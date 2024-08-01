@@ -1,4 +1,3 @@
-import aiohttp
 from rich.console import Console
 import aiohttp
 from gql import gql, Client

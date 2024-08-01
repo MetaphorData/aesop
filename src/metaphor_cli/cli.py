@@ -92,4 +92,5 @@ def callback(ctx: typer.Context):
         main_menu()
 
 if __name__ == "__main__":
+    
     app()

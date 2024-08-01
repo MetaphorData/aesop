@@ -1,4 +1,4 @@
-# metaphor_cli/config.py
+#Config for upload
 
 class Config:
     def __init__(self, api_key: str=None, upload_url: str=None):

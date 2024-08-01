@@ -1,5 +1,3 @@
-# metaphor_cli/data_asset_loaders.py
-
 import csv
 from typing import List, Dict, Any
 import sys

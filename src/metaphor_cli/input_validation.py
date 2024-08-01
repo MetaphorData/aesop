@@ -1,6 +1,5 @@
 import csv
 from typing import List, Dict, Any
-import sys
 from rich.console import Console
 
 console = Console()
