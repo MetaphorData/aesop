@@ -22,6 +22,7 @@ This repository contains a command-line interface (CLI) tool designed for easy i
     ```
     please paste the schema in the schema.gql file in the aesop directory.
     ```
+<<<<<<< HEAD
 4. **Run the CLI Tool:**
     ```bash
     aesop --help
@@ -38,3 +39,10 @@ This repository contains a command-line interface (CLI) tool designed for easy i
     ```bash
     ./generate_models.sh
     ```
+=======
+
+3. **Run the CLI Tool:**
+    ```bash
+    metaphor-cli
+    ```
+>>>>>>> 3020075eae2fdeb2bc7abda62d987a6d662b74a7
