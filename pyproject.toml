@@ -5,12 +5,13 @@ description = "A CLI application for Metaphor data ingestion and upload"
 authors = ["Metaphor <dev@metaphor.io>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
-typer = "^0.9.0"
-rich = "^13.3.5"
 aiohttp = "^3.9.5"
-pydantic = "^2.0.0"
 ariadne-codegen = "^0.14.0"
+pydantic = "^2.0.0"
+python = "^3.9"
+pyyaml = "^6.0.2"
+rich = "^13.3.5"
+typer = "^0.9.0"
 
 [tool.poetry.dev-dependencies]
 black = "^24.2.0"
@@ -30,24 +31,24 @@ asyncio_mode = "strict"
 [tool.black]
 line-length = 100
 target-version = ['py39']
-extend-exclude = "src/aesop/graphql_models"
+extend-exclude = "aesop/generated"
 
 [tool.isort]
 profile = "black"
 line_length = 100
-skip_glob = ["src/aesop/graphql_models/*"]
+skip_glob = ["aesop/generated/*"]
 
 [tool.mypy]
 ignore_missing_imports = true
 strict = true
-exclude = "src/aesop/graphql_models/"
+exclude = "aesop/generated/"
 
 [tool.ariadne-codegen]
 schema_path = "schema.gql"
 enable_custom_operations = true
 target_package_name = "graphql_models_generated"
-target_package_path = "./src/aesop"
+target_package_path = "./aesop"
 
 # Add this section to create a CLI entry point
 [tool.poetry.scripts]
-aesop = "aesop.cli:app"
+aesop = "aesop.app:app"

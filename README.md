@@ -6,43 +6,14 @@ This repository contains a command-line interface (CLI) tool designed for easy i
 
 * **Data Asset Uploads:** Upload data assets (knowledge cards) from a structured CSV file.
 
-## Getting Started
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/MetaphorData/aesop
-   cd aesop
-   ```
+## Config file
 
-2. **Install Dependencies:**
-   ```bash
-    pip install -e .
-    ```
+The config file should include the following fields:
 
-3. **Get GraphQL schema:**
-    ```
-    please paste the schema in the schema.gql file in the aesop directory.
-    ```
-<<<<<<< HEAD
-4. **Run the CLI Tool:**
-    ```bash
-    aesop --help
-    ```
+```yaml
+config: <CONFIG>
+tenant: <TENANT> # This is optional, only applicable to multi-tenant environments.
+api_key: <API_KEY>
+```
 
-## Upading Schema
-
-1. **Get GraphQL schema:**
-    ```
-    please paste the schema in the schema.gql file in the aesop directory, ensure it is named schema.gql.
-    ```
-
-2. **Run Ariadne Codegen:**
-    ```bash
-    ./generate_models.sh
-    ```
-=======
-
-3. **Run the CLI Tool:**
-    ```bash
-    metaphor-cli
-    ```
->>>>>>> 3020075eae2fdeb2bc7abda62d987a6d662b74a7
+By default, `aesop` will look for `~/.config/aesop.yml`. You can provide a path to your config file via option `--config_file`.
