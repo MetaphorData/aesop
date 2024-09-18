@@ -1,7 +1,7 @@
 from rich.console import Console
 
 
-class MetaphorConsole(Console):
+class AesopConsole(Console):
     def ok(self, message: str):
         return self.print(message, style="green")
 
@@ -12,4 +12,4 @@ class MetaphorConsole(Console):
         return self.print(message, style="bold red")
 
 
-console = MetaphorConsole()
+console = AesopConsole()
