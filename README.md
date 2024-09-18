@@ -16,4 +16,4 @@ tenant: <TENANT> # This is optional, only applicable to multi-tenant environment
 api_key: <API_KEY>
 ```
 
-By default, `aesop` will look for `~/.aesop.yml`. You can provide a path to your config file via option `--config_file`.
+By default, `aesop` will look for `~/.config/aesop.yml`. You can provide a path to your config file via option `--config_file`.
