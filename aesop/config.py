@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 from aesop.generated.client import Client
 
-DEFAULT_CONFIG_PATH = Path.home() / ".aesop.yml"
+DEFAULT_CONFIG_PATH = Path.home() / ".aesop" / "config.yml"
 
 
 class AesopConfig(BaseModel):
