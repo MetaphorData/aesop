@@ -347,11 +347,6 @@ class CommonColumnAttributesPatchInput(BaseModel):
     )
 
 
-class CommonColumnDescriptionExclusionInput(BaseModel):
-    entity_id: Optional[str] = Field(alias="entityId", default="")
-    exclusion: Optional[List["DatasetColumnsInput"]] = Field(default_factory=lambda: [])
-
-
 class ConnectionOrderBy(BaseModel):
     custom_order: Optional["CustomOrder"] = Field(alias="customOrder", default=None)
     names: Optional[List[str]] = Field(default_factory=lambda: [])
@@ -389,6 +384,11 @@ class CreateCrawlerScheduleInput(BaseModel):
     is_daily: Optional[bool] = Field(alias="isDaily", default=True)
     schedule: Optional[str] = None
     type: Optional[CrawlerType] = CrawlerType.UNKNOWN
+
+
+class CustomAttributesInput(BaseModel):
+    color: Optional[str] = None
+    icon_key: Optional[str] = Field(alias="iconKey", default=None)
 
 
 class CustomMetadataConfigInput(BaseModel):
@@ -572,6 +572,9 @@ class FollowAssetInput(BaseModel):
     entity_ids: Optional[List[str]] = Field(
         alias="entityIds", default_factory=lambda: []
     )
+    followers_to_enroll: Optional[List[str]] = Field(
+        alias="followersToEnroll", default_factory=lambda: []
+    )
     search_query: Optional["SearchArguments"] = Field(alias="searchQuery", default=None)
 
 
@@ -625,6 +628,13 @@ class GroupDescriptionInput(BaseModel):
     tokenized_text: Optional[str] = Field(alias="tokenizedText", default=None)
 
 
+class GroupFilters(BaseModel):
+    browse_paths: Optional[List[str]] = Field(alias="browsePaths", default=None)
+    domains: Optional[List[str]] = None
+    hashtags: Optional[List[str]] = None
+    is_deleted: Optional[bool] = Field(alias="isDeleted", default=None)
+
+
 class GroupInfoInput(BaseModel):
     description: Optional["GroupDescriptionInput"] = None
     email: Optional[str] = None
@@ -650,6 +660,11 @@ class GroupMembersPatchInput(BaseModel):
     member_ids_to_remove: Optional[List[str]] = Field(
         alias="memberIdsToRemove", default=None
     )
+
+
+class HardDeletionInput(BaseModel):
+    enabled: Optional[bool] = True
+    threshold_hours: Optional[float] = Field(alias="thresholdHours", default=1440)
 
 
 class HashtagInput(BaseModel):
@@ -897,16 +912,6 @@ class MetricFilters(BaseModel):
     type: Optional[List[MetricType]] = None
 
 
-class MetricInfoPatchInput(BaseModel):
-    entity_ids: Optional[List[str]] = Field(
-        alias="entityIds", default_factory=lambda: []
-    )
-    entity_ids_to_add: Optional[List[str]] = Field(alias="entityIdsToAdd", default=None)
-    entity_ids_to_remove: Optional[List[str]] = Field(
-        alias="entityIdsToRemove", default=None
-    )
-
-
 class MetricLogicalIdInput(BaseModel):
     name: Optional[str] = ""
     type: Optional[MetricType] = MetricType.UNKNOWN
@@ -993,6 +998,9 @@ class NamespaceInfoConnectionFilterInput(BaseModel):
 
 
 class NamespaceInfoInput(BaseModel):
+    custom_attributes: Optional["CustomAttributesInput"] = Field(
+        alias="customAttributes", default=None
+    )
     description: Optional["NamespaceDescriptionInput"] = None
     detail: Optional["NamespaceTypeDetailInput"] = Field(
         default_factory=lambda: globals()["NamespaceTypeDetailInput"].model_validate(
@@ -1008,6 +1016,9 @@ class NamespaceInfoInput(BaseModel):
 
 
 class NamespaceInfoPatchInput(BaseModel):
+    custom_attributes: Optional["CustomAttributesInput"] = Field(
+        alias="customAttributes", default=None
+    )
     description: Optional["NamespaceDescriptionInput"] = None
     entity_id: Optional[str] = Field(alias="entityId", default="")
     name: Optional[str] = None
@@ -1243,6 +1254,11 @@ class PowerQueryExplainerInput(BaseModel):
     table: Optional[str] = None
 
 
+class PurgeDataQualityInput(BaseModel):
+    enabled: Optional[bool] = True
+    threshold_hours: Optional[float] = Field(alias="thresholdHours", default=48)
+
+
 class QueryDescriptionTokenizedContentInput(BaseModel):
     explanation: Optional[str] = None
 
@@ -1260,7 +1276,12 @@ class QueryExplainerInput(BaseModel):
 
 class QueryInfoConnectionFilterInput(BaseModel):
     dataset_id: Optional[str] = Field(alias="datasetId", default=None)
+    hide_duplicates: Optional[bool] = Field(alias="hideDuplicates", default=True)
+    hide_service_account: Optional[bool] = Field(
+        alias="hideServiceAccount", default=True
+    )
     issued_by: Optional[List[str]] = Field(alias="issuedBy", default=None)
+    lookback_days: Optional[int] = Field(alias="lookbackDays", default=1)
 
 
 class QueryKnowledgeCardInput(BaseModel):
@@ -1304,6 +1325,16 @@ class RecentUserActivitiesFilterInput(BaseModel):
     granularity: Optional[UserActivityGranularity] = None
     lookback_days: Optional[int] = Field(alias="lookbackDays", default=None)
     source: Optional[UserActivitySource] = None
+
+
+class RelatedAssetsPatchInput(BaseModel):
+    entity_ids: Optional[List[str]] = Field(
+        alias="entityIds", default_factory=lambda: []
+    )
+    entity_ids_to_add: Optional[List[str]] = Field(alias="entityIdsToAdd", default=None)
+    entity_ids_to_remove: Optional[List[str]] = Field(
+        alias="entityIdsToRemove", default=None
+    )
 
 
 class ResourceInfoConnectionFilterInput(BaseModel):
@@ -1397,6 +1428,7 @@ class SearchFacets(BaseModel):
     dbt_materialization_type: Optional[List[DbtMaterializationType]] = Field(
         alias="dbtMaterializationType", default=None
     )
+    dbt_tags: Optional[List[str]] = Field(alias="dbtTags", default=None)
     department: Optional[List[str]] = None
     directory: Optional[List[str]] = None
     domain_display_name: Optional[List[str]] = Field(
@@ -1410,6 +1442,7 @@ class SearchFacets(BaseModel):
     knowledge_card_type: Optional[List[KnowledgeCardType]] = Field(
         alias="knowledgeCardType", default=None
     )
+    looker_tags: Optional[List[str]] = Field(alias="lookerTags", default=None)
     materialization_type: Optional[List[str]] = Field(
         alias="materializationType", default=None
     )
@@ -1417,9 +1450,17 @@ class SearchFacets(BaseModel):
     platform: Optional[List[PlatformType]] = None
     project: Optional[List[str]] = None
     schema_: Optional[List[str]] = Field(alias="schema", default=None)
+    snowflake_tags: Optional[List[str]] = Field(alias="snowflakeTags", default=None)
     sub_type: Optional[List[AssetSubType]] = Field(alias="subType", default=None)
+    tableau_tags: Optional[List[str]] = Field(alias="tableauTags", default=None)
     thought_spot_data_object_type: Optional[List[ThoughtSpotDataObjectType]] = Field(
         alias="thoughtSpotDataObjectType", default=None
+    )
+    thought_spot_tags: Optional[List[str]] = Field(
+        alias="thoughtSpotTags", default=None
+    )
+    unity_catalog_tags: Optional[List[str]] = Field(
+        alias="unityCatalogTags", default=None
     )
     usage_level: Optional[List[str]] = Field(alias="usageLevel", default=None)
     workspace: Optional[List[str]] = None
@@ -1433,6 +1474,7 @@ class SearchQueryFilters(BaseModel):
     dataset_filters: Optional["DatasetFilters"] = Field(
         alias="datasetFilters", default=None
     )
+    group_filters: Optional["GroupFilters"] = Field(alias="groupFilters", default=None)
     hierarchy_filters: Optional["HierarchyFilters"] = Field(
         alias="hierarchyFilters", default=None
     )
@@ -1494,8 +1536,14 @@ class SettingsInput(BaseModel):
     custom_user_defined_order_hierarchy: Optional[
         List["UserSpecifiedOrderingInput"]
     ] = Field(alias="customUserDefinedOrderHierarchy", default=None)
+    hard_deletion: Optional["HardDeletionInput"] = Field(
+        alias="hardDeletion", default=None
+    )
     non_prod: Optional["NonProdInput"] = Field(alias="nonProd", default=None)
     organization: Optional["OrganizationInput"] = None
+    purge_data_quality: Optional["PurgeDataQualityInput"] = Field(
+        alias="purgeDataQuality", default=None
+    )
     service_accounts: Optional[List[str]] = Field(alias="serviceAccounts", default=None)
     social_login: Optional["SocialLoginInput"] = Field(
         alias="socialLogin", default=None
@@ -1552,6 +1600,10 @@ class ThoughtSpotDataObjectDownstreamLineageInput(BaseModel):
 
 class ThoughtSpotDataObjectUpstreamLineageInput(BaseModel):
     types: Optional[List[LineageType]] = None
+
+
+class ToggleMuteNotificationInput(BaseModel):
+    entity_id: Optional[str] = Field(alias="entityId", default="")
 
 
 class UniversalSearchInput(BaseModel):
@@ -1627,9 +1679,6 @@ class UserDefinedResourceInput(BaseModel):
     common_column_attributes: Optional["CommonColumnAttributesInput"] = Field(
         alias="commonColumnAttributes", default=None
     )
-    common_column_description_exclusion: Optional[
-        "CommonColumnDescriptionExclusionInput"
-    ] = Field(alias="commonColumnDescriptionExclusion", default=None)
     user_defined_resource_info: Optional["UserDefinedResourceInfoInput"] = Field(
         alias="userDefinedResourceInfo", default=None
     )
@@ -1675,7 +1724,6 @@ ChangeRequestKnowledgeCardInput.model_rebuild()
 CommentInput.model_rebuild()
 CommonColumnAttributesInput.model_rebuild()
 CommonColumnAttributesPatchInput.model_rebuild()
-CommonColumnDescriptionExclusionInput.model_rebuild()
 ConnectionOrderBy.model_rebuild()
 CreateCrawlerInput.model_rebuild()
 DataDocumentInput.model_rebuild()

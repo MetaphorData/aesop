@@ -18,6 +18,7 @@ black = "^24.2.0"
 flake8 = "^7.0.0"
 isort = "^5.11.0"
 mypy = "^1.9.0"
+poethepoet = "^0.28.0"
 pytest = "^8.2.1"
 pytest-asyncio = "^0.23.7"
 
@@ -31,24 +32,38 @@ asyncio_mode = "strict"
 [tool.black]
 line-length = 100
 target-version = ['py39']
-extend-exclude = "aesop/generated"
+extend-exclude = "aesop/graphql/generated"
 
 [tool.isort]
 profile = "black"
 line_length = 100
-skip_glob = ["aesop/generated/*"]
+skip_glob = ["aesop/graphql/generated/*"]
 
 [tool.mypy]
 ignore_missing_imports = true
 strict = true
-exclude = "aesop/generated/"
-
-[tool.ariadne-codegen]
-schema_path = "schema.gql"
-enable_custom_operations = true
-target_package_name = "graphql_models_generated"
-target_package_path = "./aesop"
+exclude = "aesop/graphql/generated/"
 
 # Add this section to create a CLI entry point
 [tool.poetry.scripts]
 aesop = "aesop.app:app"
+
+[tool.ariadne-codegen]
+schema_path = "schema.gql"
+target_package_name = "generated"
+target_package_path = "./aesop/graphql"
+enable_custom_operations = true
+async_client = false
+
+[tool.poe.tasks]
+_black = "black ."
+_isort = "isort ."
+format = ["_black", "_isort"]
+
+[tool.poe.tasks.codegen]
+help = "Generates the GraphQL client code from schema.gql. To run codegen, copy `@www/data/schema.gql` to the root directory, then run `poe codegen`. This command only works on macOS, since we are using sed, which is not portable across platforms, to change the generated client from async to sync."
+shell = """
+    ariadne-codegen
+    sed -i '' -e 's/await //' aesop/graphql/generated/client.py
+    sed -i '' -e 's/async //' aesop/graphql/generated/client.py
+"""

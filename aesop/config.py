@@ -4,7 +4,7 @@ from typing import Optional
 import yarl
 from pydantic import BaseModel
 
-from aesop.generated.client import Client
+from aesop.graphql.generated.client import Client
 
 DEFAULT_CONFIG_PATH = Path.home() / ".aesop" / "config.yml"
 

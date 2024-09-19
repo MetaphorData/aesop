@@ -273,18 +273,6 @@ class CommonColumnAttributesBaseGraphQLField(GraphQLField):
         return self
 
 
-class CommonColumnDescriptionExclusionGraphQLField(GraphQLField):
-    def alias(self, alias: str) -> "CommonColumnDescriptionExclusionGraphQLField":
-        self._alias = alias
-        return self
-
-
-class CommonColumnDescriptionExclusionBaseGraphQLField(GraphQLField):
-    def alias(self, alias: str) -> "CommonColumnDescriptionExclusionBaseGraphQLField":
-        self._alias = alias
-        return self
-
-
 class CrawlerGraphQLField(GraphQLField):
     def alias(self, alias: str) -> "CrawlerGraphQLField":
         self._alias = alias
@@ -335,6 +323,12 @@ class CrawlerScheduleGraphQLField(GraphQLField):
 
 class CrawlerTypeResponseGraphQLField(GraphQLField):
     def alias(self, alias: str) -> "CrawlerTypeResponseGraphQLField":
+        self._alias = alias
+        return self
+
+
+class CustomAttributesGraphQLField(GraphQLField):
+    def alias(self, alias: str) -> "CustomAttributesGraphQLField":
         self._alias = alias
         return self
 
@@ -527,6 +521,12 @@ class DatasetFieldStatisticsGraphQLField(GraphQLField):
 
 class DatasetHighlightGraphQLField(GraphQLField):
     def alias(self, alias: str) -> "DatasetHighlightGraphQLField":
+        self._alias = alias
+        return self
+
+
+class DatasetLastQueryGraphQLField(GraphQLField):
+    def alias(self, alias: str) -> "DatasetLastQueryGraphQLField":
         self._alias = alias
         return self
 
@@ -837,6 +837,12 @@ class GroupEdgeGraphQLField(GraphQLField):
         return self
 
 
+class GroupHighlightGraphQLField(GraphQLField):
+    def alias(self, alias: str) -> "GroupHighlightGraphQLField":
+        self._alias = alias
+        return self
+
+
 class GroupInfoGraphQLField(GraphQLField):
     def alias(self, alias: str) -> "GroupInfoGraphQLField":
         self._alias = alias
@@ -851,6 +857,24 @@ class GroupInfoBaseGraphQLField(GraphQLField):
 
 class GroupLogicalIdGraphQLField(GraphQLField):
     def alias(self, alias: str) -> "GroupLogicalIdGraphQLField":
+        self._alias = alias
+        return self
+
+
+class GroupSearchDocumentGraphQLField(GraphQLField):
+    def alias(self, alias: str) -> "GroupSearchDocumentGraphQLField":
+        self._alias = alias
+        return self
+
+
+class GroupSearchResultGraphQLField(GraphQLField):
+    def alias(self, alias: str) -> "GroupSearchResultGraphQLField":
+        self._alias = alias
+        return self
+
+
+class HardDeletionGraphQLField(GraphQLField):
+    def alias(self, alias: str) -> "HardDeletionGraphQLField":
         self._alias = alias
         return self
 
@@ -1579,6 +1603,12 @@ class PowerBiWorkspaceUserGraphQLField(GraphQLField):
         return self
 
 
+class PurgeDataQualityGraphQLField(GraphQLField):
+    def alias(self, alias: str) -> "PurgeDataQualityGraphQLField":
+        self._alias = alias
+        return self
+
+
 class QueryCountGraphQLField(GraphQLField):
     def alias(self, alias: str) -> "QueryCountGraphQLField":
         self._alias = alias
@@ -1635,6 +1665,12 @@ class QueryKnowledgeCardGraphQLField(GraphQLField):
 
 class QueryResultGraphQLField(GraphQLField):
     def alias(self, alias: str) -> "QueryResultGraphQLField":
+        self._alias = alias
+        return self
+
+
+class QuickSightDatasetSearchResultGraphQLField(GraphQLField):
+    def alias(self, alias: str) -> "QuickSightDatasetSearchResultGraphQLField":
         self._alias = alias
         return self
 
@@ -1723,6 +1759,12 @@ class SearchStatisticsResultGraphQLField(GraphQLField):
 
 class SettingsGraphQLField(GraphQLField):
     def alias(self, alias: str) -> "SettingsGraphQLField":
+        self._alias = alias
+        return self
+
+
+class SimilarAssetsResultItemGraphQLField(GraphQLField):
+    def alias(self, alias: str) -> "SimilarAssetsResultItemGraphQLField":
         self._alias = alias
         return self
 
@@ -1915,6 +1957,12 @@ class ThoughtSpotDataObjectSearchResultGraphQLField(GraphQLField):
 
 class ThoughtSpotInfoGraphQLField(GraphQLField):
     def alias(self, alias: str) -> "ThoughtSpotInfoGraphQLField":
+        self._alias = alias
+        return self
+
+
+class ToggleMuteNotificationOutputGraphQLField(GraphQLField):
+    def alias(self, alias: str) -> "ToggleMuteNotificationOutputGraphQLField":
         self._alias = alias
         return self
 
@@ -2131,6 +2179,18 @@ class VirtualViewHighlightGraphQLField(GraphQLField):
 
 class VirtualViewLogicalIdGraphQLField(GraphQLField):
     def alias(self, alias: str) -> "VirtualViewLogicalIdGraphQLField":
+        self._alias = alias
+        return self
+
+
+class VirtualViewSchemaGraphQLField(GraphQLField):
+    def alias(self, alias: str) -> "VirtualViewSchemaGraphQLField":
+        self._alias = alias
+        return self
+
+
+class VirtualViewSchemaFieldGraphQLField(GraphQLField):
+    def alias(self, alias: str) -> "VirtualViewSchemaFieldGraphQLField":
         self._alias = alias
         return self
 

@@ -15,7 +15,6 @@ from .custom_fields import (
     GroupFields,
     KnowledgeCardDeletePayloadFields,
     KnowledgeCardFields,
-    MetricFields,
     NamespaceDeletePayloadFields,
     NamespaceFields,
     PersonFields,
@@ -23,6 +22,7 @@ from .custom_fields import (
     RunCrawlerResponseFields,
     SettingsFields,
     TenantInfoFields,
+    ToggleMuteNotificationOutputFields,
     UserDefinedResourceDeletePayloadFields,
     UserDefinedResourceFields,
     WebhookFields,
@@ -38,7 +38,6 @@ from .input_types import (
     AssetLikeInput,
     ChangeRequestStatusPatchInput,
     CommonColumnAttributesPatchInput,
-    CommonColumnDescriptionExclusionInput,
     CreateApiKeyInput,
     CreateCrawlerInput,
     DeleteCrawlerInput,
@@ -56,7 +55,6 @@ from .input_types import (
     KnowledgeCardInfoInput,
     KnowledgeCardInput,
     LastActiveInput,
-    MetricInfoPatchInput,
     NamespaceAssetsPatchInput,
     NamespaceAssetsUserDefinedOrderInput,
     NamespaceDeleteInput,
@@ -69,7 +67,9 @@ from .input_types import (
     PersonPatchInput,
     PinOrUnpinAssetInput,
     QueryKnowledgeCardPatchInput,
+    RelatedAssetsPatchInput,
     SettingsInput,
+    ToggleMuteNotificationInput,
     UpdateApiKeyInput,
     UpdateCrawlerInput,
     UserDefinedResourceDeleteInput,
@@ -390,6 +390,20 @@ class Mutation:
         )
 
     @classmethod
+    def toggle_mute_notification(
+        cls, input: ToggleMuteNotificationInput
+    ) -> ToggleMuteNotificationOutputFields:
+        arguments: Dict[str, Dict[str, Any]] = {
+            "input": {"type": "ToggleMuteNotificationInput!", "value": input}
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return ToggleMuteNotificationOutputFields(
+            field_name="toggleMuteNotification", arguments=cleared_arguments
+        )
+
+    @classmethod
     def uninstall_teams(cls, teams_tenant_id: str) -> GraphQLField:
         arguments: Dict[str, Dict[str, Any]] = {
             "teamsTenantId": {"type": "String!", "value": teams_tenant_id}
@@ -442,21 +456,6 @@ class Mutation:
         }
         return UserDefinedResourceFields(
             field_name="updateCommonColumnAttributes", arguments=cleared_arguments
-        )
-
-    @classmethod
-    def update_common_column_description_exclusion(
-        cls, input: CommonColumnDescriptionExclusionInput
-    ) -> UserDefinedResourceFields:
-        arguments: Dict[str, Dict[str, Any]] = {
-            "input": {"type": "CommonColumnDescriptionExclusionInput!", "value": input}
-        }
-        cleared_arguments = {
-            key: value for key, value in arguments.items() if value["value"] is not None
-        }
-        return UserDefinedResourceFields(
-            field_name="updateCommonColumnDescriptionExclusion",
-            arguments=cleared_arguments,
         )
 
     @classmethod
@@ -694,14 +693,14 @@ class Mutation:
         )
 
     @classmethod
-    def upsert_related_assets(cls, input: MetricInfoPatchInput) -> MetricFields:
+    def upsert_related_assets(cls, input: RelatedAssetsPatchInput) -> EntityInterface:
         arguments: Dict[str, Dict[str, Any]] = {
-            "input": {"type": "MetricInfoPatchInput!", "value": input}
+            "input": {"type": "RelatedAssetsPatchInput!", "value": input}
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
         }
-        return MetricFields(
+        return EntityInterface(
             field_name="upsertRelatedAssets", arguments=cleared_arguments
         )
 

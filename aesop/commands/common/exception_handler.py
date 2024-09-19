@@ -12,7 +12,7 @@ def exception_handler(command: str, exception_type: type[Exception], exit_code: 
             try:
                 return func(*args, **kwargs)
             except exception_type as e:
-                console.error(f"{command.upper()}: {str(e)}")
+                console.error(f"{command.capitalize()}: {str(e)}")
                 raise typer.Exit(code=exit_code)
 
         return wrapper
