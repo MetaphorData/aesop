@@ -41,6 +41,7 @@ from .custom_fields import (
     SchemaFieldFields,
     SearchStatisticsResultFields,
     SettingsFields,
+    SetupInfoFields,
     SimilarAssetsResultItemFields,
     SQLExplainerResultFields,
     SuggestResultFields,
@@ -873,6 +874,10 @@ class Query:
         return SettingsFields(field_name="settings")
 
     @classmethod
+    def setup_info(cls) -> SetupInfoFields:
+        return SetupInfoFields(field_name="setupInfo")
+
+    @classmethod
     def similar_assets(
         cls, entity_id: str, *, max_neighbors: Optional[int] = None
     ) -> SimilarAssetsResultItemFields:
@@ -938,10 +943,6 @@ class Query:
             key: value for key, value in arguments.items() if value["value"] is not None
         }
         return SuggestResultFields(field_name="suggest", arguments=cleared_arguments)
-
-    @classmethod
-    def supported_platforms_list(cls) -> GraphQLField:
-        return GraphQLField(field_name="supportedPlatformsList")
 
     @classmethod
     def system_tag_counts(
