@@ -120,7 +120,7 @@ class Query:
         filters: Optional[ActivityFeedConnectionFilterInput] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> ActivityFeedConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -128,7 +128,7 @@ class Query:
             "filters": {"type": "ActivityFeedConnectionFilterInput", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -202,7 +202,7 @@ class Query:
         filters: Optional[PersonConnectionFilterInput] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> PersonConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -210,7 +210,7 @@ class Query:
             "filters": {"type": "PersonConnectionFilterInput", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -229,7 +229,7 @@ class Query:
         filters: Optional[BaseConnectionFilter] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> UserDefinedResourceConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -237,7 +237,7 @@ class Query:
             "filters": {"type": "BaseConnectionFilter", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -256,7 +256,7 @@ class Query:
         filters: Optional[PersonConnectionFilterInput] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> PersonConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -264,7 +264,7 @@ class Query:
             "filters": {"type": "PersonConnectionFilterInput", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -282,7 +282,7 @@ class Query:
         filters: Optional[PersonConnectionFilterInput] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> PersonConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -290,7 +290,7 @@ class Query:
             "filters": {"type": "PersonConnectionFilterInput", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -298,10 +298,6 @@ class Query:
         return PersonConnectionFields(
             field_name="commonColumnAttributesUpdaters", arguments=cleared_arguments
         )
-
-    @classmethod
-    def crawler_ip_addresses(cls) -> GraphQLField:
-        return GraphQLField(field_name="crawlerIpAddresses")
 
     @classmethod
     def crawler_types(cls) -> CrawlerTypeResponseFields:
@@ -322,9 +318,9 @@ class Query:
         return UserSpecifiedOrderingFields(field_name="customOrderingSettings")
 
     @classmethod
-    def dashboard(cls, logical_id: DashboardIdInput) -> DashboardFields:
+    def dashboard(cls, logicalId: DashboardIdInput) -> DashboardFields:
         arguments: Dict[str, Dict[str, Any]] = {
-            "logicalId": {"type": "DashboardIdInput!", "value": logical_id}
+            "logicalId": {"type": "DashboardIdInput!", "value": logicalId}
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -340,7 +336,7 @@ class Query:
         filters: Optional[DashboardConnectionFilterInput] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> DashboardConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -348,7 +344,7 @@ class Query:
             "filters": {"type": "DashboardConnectionFilterInput", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -358,9 +354,9 @@ class Query:
         )
 
     @classmethod
-    def dataset(cls, logical_id: DatasetIdInput) -> DatasetFields:
+    def dataset(cls, logicalId: DatasetIdInput) -> DatasetFields:
         arguments: Dict[str, Dict[str, Any]] = {
-            "logicalId": {"type": "DatasetIdInput!", "value": logical_id}
+            "logicalId": {"type": "DatasetIdInput!", "value": logicalId}
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -376,7 +372,7 @@ class Query:
         filters: Optional[BaseConnectionFilter] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> DatasetConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -384,7 +380,7 @@ class Query:
             "filters": {"type": "BaseConnectionFilter", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -436,14 +432,14 @@ class Query:
     @classmethod
     def get_sample_search_questions(
         cls,
-        max_count: float,
+        maxCount: float,
         *,
         after: Optional[str] = None,
         before: Optional[str] = None,
         filters: Optional[BaseConnectionFilter] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> SampleSearchQuestionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -451,8 +447,8 @@ class Query:
             "filters": {"type": "BaseConnectionFilter", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "maxCount": {"type": "Float!", "value": max_count},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "maxCount": {"type": "Float!", "value": maxCount},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -470,7 +466,7 @@ class Query:
         filters: Optional[PersonConnectionFilterInput] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> PersonConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -478,7 +474,7 @@ class Query:
             "filters": {"type": "PersonConnectionFilterInput", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -496,7 +492,7 @@ class Query:
         filters: Optional[GroupConnectionFilterInput] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> GroupConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -504,7 +500,7 @@ class Query:
             "filters": {"type": "GroupConnectionFilterInput", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -520,7 +516,7 @@ class Query:
         filters: Optional[HierarchyConnectionFilterInput] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> HierarchyConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -528,7 +524,7 @@ class Query:
             "filters": {"type": "HierarchyConnectionFilterInput", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -538,9 +534,9 @@ class Query:
         )
 
     @classmethod
-    def hierarchy(cls, logical_id: HierarchyLogicalIdInput) -> HierarchyFields:
+    def hierarchy(cls, logicalId: HierarchyLogicalIdInput) -> HierarchyFields:
         arguments: Dict[str, Dict[str, Any]] = {
-            "logicalId": {"type": "HierarchyLogicalIdInput!", "value": logical_id}
+            "logicalId": {"type": "HierarchyLogicalIdInput!", "value": logicalId}
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -556,9 +552,9 @@ class Query:
         return GraphQLField(field_name="isViewerCRMContact")
 
     @classmethod
-    def knowledge_card(cls, logical_id: KnowledgeCardIdInput) -> KnowledgeCardFields:
+    def knowledge_card(cls, logicalId: KnowledgeCardIdInput) -> KnowledgeCardFields:
         arguments: Dict[str, Dict[str, Any]] = {
-            "logicalId": {"type": "KnowledgeCardIdInput!", "value": logical_id}
+            "logicalId": {"type": "KnowledgeCardIdInput!", "value": logicalId}
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -572,21 +568,21 @@ class Query:
         cls,
         *,
         after: Optional[str] = None,
-        anchor_id: Optional[str] = None,
+        anchorId: Optional[str] = None,
         before: Optional[str] = None,
         filters: Optional[KnowledgeCardConnectionFilterInput] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> KnowledgeCardConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
-            "anchorId": {"type": "ID", "value": anchor_id},
+            "anchorId": {"type": "ID", "value": anchorId},
             "before": {"type": "String", "value": before},
             "filters": {"type": "KnowledgeCardConnectionFilterInput", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -596,9 +592,9 @@ class Query:
         )
 
     @classmethod
-    def metric(cls, logical_id: MetricLogicalIdInput) -> MetricFields:
+    def metric(cls, logicalId: MetricLogicalIdInput) -> MetricFields:
         arguments: Dict[str, Dict[str, Any]] = {
-            "logicalId": {"type": "MetricLogicalIdInput!", "value": logical_id}
+            "logicalId": {"type": "MetricLogicalIdInput!", "value": logicalId}
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -614,7 +610,7 @@ class Query:
         filters: Optional[MetricConnectionFilterInput] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> MetricConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -622,7 +618,7 @@ class Query:
             "filters": {"type": "MetricConnectionFilterInput", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -654,8 +650,8 @@ class Query:
         before: Optional[str] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None,
-        order_by_user_defined_order: Optional[UserDefinedOrderType] = None
+        orderBy: Optional[ConnectionOrderBy] = None,
+        orderByUserDefinedOrder: Optional[UserDefinedOrderType] = None
     ) -> NamespaceConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -666,10 +662,10 @@ class Query:
             },
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
             "orderByUserDefinedOrder": {
                 "type": "UserDefinedOrderType",
-                "value": order_by_user_defined_order,
+                "value": orderByUserDefinedOrder,
             },
         }
         cleared_arguments = {
@@ -704,7 +700,7 @@ class Query:
         filters: Optional[PersonConnectionFilterInput] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> PersonConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -712,7 +708,7 @@ class Query:
             "filters": {"type": "PersonConnectionFilterInput", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -720,18 +716,14 @@ class Query:
         return PersonConnectionFields(field_name="people", arguments=cleared_arguments)
 
     @classmethod
-    def person(cls, logical_id: PersonLogicalIdInput) -> PersonFields:
+    def person(cls, logicalId: PersonLogicalIdInput) -> PersonFields:
         arguments: Dict[str, Dict[str, Any]] = {
-            "logicalId": {"type": "PersonLogicalIdInput!", "value": logical_id}
+            "logicalId": {"type": "PersonLogicalIdInput!", "value": logicalId}
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
         }
         return PersonFields(field_name="person", arguments=cleared_arguments)
-
-    @classmethod
-    def platforms_list(cls) -> GraphQLField:
-        return GraphQLField(field_name="platformsList")
 
     @classmethod
     def power_query_explainer_query(
@@ -792,14 +784,14 @@ class Query:
         *,
         aggregations: Optional[AggregationMetadataName] = None,
         facets: Optional[SearchFacets] = None,
-        fields_selection: Optional[SearchResultFieldsSelection] = None,
+        fieldsSelection: Optional[SearchResultFieldsSelection] = None,
         filters: Optional[SearchQueryFilters] = None,
         from_: Optional[int] = None,
         indices: Optional[SearchIndex] = None,
-        meta_only: Optional[bool] = None,
-        related_assets: Optional[str] = None,
-        score_details: Optional[bool] = None,
-        search_after: Optional[str] = None,
+        metaOnly: Optional[bool] = None,
+        relatedAssets: Optional[str] = None,
+        scoreDetails: Optional[bool] = None,
+        searchAfter: Optional[str] = None,
         size: Optional[int] = None,
         sort: Optional[SearchResultSort] = None
     ) -> SearchResultUnion:
@@ -808,16 +800,16 @@ class Query:
             "facets": {"type": "SearchFacets", "value": facets},
             "fieldsSelection": {
                 "type": "SearchResultFieldsSelection",
-                "value": fields_selection,
+                "value": fieldsSelection,
             },
             "filters": {"type": "SearchQueryFilters", "value": filters},
             "from": {"type": "Int", "value": from_},
             "indices": {"type": "SearchIndex", "value": indices},
             "input": {"type": "String!", "value": input},
-            "metaOnly": {"type": "Boolean", "value": meta_only},
-            "relatedAssets": {"type": "ID", "value": related_assets},
-            "scoreDetails": {"type": "Boolean", "value": score_details},
-            "searchAfter": {"type": "String", "value": search_after},
+            "metaOnly": {"type": "Boolean", "value": metaOnly},
+            "relatedAssets": {"type": "ID", "value": relatedAssets},
+            "scoreDetails": {"type": "Boolean", "value": scoreDetails},
+            "searchAfter": {"type": "String", "value": searchAfter},
             "size": {"type": "Int", "value": size},
             "sort": {"type": "SearchResultSort", "value": sort},
         }
@@ -833,14 +825,14 @@ class Query:
         *,
         aggregations: Optional[AggregationMetadataName] = None,
         facets: Optional[SearchFacets] = None,
-        fields_selection: Optional[SearchResultFieldsSelection] = None,
+        fieldsSelection: Optional[SearchResultFieldsSelection] = None,
         filters: Optional[SearchQueryFilters] = None,
         from_: Optional[int] = None,
         indices: Optional[SearchIndex] = None,
-        meta_only: Optional[bool] = None,
-        related_assets: Optional[str] = None,
-        score_details: Optional[bool] = None,
-        search_after: Optional[str] = None,
+        metaOnly: Optional[bool] = None,
+        relatedAssets: Optional[str] = None,
+        scoreDetails: Optional[bool] = None,
+        searchAfter: Optional[str] = None,
         size: Optional[int] = None,
         sort: Optional[SearchResultSort] = None
     ) -> SearchStatisticsResultFields:
@@ -849,16 +841,16 @@ class Query:
             "facets": {"type": "SearchFacets", "value": facets},
             "fieldsSelection": {
                 "type": "SearchResultFieldsSelection",
-                "value": fields_selection,
+                "value": fieldsSelection,
             },
             "filters": {"type": "SearchQueryFilters", "value": filters},
             "from": {"type": "Int", "value": from_},
             "indices": {"type": "SearchIndex", "value": indices},
             "input": {"type": "String!", "value": input},
-            "metaOnly": {"type": "Boolean", "value": meta_only},
-            "relatedAssets": {"type": "ID", "value": related_assets},
-            "scoreDetails": {"type": "Boolean", "value": score_details},
-            "searchAfter": {"type": "String", "value": search_after},
+            "metaOnly": {"type": "Boolean", "value": metaOnly},
+            "relatedAssets": {"type": "ID", "value": relatedAssets},
+            "scoreDetails": {"type": "Boolean", "value": scoreDetails},
+            "searchAfter": {"type": "String", "value": searchAfter},
             "size": {"type": "Int", "value": size},
             "sort": {"type": "SearchResultSort", "value": sort},
         }
@@ -879,11 +871,11 @@ class Query:
 
     @classmethod
     def similar_assets(
-        cls, entity_id: str, *, max_neighbors: Optional[int] = None
+        cls, entityId: str, *, maxNeighbors: Optional[int] = None
     ) -> SimilarAssetsResultItemFields:
         arguments: Dict[str, Dict[str, Any]] = {
-            "entityId": {"type": "ID!", "value": entity_id},
-            "maxNeighbors": {"type": "Int", "value": max_neighbors},
+            "entityId": {"type": "ID!", "value": entityId},
+            "maxNeighbors": {"type": "Int", "value": maxNeighbors},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -893,10 +885,10 @@ class Query:
         )
 
     @classmethod
-    def subfields(cls, dataset_id: str, field_path: str) -> SchemaFieldFields:
+    def subfields(cls, datasetId: str, fieldPath: str) -> SchemaFieldFields:
         arguments: Dict[str, Dict[str, Any]] = {
-            "datasetId": {"type": "String!", "value": dataset_id},
-            "fieldPath": {"type": "String!", "value": field_path},
+            "datasetId": {"type": "String!", "value": datasetId},
+            "fieldPath": {"type": "String!", "value": fieldPath},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -910,14 +902,14 @@ class Query:
         *,
         aggregations: Optional[AggregationMetadataName] = None,
         facets: Optional[SearchFacets] = None,
-        fields_selection: Optional[SearchResultFieldsSelection] = None,
+        fieldsSelection: Optional[SearchResultFieldsSelection] = None,
         filters: Optional[SearchQueryFilters] = None,
         from_: Optional[int] = None,
         indices: Optional[SearchIndex] = None,
-        meta_only: Optional[bool] = None,
-        related_assets: Optional[str] = None,
-        score_details: Optional[bool] = None,
-        search_after: Optional[str] = None,
+        metaOnly: Optional[bool] = None,
+        relatedAssets: Optional[str] = None,
+        scoreDetails: Optional[bool] = None,
+        searchAfter: Optional[str] = None,
         size: Optional[int] = None,
         sort: Optional[SearchResultSort] = None
     ) -> SuggestResultFields:
@@ -926,16 +918,16 @@ class Query:
             "facets": {"type": "SearchFacets", "value": facets},
             "fieldsSelection": {
                 "type": "SearchResultFieldsSelection",
-                "value": fields_selection,
+                "value": fieldsSelection,
             },
             "filters": {"type": "SearchQueryFilters", "value": filters},
             "from": {"type": "Int", "value": from_},
             "indices": {"type": "SearchIndex", "value": indices},
             "input": {"type": "String!", "value": input},
-            "metaOnly": {"type": "Boolean", "value": meta_only},
-            "relatedAssets": {"type": "ID", "value": related_assets},
-            "scoreDetails": {"type": "Boolean", "value": score_details},
-            "searchAfter": {"type": "String", "value": search_after},
+            "metaOnly": {"type": "Boolean", "value": metaOnly},
+            "relatedAssets": {"type": "ID", "value": relatedAssets},
+            "scoreDetails": {"type": "Boolean", "value": scoreDetails},
+            "searchAfter": {"type": "String", "value": searchAfter},
             "size": {"type": "Int", "value": size},
             "sort": {"type": "SearchResultSort", "value": sort},
         }
@@ -953,7 +945,7 @@ class Query:
         filters: Optional[SystemTagsConnectionFilterInput] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> SystemTagCountsConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -961,7 +953,7 @@ class Query:
             "filters": {"type": "SystemTagsConnectionFilterInput", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -993,7 +985,7 @@ class Query:
         filters: Optional[BaseConnectionFilter] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> PersonConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -1001,7 +993,7 @@ class Query:
             "filters": {"type": "BaseConnectionFilter", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -1015,21 +1007,21 @@ class Query:
         cls,
         *,
         after: Optional[str] = None,
-        anchor_id: Optional[str] = None,
+        anchorId: Optional[str] = None,
         before: Optional[str] = None,
         filters: Optional[KnowledgeCardConnectionFilterInput] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> KnowledgeCardConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
-            "anchorId": {"type": "ID", "value": anchor_id},
+            "anchorId": {"type": "ID", "value": anchorId},
             "before": {"type": "String", "value": before},
             "filters": {"type": "KnowledgeCardConnectionFilterInput", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -1047,7 +1039,7 @@ class Query:
         filters: Optional[BaseConnectionFilter] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> UserDefinedResourceConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -1055,7 +1047,7 @@ class Query:
             "filters": {"type": "BaseConnectionFilter", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -1082,7 +1074,7 @@ class Query:
         filters: Optional[BaseConnectionFilter] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> UniversalSearchResultFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -1090,7 +1082,7 @@ class Query:
             "filters": {"type": "BaseConnectionFilter", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
             "request": {"type": "UniversalSearchInput!", "value": request},
         }
         cleared_arguments = {
@@ -1109,7 +1101,7 @@ class Query:
         before: Optional[str] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> UserDefinedResourceConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -1117,7 +1109,7 @@ class Query:
             "filters": {"type": "ResourceInfoConnectionFilterInput!", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -1127,9 +1119,9 @@ class Query:
         )
 
     @classmethod
-    def version(cls, *, version_id: Optional[str] = None) -> VersionHistoryFields:
+    def version(cls, *, versionId: Optional[str] = None) -> VersionHistoryFields:
         arguments: Dict[str, Dict[str, Any]] = {
-            "versionId": {"type": "ID", "value": version_id}
+            "versionId": {"type": "ID", "value": versionId}
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -1139,26 +1131,26 @@ class Query:
     @classmethod
     def versions(
         cls,
-        entity_id: str,
+        entityId: str,
         *,
         after: Optional[str] = None,
         before: Optional[str] = None,
         filters: Optional[VersionHistoryConnectionFilterInput] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> VersionHistoryConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
             "before": {"type": "String", "value": before},
-            "entityId": {"type": "ID!", "value": entity_id},
+            "entityId": {"type": "ID!", "value": entityId},
             "filters": {
                 "type": "VersionHistoryConnectionFilterInput",
                 "value": filters,
             },
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -1190,9 +1182,9 @@ class Query:
         return ViewerPermissionsFields(field_name="viewerPermissions")
 
     @classmethod
-    def virtual_view(cls, logical_id: VirtualViewLogicalIdInput) -> VirtualViewFields:
+    def virtual_view(cls, logicalId: VirtualViewLogicalIdInput) -> VirtualViewFields:
         arguments: Dict[str, Dict[str, Any]] = {
-            "logicalId": {"type": "VirtualViewLogicalIdInput!", "value": logical_id}
+            "logicalId": {"type": "VirtualViewLogicalIdInput!", "value": logicalId}
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -1208,7 +1200,7 @@ class Query:
         filters: Optional[BaseConnectionFilter] = None,
         first: Optional[int] = None,
         last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None
+        orderBy: Optional[ConnectionOrderBy] = None
     ) -> VirtualViewConnectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
@@ -1216,7 +1208,7 @@ class Query:
             "filters": {"type": "BaseConnectionFilter", "value": filters},
             "first": {"type": "Int", "value": first},
             "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+            "orderBy": {"type": "ConnectionOrderBy", "value": orderBy},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None

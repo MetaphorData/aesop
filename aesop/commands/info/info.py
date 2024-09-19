@@ -9,12 +9,13 @@ from aesop.graphql.generated.custom_queries import Query
 @exception_handler(command="info", exception_type=Exception)
 def info(config: AesopConfig) -> None:
     setup_info_query = Query.setup_info().fields(
-        SetupInfoFields.oidc().fields(OIDCFields.sign_in_redirect_url),
+        SetupInfoFields.oidc().fields(OIDCFields.signInRedirectUrl),
         SetupInfoFields.saml().fields(
-            SAMLFields.entity_id, SAMLFields.reply_acs_url, SAMLFields.sign_on_url
+            SAMLFields.entityId, SAMLFields.replyACSUrl, SAMLFields.signOnUrl
         ),
+        SetupInfoFields.crawlerIpAddresses,
     )
     res = config.get_graphql_client().query(
-        setup_info_query, Query.crawler_ip_addresses(), operation_name="getInfo"
+        setup_info_query, operation_name="getInfo"
     )
     print(res)

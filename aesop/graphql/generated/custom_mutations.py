@@ -305,9 +305,9 @@ class Mutation:
         )
 
     @classmethod
-    def install_teams(cls, teams_tenant_id: str) -> GraphQLField:
+    def install_teams(cls, teamsTenantId: str) -> GraphQLField:
         arguments: Dict[str, Dict[str, Any]] = {
-            "teamsTenantId": {"type": "String!", "value": teams_tenant_id}
+            "teamsTenantId": {"type": "String!", "value": teamsTenantId}
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -316,10 +316,10 @@ class Mutation:
 
     @classmethod
     def invite_people(
-        cls, invitees: InvitedPersonInput, *, invitation_message: Optional[str] = None
+        cls, invitees: InvitedPersonInput, *, invitationMessage: Optional[str] = None
     ) -> PersonFields:
         arguments: Dict[str, Dict[str, Any]] = {
-            "invitationMessage": {"type": "String", "value": invitation_message},
+            "invitationMessage": {"type": "String", "value": invitationMessage},
             "invitees": {"type": "InvitedPersonInput!", "value": invitees},
         }
         cleared_arguments = {
@@ -378,9 +378,9 @@ class Mutation:
         return PersonFields(field_name="recordLastActive", arguments=cleared_arguments)
 
     @classmethod
-    def run_crawler(cls, crawler_id: str) -> RunCrawlerResponseFields:
+    def run_crawler(cls, crawlerId: str) -> RunCrawlerResponseFields:
         arguments: Dict[str, Dict[str, Any]] = {
-            "crawlerId": {"type": "String!", "value": crawler_id}
+            "crawlerId": {"type": "String!", "value": crawlerId}
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -404,9 +404,9 @@ class Mutation:
         )
 
     @classmethod
-    def uninstall_teams(cls, teams_tenant_id: str) -> GraphQLField:
+    def uninstall_teams(cls, teamsTenantId: str) -> GraphQLField:
         arguments: Dict[str, Dict[str, Any]] = {
-            "teamsTenantId": {"type": "String!", "value": teams_tenant_id}
+            "teamsTenantId": {"type": "String!", "value": teamsTenantId}
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
@@ -459,11 +459,9 @@ class Mutation:
         )
 
     @classmethod
-    def update_crawler(
-        cls, crawler_id: str, input: UpdateCrawlerInput
-    ) -> CrawlerFields:
+    def update_crawler(cls, crawlerId: str, input: UpdateCrawlerInput) -> CrawlerFields:
         arguments: Dict[str, Dict[str, Any]] = {
-            "crawlerId": {"type": "ID!", "value": crawler_id},
+            "crawlerId": {"type": "ID!", "value": crawlerId},
             "input": {"type": "UpdateCrawlerInput!", "value": input},
         }
         cleared_arguments = {
