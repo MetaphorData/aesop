@@ -2,10 +2,11 @@ import typer
 import yaml
 from typing_extensions import Annotated
 
-from aesop.commands import info_command, upload_command
+from aesop.commands import info_command, tags_app, upload_command
 from aesop.config import DEFAULT_CONFIG_PATH, AesopConfig
 
 app = typer.Typer(add_completion=False)
+app.add_typer(tags_app, name="tags")
 
 
 @app.command()

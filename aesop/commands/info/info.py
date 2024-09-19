@@ -15,7 +15,5 @@ def info(config: AesopConfig) -> None:
         ),
         SetupInfoFields.crawlerIpAddresses,
     )
-    res = config.get_graphql_client().query(
-        setup_info_query, operation_name="getInfo"
-    )
+    res = config.get_graphql_client().query(setup_info_query, operation_name="getInfo")
     print(res)
