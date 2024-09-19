@@ -41,6 +41,7 @@ from .custom_fields import (
     SchemaFieldFields,
     SearchStatisticsResultFields,
     SettingsFields,
+    SimilarAssetsResultItemFields,
     SQLExplainerResultFields,
     SuggestResultFields,
     SystemTagCountsConnectionFields,
@@ -870,6 +871,21 @@ class Query:
     @classmethod
     def settings(cls) -> SettingsFields:
         return SettingsFields(field_name="settings")
+
+    @classmethod
+    def similar_assets(
+        cls, entity_id: str, *, max_neighbors: Optional[int] = None
+    ) -> SimilarAssetsResultItemFields:
+        arguments: Dict[str, Dict[str, Any]] = {
+            "entityId": {"type": "ID!", "value": entity_id},
+            "maxNeighbors": {"type": "Int", "value": max_neighbors},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return SimilarAssetsResultItemFields(
+            field_name="similarAssets", arguments=cleared_arguments
+        )
 
     @classmethod
     def subfields(cls, dataset_id: str, field_path: str) -> SchemaFieldFields:

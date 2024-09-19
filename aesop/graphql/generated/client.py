@@ -15,7 +15,7 @@ from graphql import (
     print_ast,
 )
 
-from .async_base_client import AsyncBaseClient
+from .base_client import BaseClient
 from .base_operation import GraphQLField
 
 
@@ -23,8 +23,8 @@ def gql(q: str) -> str:
     return q
 
 
-class Client(AsyncBaseClient):
-    async def execute_custom_operation(
+class Client(BaseClient):
+    def execute_custom_operation(
         self, *fields: GraphQLField, operation_type: OperationType, operation_name: str
     ) -> Dict[str, Any]:
         selections = self._build_selection_set(fields)
@@ -35,7 +35,7 @@ class Client(AsyncBaseClient):
         operation_ast = self._build_operation_ast(
             selections, operation_type, operation_name, variable_definitions
         )
-        response = await self.execute(
+        response = self.execute(
             print_ast(operation_ast),
             variables=combined_variables["values"],
             operation_name=operation_name,
@@ -94,15 +94,15 @@ class Client(AsyncBaseClient):
     ) -> List[SelectionNode]:
         return [field.to_ast(idx) for idx, field in enumerate(fields)]
 
-    async def query(self, *fields: GraphQLField, operation_name: str) -> Dict[str, Any]:
-        return await self.execute_custom_operation(
+    def query(self, *fields: GraphQLField, operation_name: str) -> Dict[str, Any]:
+        return self.execute_custom_operation(
             *fields, operation_type=OperationType.QUERY, operation_name=operation_name
         )
 
-    async def mutation(
+    def mutation(
         self, *fields: GraphQLField, operation_name: str
     ) -> Dict[str, Any]:
-        return await self.execute_custom_operation(
+        return self.execute_custom_operation(
             *fields,
             operation_type=OperationType.MUTATION,
             operation_name=operation_name

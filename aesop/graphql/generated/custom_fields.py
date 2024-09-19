@@ -57,8 +57,6 @@ from .custom_typing_fields import (
     CommentTokenizedContentGraphQLField,
     CommonColumnAttributesBaseGraphQLField,
     CommonColumnAttributesGraphQLField,
-    CommonColumnDescriptionExclusionBaseGraphQLField,
-    CommonColumnDescriptionExclusionGraphQLField,
     CrawlerGraphQLField,
     CrawlerMetadataBaseGraphQLField,
     CrawlerRunMetadataConnectionGraphQLField,
@@ -67,6 +65,7 @@ from .custom_typing_fields import (
     CrawlerRunStatusGraphQLField,
     CrawlerScheduleGraphQLField,
     CrawlerTypeResponseGraphQLField,
+    CustomAttributesGraphQLField,
     CustomDirectorySearchResultGraphQLField,
     CustomMetadataConfigGraphQLField,
     CustomMetadataGraphQLField,
@@ -99,6 +98,7 @@ from .custom_typing_fields import (
     DatasetFieldStatisticsGraphQLField,
     DatasetGraphQLField,
     DatasetHighlightGraphQLField,
+    DatasetLastQueryGraphQLField,
     DatasetLogicalIdGraphQLField,
     DatasetPatternGraphQLField,
     DatasetSchemaGraphQLField,
@@ -150,9 +150,13 @@ from .custom_typing_fields import (
     GroupDescriptionGraphQLField,
     GroupEdgeGraphQLField,
     GroupGraphQLField,
+    GroupHighlightGraphQLField,
     GroupInfoBaseGraphQLField,
     GroupInfoGraphQLField,
     GroupLogicalIdGraphQLField,
+    GroupSearchDocumentGraphQLField,
+    GroupSearchResultGraphQLField,
+    HardDeletionGraphQLField,
     HashtagGraphQLField,
     HierarchyConnectionGraphQLField,
     HierarchyEdgeGraphQLField,
@@ -273,6 +277,7 @@ from .custom_typing_fields import (
     PowerBiUserGraphQLField,
     PowerBiWorkspaceGraphQLField,
     PowerBiWorkspaceUserGraphQLField,
+    PurgeDataQualityGraphQLField,
     QueryCountGraphQLField,
     QueryCountPercentileGraphQLField,
     QueryCountsGraphQLField,
@@ -283,6 +288,7 @@ from .custom_typing_fields import (
     QueryInfoGraphQLField,
     QueryKnowledgeCardGraphQLField,
     QueryResultGraphQLField,
+    QuickSightDatasetSearchResultGraphQLField,
     RecentUserActivitiesGraphQLField,
     ResultRowGraphQLField,
     RunCrawlerResponseGraphQLField,
@@ -294,6 +300,7 @@ from .custom_typing_fields import (
     SearchScoreDetailsGraphQLField,
     SearchStatisticsResultGraphQLField,
     SettingsGraphQLField,
+    SimilarAssetsResultItemGraphQLField,
     SnowflakeStreamInfoGraphQLField,
     SocialLoginGraphQLField,
     SoftDeletionGraphQLField,
@@ -327,6 +334,7 @@ from .custom_typing_fields import (
     ThoughtSpotDataObjectGraphQLField,
     ThoughtSpotDataObjectSearchResultGraphQLField,
     ThoughtSpotInfoGraphQLField,
+    ToggleMuteNotificationOutputGraphQLField,
     UnityCatalogGraphQLField,
     UnityCatalogTableInfoGraphQLField,
     UnityCatalogVolumeInfoGraphQLField,
@@ -363,6 +371,8 @@ from .custom_typing_fields import (
     VirtualViewGraphQLField,
     VirtualViewHighlightGraphQLField,
     VirtualViewLogicalIdGraphQLField,
+    VirtualViewSchemaFieldGraphQLField,
+    VirtualViewSchemaGraphQLField,
     VirtualViewSearchDocumentGraphQLField,
     VirtualViewSearchInfoGraphQLField,
     VirtualViewSearchResultGraphQLField,
@@ -563,13 +573,23 @@ class AnchorEntityLabelFields(GraphQLField):
 
 
 class ApiKeyFields(GraphQLField):
+    @classmethod
+    def created(cls) -> "AuditStampFields":
+        return AuditStampFields("created")
+
     description: "ApiKeyGraphQLField" = ApiKeyGraphQLField("description")
     enabled: "ApiKeyGraphQLField" = ApiKeyGraphQLField("enabled")
     id: "ApiKeyGraphQLField" = ApiKeyGraphQLField("id")
-    name: "ApiKeyGraphQLField" = ApiKeyGraphQLField("name")
-    value: "ApiKeyGraphQLField" = ApiKeyGraphQLField("value")
 
-    def fields(self, *subfields: ApiKeyGraphQLField) -> "ApiKeyFields":
+    @classmethod
+    def last_modified(cls) -> "AuditStampFields":
+        return AuditStampFields("last_modified")
+
+    name: "ApiKeyGraphQLField" = ApiKeyGraphQLField("name")
+
+    def fields(
+        self, *subfields: Union[ApiKeyGraphQLField, "AuditStampFields"]
+    ) -> "ApiKeyFields":
         """Subfields should come from the ApiKeyFields class"""
         self._subfields.extend(subfields)
         return self
@@ -747,6 +767,34 @@ class AssetInterface(GraphQLField):
         return NamespaceConnectionFields("namespaces", arguments=cleared_arguments)
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
+    def source_info(cls) -> "SourceInfoFields":
+        return SourceInfoFields("source_info")
+
+    @classmethod
     def system_contacts(cls) -> "SystemContactsFields":
         return SystemContactsFields("system_contacts")
 
@@ -792,10 +840,12 @@ class AssetInterface(GraphQLField):
             "AssetFollowersFields",
             "AuditStampFields",
             "BrowsePathFields",
+            "EntityConnectionFields",
             "HashtagFields",
             "KnowledgeCardConnectionFields",
             "NamespaceConnectionFields",
             "PersonConnectionFields",
+            "SourceInfoFields",
             "SystemContactsFields",
             "SystemDescriptionFields",
             "SystemTagsFields",
@@ -967,6 +1017,7 @@ class AssetFollowersFields(GraphQLField):
 
     created_at: "AssetFollowersGraphQLField" = AssetFollowersGraphQLField("createdAt")
     entity_id: "AssetFollowersGraphQLField" = AssetFollowersGraphQLField("entityId")
+    followed_by: "AssetFollowersGraphQLField" = AssetFollowersGraphQLField("followedBy")
 
     @classmethod
     def followers(
@@ -978,7 +1029,7 @@ class AssetFollowersFields(GraphQLField):
         first: Optional[int] = None,
         last: Optional[int] = None,
         order_by: Optional[ConnectionOrderBy] = None
-    ) -> "PersonConnectionFields":
+    ) -> "EntityConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "after": {"type": "String", "value": after},
             "before": {"type": "String", "value": before},
@@ -990,7 +1041,7 @@ class AssetFollowersFields(GraphQLField):
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
         }
-        return PersonConnectionFields("followers", arguments=cleared_arguments)
+        return EntityConnectionFields("followers", arguments=cleared_arguments)
 
     @classmethod
     def last_modified(cls) -> "AuditStampFields":
@@ -999,14 +1050,20 @@ class AssetFollowersFields(GraphQLField):
     number_of_followers: "AssetFollowersGraphQLField" = AssetFollowersGraphQLField(
         "numberOfFollowers"
     )
+    viewer_can_unfollow: "AssetFollowersGraphQLField" = AssetFollowersGraphQLField(
+        "viewerCanUnfollow"
+    )
     viewer_does_follow: "AssetFollowersGraphQLField" = AssetFollowersGraphQLField(
         "viewerDoesFollow"
+    )
+    viewer_is_muted: "AssetFollowersGraphQLField" = AssetFollowersGraphQLField(
+        "viewerIsMuted"
     )
 
     def fields(
         self,
         *subfields: Union[
-            AssetFollowersGraphQLField, "AuditStampFields", "PersonConnectionFields"
+            AssetFollowersGraphQLField, "AuditStampFields", "EntityConnectionFields"
         ]
     ) -> "AssetFollowersFields":
         """Subfields should come from the AssetFollowersFields class"""
@@ -1613,8 +1670,8 @@ class ChangeRequestKnowledgeCardFields(GraphQLField):
     )
 
     @classmethod
-    def recipient(cls) -> "PersonFields":
-        return PersonFields("recipient")
+    def recipient(cls) -> "EntityInterface":
+        return EntityInterface("recipient")
 
     recipient_id: "ChangeRequestKnowledgeCardGraphQLField" = (
         ChangeRequestKnowledgeCardGraphQLField("recipientId")
@@ -1641,7 +1698,7 @@ class ChangeRequestKnowledgeCardFields(GraphQLField):
             ChangeRequestKnowledgeCardGraphQLField,
             "AcknowledgeChangeRequestFields",
             "ChangeRequestTokenizedContentFields",
-            "PersonFields",
+            "EntityInterface",
             "StatusFields",
         ]
     ) -> "ChangeRequestKnowledgeCardFields":
@@ -1926,76 +1983,6 @@ class CommonColumnAttributesBaseInterface(GraphQLField):
         return self
 
 
-class CommonColumnDescriptionExclusionFields(GraphQLField):
-    @classmethod
-    def created(cls) -> "AuditStampFields":
-        return AuditStampFields("created")
-
-    created_at: "CommonColumnDescriptionExclusionGraphQLField" = (
-        CommonColumnDescriptionExclusionGraphQLField("createdAt")
-    )
-    entity_id: "CommonColumnDescriptionExclusionGraphQLField" = (
-        CommonColumnDescriptionExclusionGraphQLField("entityId")
-    )
-
-    @classmethod
-    def exclusion(cls) -> "DatasetColumnsFields":
-        return DatasetColumnsFields("exclusion")
-
-    @classmethod
-    def last_modified(cls) -> "AuditStampFields":
-        return AuditStampFields("last_modified")
-
-    def fields(
-        self,
-        *subfields: Union[
-            CommonColumnDescriptionExclusionGraphQLField,
-            "AuditStampFields",
-            "DatasetColumnsFields",
-        ]
-    ) -> "CommonColumnDescriptionExclusionFields":
-        """Subfields should come from the CommonColumnDescriptionExclusionFields class"""
-        self._subfields.extend(subfields)
-        return self
-
-    def alias(self, alias: str) -> "CommonColumnDescriptionExclusionFields":
-        self._alias = alias
-        return self
-
-
-class CommonColumnDescriptionExclusionBaseInterface(GraphQLField):
-    created_at: "CommonColumnDescriptionExclusionBaseGraphQLField" = (
-        CommonColumnDescriptionExclusionBaseGraphQLField("createdAt")
-    )
-    entity_id: "CommonColumnDescriptionExclusionBaseGraphQLField" = (
-        CommonColumnDescriptionExclusionBaseGraphQLField("entityId")
-    )
-
-    @classmethod
-    def exclusion(cls) -> "DatasetColumnsFields":
-        return DatasetColumnsFields("exclusion")
-
-    def fields(
-        self,
-        *subfields: Union[
-            CommonColumnDescriptionExclusionBaseGraphQLField, "DatasetColumnsFields"
-        ]
-    ) -> "CommonColumnDescriptionExclusionBaseInterface":
-        """Subfields should come from the CommonColumnDescriptionExclusionBaseInterface class"""
-        self._subfields.extend(subfields)
-        return self
-
-    def alias(self, alias: str) -> "CommonColumnDescriptionExclusionBaseInterface":
-        self._alias = alias
-        return self
-
-    def on(
-        self, type_name: str, *subfields: GraphQLField
-    ) -> "CommonColumnDescriptionExclusionBaseInterface":
-        self._inline_fragments[type_name] = subfields
-        return self
-
-
 class CrawlerFields(GraphQLField):
     contacts: "CrawlerGraphQLField" = CrawlerGraphQLField("contacts")
     crawler_config: "CrawlerGraphQLField" = CrawlerGraphQLField("crawlerConfig")
@@ -2244,6 +2231,22 @@ class CrawlerTypeResponseFields(GraphQLField):
         return self
 
     def alias(self, alias: str) -> "CrawlerTypeResponseFields":
+        self._alias = alias
+        return self
+
+
+class CustomAttributesFields(GraphQLField):
+    color: "CustomAttributesGraphQLField" = CustomAttributesGraphQLField("color")
+    icon_key: "CustomAttributesGraphQLField" = CustomAttributesGraphQLField("iconKey")
+
+    def fields(
+        self, *subfields: CustomAttributesGraphQLField
+    ) -> "CustomAttributesFields":
+        """Subfields should come from the CustomAttributesFields class"""
+        self._subfields.extend(subfields)
+        return self
+
+    def alias(self, alias: str) -> "CustomAttributesFields":
         self._alias = alias
         return self
 
@@ -2762,6 +2765,30 @@ class DashboardFields(GraphQLField):
         return ViewedByConnectionFields(
             "recently_viewed_by", arguments=cleared_arguments
         )
+
+    @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
 
     @classmethod
     def related_metrics(
@@ -3446,6 +3473,7 @@ class DataGroupSearchResultFields(GraphQLField):
 
 class DataMonitorFields(GraphQLField):
     description: "DataMonitorGraphQLField" = DataMonitorGraphQLField("description")
+    exceptions: "DataMonitorGraphQLField" = DataMonitorGraphQLField("exceptions")
     last_run: "DataMonitorGraphQLField" = DataMonitorGraphQLField("lastRun")
     owner: "DataMonitorGraphQLField" = DataMonitorGraphQLField("owner")
     severity: "DataMonitorGraphQLField" = DataMonitorGraphQLField("severity")
@@ -3694,6 +3722,10 @@ class DatasetFields(GraphQLField):
     last_modified_at: "DatasetGraphQLField" = DatasetGraphQLField("lastModifiedAt")
 
     @classmethod
+    def last_query(cls) -> "DatasetLastQueryFields":
+        return DatasetLastQueryFields("last_query")
+
+    @classmethod
     def logical_id(cls) -> "DatasetLogicalIdFields":
         return DatasetLogicalIdFields("logical_id")
 
@@ -3747,15 +3779,43 @@ class DatasetFields(GraphQLField):
 
     @classmethod
     def query_issuers(
-        cls, *, days_ago: Optional[float] = None
+        cls,
+        *,
+        days_ago: Optional[float] = None,
+        hide_service_account: Optional[bool] = None
     ) -> "DatasetGraphQLField":
         arguments: Dict[str, Dict[str, Any]] = {
-            "daysAgo": {"type": "Float", "value": days_ago}
+            "daysAgo": {"type": "Float", "value": days_ago},
+            "hideServiceAccount": {"type": "Boolean", "value": hide_service_account},
         }
         cleared_arguments = {
             key: value for key, value in arguments.items() if value["value"] is not None
         }
         return DatasetGraphQLField("query_issuers", arguments=cleared_arguments)
+
+    @classmethod
+    def query_logs(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[QueryInfoConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "QueryInfoConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "QueryInfoConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return QueryInfoConnectionFields("query_logs", arguments=cleared_arguments)
 
     @classmethod
     def recent_queries(
@@ -3850,6 +3910,30 @@ class DatasetFields(GraphQLField):
         return EntityLineageConnectionFields(
             "related_asset_of_type", arguments=cleared_arguments
         )
+
+    @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
 
     @classmethod
     def schema(cls) -> "DatasetSchemaFields":
@@ -3991,12 +4075,14 @@ class DatasetFields(GraphQLField):
             "DatasetDocumentationFields",
             "DatasetFieldAssociationsFields",
             "DatasetFieldStatisticsFields",
+            "DatasetLastQueryFields",
             "DatasetLogicalIdFields",
             "DatasetSchemaFields",
             "DatasetStatisticsFields",
             "DatasetStructureFields",
             "DatasetUsageFields",
             "DerivedAssetDescriptionsFields",
+            "EntityConnectionFields",
             "EntityLineageConnectionFields",
             "EntityUpstreamFields",
             "HashtagFields",
@@ -4249,6 +4335,30 @@ class DatasetHighlightFields(GraphQLField):
         return self
 
 
+class DatasetLastQueryFields(GraphQLField):
+    created_at: "DatasetLastQueryGraphQLField" = DatasetLastQueryGraphQLField(
+        "createdAt"
+    )
+    entity_id: "DatasetLastQueryGraphQLField" = DatasetLastQueryGraphQLField("entityId")
+    last_queried_at: "DatasetLastQueryGraphQLField" = DatasetLastQueryGraphQLField(
+        "lastQueriedAt"
+    )
+    last_queried_by: "DatasetLastQueryGraphQLField" = DatasetLastQueryGraphQLField(
+        "lastQueriedBy"
+    )
+
+    def fields(
+        self, *subfields: DatasetLastQueryGraphQLField
+    ) -> "DatasetLastQueryFields":
+        """Subfields should come from the DatasetLastQueryFields class"""
+        self._subfields.extend(subfields)
+        return self
+
+    def alias(self, alias: str) -> "DatasetLastQueryFields":
+        self._alias = alias
+        return self
+
+
 class DatasetLogicalIdFields(GraphQLField):
     account: "DatasetLogicalIdGraphQLField" = DatasetLogicalIdGraphQLField("account")
     name: "DatasetLogicalIdGraphQLField" = DatasetLogicalIdGraphQLField("name")
@@ -4290,10 +4400,6 @@ class DatasetSchemaFields(GraphQLField):
     @classmethod
     def common_column_attributes(cls) -> "SchemaFieldWithCommonAttributesFields":
         return SchemaFieldWithCommonAttributesFields("common_column_attributes")
-
-    @classmethod
-    def common_column_descriptions(cls) -> "SchemaFieldFields":
-        return SchemaFieldFields("common_column_descriptions")
 
     created_at: "DatasetSchemaGraphQLField" = DatasetSchemaGraphQLField("createdAt")
 
@@ -4403,6 +4509,9 @@ class DatasetSearchDocumentFields(GraphQLField):
     database: "DatasetSearchDocumentGraphQLField" = DatasetSearchDocumentGraphQLField(
         "database"
     )
+    dbt_tags: "DatasetSearchDocumentGraphQLField" = DatasetSearchDocumentGraphQLField(
+        "dbtTags"
+    )
     description: "DatasetSearchDocumentGraphQLField" = (
         DatasetSearchDocumentGraphQLField("description")
     )
@@ -4499,8 +4608,14 @@ class DatasetSearchDocumentFields(GraphQLField):
     size: "DatasetSearchDocumentGraphQLField" = DatasetSearchDocumentGraphQLField(
         "size"
     )
+    snowflake_tags: "DatasetSearchDocumentGraphQLField" = (
+        DatasetSearchDocumentGraphQLField("snowflakeTags")
+    )
     unity_catalog_dataset_type: "DatasetSearchDocumentGraphQLField" = (
         DatasetSearchDocumentGraphQLField("unityCatalogDatasetType")
+    )
+    unity_catalog_tags: "DatasetSearchDocumentGraphQLField" = (
+        DatasetSearchDocumentGraphQLField("unityCatalogTags")
     )
     usage_level: "DatasetSearchDocumentGraphQLField" = (
         DatasetSearchDocumentGraphQLField("usageLevel")
@@ -5293,6 +5408,30 @@ class EntityInterface(GraphQLField):
         return NamespaceConnectionFields("namespaces", arguments=cleared_arguments)
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
     def top_authors(
         cls,
         *,
@@ -5323,6 +5462,7 @@ class EntityInterface(GraphQLField):
             "AggregationMetadataFields",
             "AssetFollowersFields",
             "BrowsePathFields",
+            "EntityConnectionFields",
             "HashtagFields",
             "KnowledgeCardConnectionFields",
             "NamespaceConnectionFields",
@@ -5954,6 +6094,30 @@ class GovernedEntityInterface(GraphQLField):
         return NamespaceConnectionFields("namespaces", arguments=cleared_arguments)
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
     def top_authors(
         cls,
         *,
@@ -5984,6 +6148,7 @@ class GovernedEntityInterface(GraphQLField):
             "AggregationMetadataFields",
             "AssetFollowersFields",
             "BrowsePathFields",
+            "EntityConnectionFields",
             "HashtagFields",
             "KnowledgeCardConnectionFields",
             "NamespaceConnectionFields",
@@ -6098,6 +6263,30 @@ class GroupFields(GraphQLField):
         return NamespaceConnectionFields("namespaces", arguments=cleared_arguments)
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
     def top_authors(
         cls,
         *,
@@ -6128,6 +6317,7 @@ class GroupFields(GraphQLField):
             "AggregationMetadataFields",
             "AssetFollowersFields",
             "BrowsePathFields",
+            "EntityConnectionFields",
             "GroupInfoFields",
             "GroupLogicalIdFields",
             "HashtagFields",
@@ -6232,6 +6422,30 @@ class GroupBaseInterface(GraphQLField):
         return NamespaceConnectionFields("namespaces", arguments=cleared_arguments)
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
     def top_authors(
         cls,
         *,
@@ -6262,6 +6476,7 @@ class GroupBaseInterface(GraphQLField):
             "AggregationMetadataFields",
             "AssetFollowersFields",
             "BrowsePathFields",
+            "EntityConnectionFields",
             "HashtagFields",
             "KnowledgeCardConnectionFields",
             "NamespaceConnectionFields",
@@ -6342,6 +6557,26 @@ class GroupEdgeFields(GraphQLField):
         return self
 
     def alias(self, alias: str) -> "GroupEdgeFields":
+        self._alias = alias
+        return self
+
+
+class GroupHighlightFields(GraphQLField):
+    contact_display_names: "GroupHighlightGraphQLField" = GroupHighlightGraphQLField(
+        "contactDisplayNames"
+    )
+    governed_tags: "GroupHighlightGraphQLField" = GroupHighlightGraphQLField(
+        "governedTags"
+    )
+    hashtags: "GroupHighlightGraphQLField" = GroupHighlightGraphQLField("hashtags")
+    name: "GroupHighlightGraphQLField" = GroupHighlightGraphQLField("name")
+
+    def fields(self, *subfields: GroupHighlightGraphQLField) -> "GroupHighlightFields":
+        """Subfields should come from the GroupHighlightFields class"""
+        self._subfields.extend(subfields)
+        return self
+
+    def alias(self, alias: str) -> "GroupHighlightFields":
         self._alias = alias
         return self
 
@@ -6457,6 +6692,154 @@ class GroupLogicalIdFields(GraphQLField):
         return self
 
 
+class GroupSearchDocumentFields(GraphQLField):
+    browse_path_hierarchy: "GroupSearchDocumentGraphQLField" = (
+        GroupSearchDocumentGraphQLField("browsePathHierarchy")
+    )
+    browse_path_segments: "GroupSearchDocumentGraphQLField" = (
+        GroupSearchDocumentGraphQLField("browsePathSegments")
+    )
+
+    @classmethod
+    def browse_paths(cls) -> "BrowsePathFields":
+        return BrowsePathFields("browse_paths")
+
+    contact_display_names: "GroupSearchDocumentGraphQLField" = (
+        GroupSearchDocumentGraphQLField("contactDisplayNames")
+    )
+    document_id: "GroupSearchDocumentGraphQLField" = GroupSearchDocumentGraphQLField(
+        "documentId"
+    )
+    emails: "GroupSearchDocumentGraphQLField" = GroupSearchDocumentGraphQLField(
+        "emails"
+    )
+    embedded_string_1: "GroupSearchDocumentGraphQLField" = (
+        GroupSearchDocumentGraphQLField("embeddedString_1")
+    )
+    embedded_string_2: "GroupSearchDocumentGraphQLField" = (
+        GroupSearchDocumentGraphQLField("embeddedString_2")
+    )
+    entity_id: "GroupSearchDocumentGraphQLField" = GroupSearchDocumentGraphQLField(
+        "entityId"
+    )
+    governed_tags: "GroupSearchDocumentGraphQLField" = GroupSearchDocumentGraphQLField(
+        "governedTags"
+    )
+    hashtags: "GroupSearchDocumentGraphQLField" = GroupSearchDocumentGraphQLField(
+        "hashtags"
+    )
+
+    @classmethod
+    def highlight(cls) -> "GroupHighlightFields":
+        return GroupHighlightFields("highlight")
+
+    is_deleted: "GroupSearchDocumentGraphQLField" = GroupSearchDocumentGraphQLField(
+        "isDeleted"
+    )
+    last_refreshed: "GroupSearchDocumentGraphQLField" = GroupSearchDocumentGraphQLField(
+        "lastRefreshed"
+    )
+    members: "GroupSearchDocumentGraphQLField" = GroupSearchDocumentGraphQLField(
+        "members"
+    )
+    name: "GroupSearchDocumentGraphQLField" = GroupSearchDocumentGraphQLField("name")
+    pagination_token: "GroupSearchDocumentGraphQLField" = (
+        GroupSearchDocumentGraphQLField("paginationToken")
+    )
+
+    @classmethod
+    def score_details(cls) -> "SearchScoreDetailsFields":
+        return SearchScoreDetailsFields("score_details")
+
+    view_count: "GroupSearchDocumentGraphQLField" = GroupSearchDocumentGraphQLField(
+        "viewCount"
+    )
+
+    def fields(
+        self,
+        *subfields: Union[
+            GroupSearchDocumentGraphQLField,
+            "BrowsePathFields",
+            "GroupHighlightFields",
+            "SearchScoreDetailsFields",
+        ]
+    ) -> "GroupSearchDocumentFields":
+        """Subfields should come from the GroupSearchDocumentFields class"""
+        self._subfields.extend(subfields)
+        return self
+
+    def alias(self, alias: str) -> "GroupSearchDocumentFields":
+        self._alias = alias
+        return self
+
+
+class GroupSearchResultFields(GraphQLField):
+    @classmethod
+    def documents(cls) -> "GroupSearchDocumentFields":
+        return GroupSearchDocumentFields("documents")
+
+    error_message: "GroupSearchResultGraphQLField" = GroupSearchResultGraphQLField(
+        "errorMessage"
+    )
+    from_: "GroupSearchResultGraphQLField" = GroupSearchResultGraphQLField("from")
+    has_more: "GroupSearchResultGraphQLField" = GroupSearchResultGraphQLField("hasMore")
+
+    @classmethod
+    def metadata(cls) -> "AggregationMetadataFields":
+        return AggregationMetadataFields("metadata")
+
+    @classmethod
+    def nodes(cls) -> "NodeInterface":
+        return NodeInterface("nodes")
+
+    pagination_token: "GroupSearchResultGraphQLField" = GroupSearchResultGraphQLField(
+        "paginationToken"
+    )
+    search_context: "GroupSearchResultGraphQLField" = GroupSearchResultGraphQLField(
+        "searchContext"
+    )
+    search_index: "GroupSearchResultGraphQLField" = GroupSearchResultGraphQLField(
+        "searchIndex"
+    )
+    size: "GroupSearchResultGraphQLField" = GroupSearchResultGraphQLField("size")
+    total_count: "GroupSearchResultGraphQLField" = GroupSearchResultGraphQLField(
+        "totalCount"
+    )
+
+    def fields(
+        self,
+        *subfields: Union[
+            GroupSearchResultGraphQLField,
+            "AggregationMetadataFields",
+            "GroupSearchDocumentFields",
+            "NodeInterface",
+        ]
+    ) -> "GroupSearchResultFields":
+        """Subfields should come from the GroupSearchResultFields class"""
+        self._subfields.extend(subfields)
+        return self
+
+    def alias(self, alias: str) -> "GroupSearchResultFields":
+        self._alias = alias
+        return self
+
+
+class HardDeletionFields(GraphQLField):
+    enabled: "HardDeletionGraphQLField" = HardDeletionGraphQLField("enabled")
+    threshold_hours: "HardDeletionGraphQLField" = HardDeletionGraphQLField(
+        "thresholdHours"
+    )
+
+    def fields(self, *subfields: HardDeletionGraphQLField) -> "HardDeletionFields":
+        """Subfields should come from the HardDeletionFields class"""
+        self._subfields.extend(subfields)
+        return self
+
+    def alias(self, alias: str) -> "HardDeletionFields":
+        self._alias = alias
+        return self
+
+
 class HashtagFields(GraphQLField):
     value: "HashtagGraphQLField" = HashtagGraphQLField("value")
 
@@ -6557,6 +6940,10 @@ class HierarchyFields(GraphQLField):
         return AssetFollowersFields("followership")
 
     @classmethod
+    def force_shown(cls) -> "AuditStampFields":
+        return AuditStampFields("force_shown")
+
+    @classmethod
     def governed_tags(
         cls,
         *,
@@ -6596,8 +6983,10 @@ class HierarchyFields(GraphQLField):
     def interested_parties(cls) -> "InterestedPartyFields":
         return InterestedPartyFields("interested_parties")
 
+    is_complete: "HierarchyGraphQLField" = HierarchyGraphQLField("isComplete")
     is_deleted: "HierarchyGraphQLField" = HierarchyGraphQLField("isDeleted")
     is_hidden: "HierarchyGraphQLField" = HierarchyGraphQLField("isHidden")
+    is_production: "HierarchyGraphQLField" = HierarchyGraphQLField("isProduction")
 
     @classmethod
     def knowledge(
@@ -6737,8 +7126,44 @@ class HierarchyFields(GraphQLField):
         )
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
+    def source_info(cls) -> "SourceInfoFields":
+        return SourceInfoFields("source_info")
+
+    @classmethod
+    def system_contacts(cls) -> "SystemContactsFields":
+        return SystemContactsFields("system_contacts")
+
+    @classmethod
     def system_description(cls) -> "SystemDescriptionFields":
         return SystemDescriptionFields("system_description")
+
+    system_tag_values: "HierarchyGraphQLField" = HierarchyGraphQLField(
+        "systemTagValues"
+    )
 
     @classmethod
     def system_tags(cls) -> "SystemTagsFields":
@@ -6811,8 +7236,10 @@ class HierarchyFields(GraphQLField):
             "AssetContactsFields",
             "AssetDocumentAggregationBucketFields",
             "AssetFollowersFields",
+            "AuditStampFields",
             "BrowsePathFields",
             "DerivedAssetDescriptionsFields",
+            "EntityConnectionFields",
             "HashtagFields",
             "HierarchyConnectionFields",
             "HierarchyInfoFields",
@@ -6822,6 +7249,8 @@ class HierarchyFields(GraphQLField):
             "NamespaceConnectionFields",
             "PersonConnectionFields",
             "RecentUserActivitiesFields",
+            "SourceInfoFields",
+            "SystemContactsFields",
             "SystemDescriptionFields",
             "SystemTagsFields",
             "UserDefinedResourceConnectionFields",
@@ -7259,6 +7688,30 @@ class KnowledgeCardFields(GraphQLField):
         )
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
     def top_authors(
         cls,
         *,
@@ -7317,6 +7770,7 @@ class KnowledgeCardFields(GraphQLField):
             "AssetLikesFields",
             "AuditStampFields",
             "BrowsePathFields",
+            "EntityConnectionFields",
             "HashtagFields",
             "KnowledgeCardConnectionFields",
             "KnowledgeCardInfoFields",
@@ -7437,6 +7891,30 @@ class KnowledgeCardBaseInterface(GraphQLField):
         return NamespaceConnectionFields("namespaces", arguments=cleared_arguments)
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
     def top_authors(
         cls,
         *,
@@ -7467,6 +7945,7 @@ class KnowledgeCardBaseInterface(GraphQLField):
             "AggregationMetadataFields",
             "AssetFollowersFields",
             "BrowsePathFields",
+            "EntityConnectionFields",
             "HashtagFields",
             "KnowledgeCardConnectionFields",
             "NamespaceConnectionFields",
@@ -8830,6 +9309,34 @@ class MetricFields(GraphQLField):
         )
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
+    def source_info(cls) -> "SourceInfoFields":
+        return SourceInfoFields("source_info")
+
+    @classmethod
     def system_contacts(cls) -> "SystemContactsFields":
         return SystemContactsFields("system_contacts")
 
@@ -8938,6 +9445,7 @@ class MetricFields(GraphQLField):
             "BrowsePathFields",
             "DbtMetricFields",
             "DerivedAssetDescriptionsFields",
+            "EntityConnectionFields",
             "EntityLineageConnectionFields",
             "EntityUpstreamFields",
             "HashtagFields",
@@ -8948,6 +9456,7 @@ class MetricFields(GraphQLField):
             "NamespaceConnectionFields",
             "PersonConnectionFields",
             "RecentUserActivitiesFields",
+            "SourceInfoFields",
             "SystemContactsFields",
             "SystemDescriptionFields",
             "SystemTagsFields",
@@ -9070,6 +9579,34 @@ class MetricBaseInterface(GraphQLField):
         return NamespaceConnectionFields("namespaces", arguments=cleared_arguments)
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
+    def source_info(cls) -> "SourceInfoFields":
+        return SourceInfoFields("source_info")
+
+    @classmethod
     def system_contacts(cls) -> "SystemContactsFields":
         return SystemContactsFields("system_contacts")
 
@@ -9118,11 +9655,13 @@ class MetricBaseInterface(GraphQLField):
             "AuditStampFields",
             "BrowsePathFields",
             "DbtMetricFields",
+            "EntityConnectionFields",
             "HashtagFields",
             "KnowledgeCardConnectionFields",
             "MetricLogicalIdFields",
             "NamespaceConnectionFields",
             "PersonConnectionFields",
+            "SourceInfoFields",
             "SystemContactsFields",
             "SystemDescriptionFields",
             "SystemTagsFields",
@@ -9215,41 +9754,8 @@ class MetricInfoFields(GraphQLField):
     def last_modified(cls) -> "AuditStampFields":
         return AuditStampFields("last_modified")
 
-    @classmethod
-    def related_assets(
-        cls,
-        *,
-        after: Optional[str] = None,
-        before: Optional[str] = None,
-        filters: Optional[BaseConnectionFilter] = None,
-        first: Optional[int] = None,
-        last: Optional[int] = None,
-        order_by: Optional[ConnectionOrderBy] = None,
-        types: Optional[EntityType] = None
-    ) -> "EntityConnectionFields":
-        arguments: Dict[str, Dict[str, Any]] = {
-            "after": {"type": "String", "value": after},
-            "before": {"type": "String", "value": before},
-            "filters": {"type": "BaseConnectionFilter", "value": filters},
-            "first": {"type": "Int", "value": first},
-            "last": {"type": "Int", "value": last},
-            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
-            "types": {"type": "EntityType", "value": types},
-        }
-        cleared_arguments = {
-            key: value for key, value in arguments.items() if value["value"] is not None
-        }
-        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
-
-    related_entity_ids: "MetricInfoGraphQLField" = MetricInfoGraphQLField(
-        "relatedEntityIds"
-    )
-
     def fields(
-        self,
-        *subfields: Union[
-            MetricInfoGraphQLField, "AuditStampFields", "EntityConnectionFields"
-        ]
+        self, *subfields: Union[MetricInfoGraphQLField, "AuditStampFields"]
     ) -> "MetricInfoFields":
         """Subfields should come from the MetricInfoFields class"""
         self._subfields.extend(subfields)
@@ -9650,6 +10156,30 @@ class NamespaceFields(GraphQLField):
         )
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
     def summary(cls) -> "NamespaceSummaryFields":
         return NamespaceSummaryFields("summary")
 
@@ -9700,6 +10230,7 @@ class NamespaceFields(GraphQLField):
             "AssetFollowersFields",
             "BrowsePathFields",
             "DerivedAssetDescriptionsFields",
+            "EntityConnectionFields",
             "HashtagFields",
             "KnowledgeCardConnectionFields",
             "NamespaceAssetsFields",
@@ -9896,6 +10427,30 @@ class NamespaceBaseInterface(GraphQLField):
         return NamespaceConnectionFields("namespaces", arguments=cleared_arguments)
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
     def top_authors(
         cls,
         *,
@@ -9926,6 +10481,7 @@ class NamespaceBaseInterface(GraphQLField):
             "AggregationMetadataFields",
             "AssetFollowersFields",
             "BrowsePathFields",
+            "EntityConnectionFields",
             "HashtagFields",
             "KnowledgeCardConnectionFields",
             "NamespaceConnectionFields",
@@ -10065,6 +10621,10 @@ class NamespaceInfoFields(GraphQLField):
     created_at: "NamespaceInfoGraphQLField" = NamespaceInfoGraphQLField("createdAt")
 
     @classmethod
+    def custom_attributes(cls) -> "CustomAttributesFields":
+        return CustomAttributesFields("custom_attributes")
+
+    @classmethod
     def description(cls) -> "NamespaceDescriptionFields":
         return NamespaceDescriptionFields("description")
 
@@ -10086,6 +10646,7 @@ class NamespaceInfoFields(GraphQLField):
         *subfields: Union[
             NamespaceInfoGraphQLField,
             "AuditStampFields",
+            "CustomAttributesFields",
             "NamespaceDescriptionFields",
             "NamespaceTypeDetailFields",
         ]
@@ -10105,6 +10666,10 @@ class NamespaceInfoBaseInterface(GraphQLField):
     )
 
     @classmethod
+    def custom_attributes(cls) -> "CustomAttributesFields":
+        return CustomAttributesFields("custom_attributes")
+
+    @classmethod
     def description(cls) -> "NamespaceDescriptionFields":
         return NamespaceDescriptionFields("description")
 
@@ -10118,7 +10683,11 @@ class NamespaceInfoBaseInterface(GraphQLField):
 
     def fields(
         self,
-        *subfields: Union[NamespaceInfoBaseGraphQLField, "NamespaceDescriptionFields"]
+        *subfields: Union[
+            NamespaceInfoBaseGraphQLField,
+            "CustomAttributesFields",
+            "NamespaceDescriptionFields",
+        ]
     ) -> "NamespaceInfoBaseInterface":
         """Subfields should come from the NamespaceInfoBaseInterface class"""
         self._subfields.extend(subfields)
@@ -10881,6 +11450,30 @@ class PersonFields(GraphQLField):
         return QueryInfoConnectionFields("recent_queries", arguments=cleared_arguments)
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
     def saved_queries(cls) -> "SavedLiveQueryFields":
         return SavedLiveQueryFields("saved_queries")
 
@@ -11141,6 +11734,30 @@ class PersonDetailsInterfaceInterface(GraphQLField):
         return PersonOrganizationFields("organization")
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
     def top_authors(
         cls,
         *,
@@ -11171,6 +11788,7 @@ class PersonDetailsInterfaceInterface(GraphQLField):
             "AggregationMetadataFields",
             "AssetFollowersFields",
             "BrowsePathFields",
+            "EntityConnectionFields",
             "HashtagFields",
             "KnowledgeCardConnectionFields",
             "NamespaceConnectionFields",
@@ -11796,6 +12414,30 @@ class PersonalizationTraitInterface(GraphQLField):
         return PersonPropertiesFields("properties")
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
     def saved_queries(cls) -> "SavedLiveQueryFields":
         return SavedLiveQueryFields("saved_queries")
 
@@ -11830,6 +12472,7 @@ class PersonalizationTraitInterface(GraphQLField):
             "AggregationMetadataFields",
             "AssetFollowersFields",
             "BrowsePathFields",
+            "EntityConnectionFields",
             "HashtagFields",
             "KnowledgeCardConnectionFields",
             "NamespaceConnectionFields",
@@ -11971,6 +12614,30 @@ class PipelineFields(GraphQLField):
         return PowerBIDataflowFields("power_bi_dataflow")
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
     def source_info(cls) -> "SourceInfoFields":
         return SourceInfoFields("source_info")
 
@@ -12030,6 +12697,7 @@ class PipelineFields(GraphQLField):
             "AuditStampFields",
             "AzureDataFactoryPipelineFields",
             "BrowsePathFields",
+            "EntityConnectionFields",
             "FivetranPipelineFields",
             "HashtagFields",
             "InformaticaMappingFields",
@@ -12931,6 +13599,24 @@ class PowerBiWorkspaceUserFields(GraphQLField):
         return self
 
 
+class PurgeDataQualityFields(GraphQLField):
+    enabled: "PurgeDataQualityGraphQLField" = PurgeDataQualityGraphQLField("enabled")
+    threshold_hours: "PurgeDataQualityGraphQLField" = PurgeDataQualityGraphQLField(
+        "thresholdHours"
+    )
+
+    def fields(
+        self, *subfields: PurgeDataQualityGraphQLField
+    ) -> "PurgeDataQualityFields":
+        """Subfields should come from the PurgeDataQualityFields class"""
+        self._subfields.extend(subfields)
+        return self
+
+    def alias(self, alias: str) -> "PurgeDataQualityFields":
+        self._alias = alias
+        return self
+
+
 class QueryCountFields(GraphQLField):
     count: "QueryCountGraphQLField" = QueryCountGraphQLField("count")
     level: "QueryCountGraphQLField" = QueryCountGraphQLField("level")
@@ -13126,6 +13812,7 @@ class QueryInfoFields(GraphQLField):
 
     rows_read: "QueryInfoGraphQLField" = QueryInfoGraphQLField("rowsRead")
     rows_written: "QueryInfoGraphQLField" = QueryInfoGraphQLField("rowsWritten")
+    run_count: "QueryInfoGraphQLField" = QueryInfoGraphQLField("runCount")
 
     def fields(
         self,
@@ -13255,6 +13942,63 @@ class QueryResultFields(GraphQLField):
         return self
 
     def alias(self, alias: str) -> "QueryResultFields":
+        self._alias = alias
+        return self
+
+
+class QuickSightDatasetSearchResultFields(GraphQLField):
+    @classmethod
+    def documents(cls) -> "VirtualViewSearchDocumentFields":
+        return VirtualViewSearchDocumentFields("documents")
+
+    error_message: "QuickSightDatasetSearchResultGraphQLField" = (
+        QuickSightDatasetSearchResultGraphQLField("errorMessage")
+    )
+    from_: "QuickSightDatasetSearchResultGraphQLField" = (
+        QuickSightDatasetSearchResultGraphQLField("from")
+    )
+    has_more: "QuickSightDatasetSearchResultGraphQLField" = (
+        QuickSightDatasetSearchResultGraphQLField("hasMore")
+    )
+
+    @classmethod
+    def metadata(cls) -> "AggregationMetadataFields":
+        return AggregationMetadataFields("metadata")
+
+    @classmethod
+    def nodes(cls) -> "NodeInterface":
+        return NodeInterface("nodes")
+
+    pagination_token: "QuickSightDatasetSearchResultGraphQLField" = (
+        QuickSightDatasetSearchResultGraphQLField("paginationToken")
+    )
+    search_context: "QuickSightDatasetSearchResultGraphQLField" = (
+        QuickSightDatasetSearchResultGraphQLField("searchContext")
+    )
+    search_index: "QuickSightDatasetSearchResultGraphQLField" = (
+        QuickSightDatasetSearchResultGraphQLField("searchIndex")
+    )
+    size: "QuickSightDatasetSearchResultGraphQLField" = (
+        QuickSightDatasetSearchResultGraphQLField("size")
+    )
+    total_count: "QuickSightDatasetSearchResultGraphQLField" = (
+        QuickSightDatasetSearchResultGraphQLField("totalCount")
+    )
+
+    def fields(
+        self,
+        *subfields: Union[
+            QuickSightDatasetSearchResultGraphQLField,
+            "AggregationMetadataFields",
+            "NodeInterface",
+            "VirtualViewSearchDocumentFields",
+        ]
+    ) -> "QuickSightDatasetSearchResultFields":
+        """Subfields should come from the QuickSightDatasetSearchResultFields class"""
+        self._subfields.extend(subfields)
+        return self
+
+    def alias(self, alias: str) -> "QuickSightDatasetSearchResultFields":
         self._alias = alias
         return self
 
@@ -13611,12 +14355,20 @@ class SettingsFields(GraphQLField):
         return UserSpecifiedOrderingFields("custom_user_defined_order_hierarchy")
 
     @classmethod
+    def hard_deletion(cls) -> "HardDeletionFields":
+        return HardDeletionFields("hard_deletion")
+
+    @classmethod
     def non_prod(cls) -> "NonProdFields":
         return NonProdFields("non_prod")
 
     @classmethod
     def organization(cls) -> "OrganizationFields":
         return OrganizationFields("organization")
+
+    @classmethod
+    def purge_data_quality(cls) -> "PurgeDataQualityFields":
+        return PurgeDataQualityFields("purge_data_quality")
 
     service_accounts: "SettingsGraphQLField" = SettingsGraphQLField("serviceAccounts")
 
@@ -13638,8 +14390,10 @@ class SettingsFields(GraphQLField):
             SettingsGraphQLField,
             "AuthorizationFields",
             "CustomMetadataConfigFields",
+            "HardDeletionFields",
             "NonProdFields",
             "OrganizationFields",
+            "PurgeDataQualityFields",
             "SSOFields",
             "SocialLoginFields",
             "SoftDeletionFields",
@@ -13651,6 +14405,33 @@ class SettingsFields(GraphQLField):
         return self
 
     def alias(self, alias: str) -> "SettingsFields":
+        self._alias = alias
+        return self
+
+
+class SimilarAssetsResultItemFields(GraphQLField):
+    @classmethod
+    def dataset(cls) -> "DatasetFields":
+        return DatasetFields("dataset")
+
+    entity_id: "SimilarAssetsResultItemGraphQLField" = (
+        SimilarAssetsResultItemGraphQLField("entityId")
+    )
+    schema_similarity: "SimilarAssetsResultItemGraphQLField" = (
+        SimilarAssetsResultItemGraphQLField("schemaSimilarity")
+    )
+    vector_similarity: "SimilarAssetsResultItemGraphQLField" = (
+        SimilarAssetsResultItemGraphQLField("vectorSimilarity")
+    )
+
+    def fields(
+        self, *subfields: Union[SimilarAssetsResultItemGraphQLField, "DatasetFields"]
+    ) -> "SimilarAssetsResultItemFields":
+        """Subfields should come from the SimilarAssetsResultItemFields class"""
+        self._subfields.extend(subfields)
+        return self
+
+    def alias(self, alias: str) -> "SimilarAssetsResultItemFields":
         self._alias = alias
         return self
 
@@ -14575,6 +15356,28 @@ class ThoughtSpotInfoFields(GraphQLField):
         return self
 
 
+class ToggleMuteNotificationOutputFields(GraphQLField):
+    @classmethod
+    def entity(cls) -> "EntityInterface":
+        return EntityInterface("entity")
+
+    muted: "ToggleMuteNotificationOutputGraphQLField" = (
+        ToggleMuteNotificationOutputGraphQLField("muted")
+    )
+
+    def fields(
+        self,
+        *subfields: Union[ToggleMuteNotificationOutputGraphQLField, "EntityInterface"]
+    ) -> "ToggleMuteNotificationOutputFields":
+        """Subfields should come from the ToggleMuteNotificationOutputFields class"""
+        self._subfields.extend(subfields)
+        return self
+
+    def alias(self, alias: str) -> "ToggleMuteNotificationOutputFields":
+        self._alias = alias
+        return self
+
+
 class UnityCatalogFields(GraphQLField):
     created_at: "UnityCatalogGraphQLField" = UnityCatalogGraphQLField("createdAt")
     dataset_type: "UnityCatalogGraphQLField" = UnityCatalogGraphQLField("datasetType")
@@ -14858,14 +15661,6 @@ class UserDefinedResourceFields(GraphQLField):
     def common_column_attributes(cls) -> "CommonColumnAttributesFields":
         return CommonColumnAttributesFields("common_column_attributes")
 
-    @classmethod
-    def common_column_description_exclusion(
-        cls,
-    ) -> "CommonColumnDescriptionExclusionFields":
-        return CommonColumnDescriptionExclusionFields(
-            "common_column_description_exclusion"
-        )
-
     count_matching_columns: "UserDefinedResourceGraphQLField" = (
         UserDefinedResourceGraphQLField("countMatchingColumns")
     )
@@ -14972,6 +15767,30 @@ class UserDefinedResourceFields(GraphQLField):
         return UserDefinedResourceFields("parent_resource")
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
     def top_authors(
         cls,
         *,
@@ -15017,7 +15836,6 @@ class UserDefinedResourceFields(GraphQLField):
             "AssetFollowersFields",
             "BrowsePathFields",
             "CommonColumnAttributesFields",
-            "CommonColumnDescriptionExclusionFields",
             "EntityConnectionFields",
             "HashtagFields",
             "KnowledgeCardConnectionFields",
@@ -15141,6 +15959,30 @@ class UserDefinedResourceBaseInterface(GraphQLField):
         return NamespaceConnectionFields("namespaces", arguments=cleared_arguments)
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
     def top_authors(
         cls,
         *,
@@ -15171,6 +16013,7 @@ class UserDefinedResourceBaseInterface(GraphQLField):
             "AggregationMetadataFields",
             "AssetFollowersFields",
             "BrowsePathFields",
+            "EntityConnectionFields",
             "HashtagFields",
             "KnowledgeCardConnectionFields",
             "NamespaceConnectionFields",
@@ -15928,6 +16771,9 @@ class ViewerPermissionsFields(GraphQLField):
     can_edit_users: "ViewerPermissionsGraphQLField" = ViewerPermissionsGraphQLField(
         "canEditUsers"
     )
+    can_enroll_groups_as_followers: "ViewerPermissionsGraphQLField" = (
+        ViewerPermissionsGraphQLField("canEnrollGroupsAsFollowers")
+    )
     can_list_users: "ViewerPermissionsGraphQLField" = ViewerPermissionsGraphQLField(
         "canListUsers"
     )
@@ -16230,6 +17076,38 @@ class VirtualViewFields(GraphQLField):
         )
 
     @classmethod
+    def related_assets(
+        cls,
+        *,
+        after: Optional[str] = None,
+        before: Optional[str] = None,
+        filters: Optional[AssetConnectionFilterInput] = None,
+        first: Optional[int] = None,
+        last: Optional[int] = None,
+        order_by: Optional[ConnectionOrderBy] = None
+    ) -> "EntityConnectionFields":
+        arguments: Dict[str, Dict[str, Any]] = {
+            "after": {"type": "String", "value": after},
+            "before": {"type": "String", "value": before},
+            "filters": {"type": "AssetConnectionFilterInput", "value": filters},
+            "first": {"type": "Int", "value": first},
+            "last": {"type": "Int", "value": last},
+            "orderBy": {"type": "ConnectionOrderBy", "value": order_by},
+        }
+        cleared_arguments = {
+            key: value for key, value in arguments.items() if value["value"] is not None
+        }
+        return EntityConnectionFields("related_assets", arguments=cleared_arguments)
+
+    @classmethod
+    def schema(cls) -> "VirtualViewSchemaFields":
+        return VirtualViewSchemaFields("schema")
+
+    @classmethod
+    def source_info(cls) -> "SourceInfoFields":
+        return SourceInfoFields("source_info")
+
+    @classmethod
     def structure(cls) -> "AssetStructureFields":
         return AssetStructureFields("structure")
 
@@ -16355,6 +17233,7 @@ class VirtualViewFields(GraphQLField):
             "BrowsePathFields",
             "DbtModelFields",
             "DerivedAssetDescriptionsFields",
+            "EntityConnectionFields",
             "EntityLineageConnectionFields",
             "EntityUpstreamFields",
             "HashtagFields",
@@ -16368,6 +17247,7 @@ class VirtualViewFields(GraphQLField):
             "PipelineInfoFields",
             "PowerBIDatasetFields",
             "RecentUserActivitiesFields",
+            "SourceInfoFields",
             "SystemContactsFields",
             "SystemDescriptionFields",
             "SystemTagsFields",
@@ -16376,6 +17256,7 @@ class VirtualViewFields(GraphQLField):
             "UserDefinedResourceConnectionFields",
             "ViewedByConnectionFields",
             "VirtualViewLogicalIdFields",
+            "VirtualViewSchemaFields",
         ]
     ) -> "VirtualViewFields":
         """Subfields should come from the VirtualViewFields class"""
@@ -16483,6 +17364,63 @@ class VirtualViewLogicalIdFields(GraphQLField):
         return self
 
 
+class VirtualViewSchemaFields(GraphQLField):
+    created_at: "VirtualViewSchemaGraphQLField" = VirtualViewSchemaGraphQLField(
+        "createdAt"
+    )
+    entity_id: "VirtualViewSchemaGraphQLField" = VirtualViewSchemaGraphQLField(
+        "entityId"
+    )
+
+    @classmethod
+    def fields(cls) -> "VirtualViewSchemaFieldFields":
+        return VirtualViewSchemaFieldFields("fields")
+
+    def fields(
+        self,
+        *subfields: Union[VirtualViewSchemaGraphQLField, "VirtualViewSchemaFieldFields"]
+    ) -> "VirtualViewSchemaFields":
+        """Subfields should come from the VirtualViewSchemaFields class"""
+        self._subfields.extend(subfields)
+        return self
+
+    def alias(self, alias: str) -> "VirtualViewSchemaFields":
+        self._alias = alias
+        return self
+
+
+class VirtualViewSchemaFieldFields(GraphQLField):
+    description: "VirtualViewSchemaFieldGraphQLField" = (
+        VirtualViewSchemaFieldGraphQLField("description")
+    )
+    field_name: "VirtualViewSchemaFieldGraphQLField" = (
+        VirtualViewSchemaFieldGraphQLField("fieldName")
+    )
+    field_path: "VirtualViewSchemaFieldGraphQLField" = (
+        VirtualViewSchemaFieldGraphQLField("fieldPath")
+    )
+    formula: "VirtualViewSchemaFieldGraphQLField" = VirtualViewSchemaFieldGraphQLField(
+        "formula"
+    )
+    optional_type: "VirtualViewSchemaFieldGraphQLField" = (
+        VirtualViewSchemaFieldGraphQLField("optionalType")
+    )
+    type: "VirtualViewSchemaFieldGraphQLField" = VirtualViewSchemaFieldGraphQLField(
+        "type"
+    )
+
+    def fields(
+        self, *subfields: VirtualViewSchemaFieldGraphQLField
+    ) -> "VirtualViewSchemaFieldFields":
+        """Subfields should come from the VirtualViewSchemaFieldFields class"""
+        self._subfields.extend(subfields)
+        return self
+
+    def alias(self, alias: str) -> "VirtualViewSchemaFieldFields":
+        self._alias = alias
+        return self
+
+
 class VirtualViewSearchDocumentFields(GraphQLField):
     browse_path_hierarchy: "VirtualViewSearchDocumentGraphQLField" = (
         VirtualViewSearchDocumentGraphQLField("browsePathHierarchy")
@@ -16506,6 +17444,9 @@ class VirtualViewSearchDocumentFields(GraphQLField):
     )
     dbt_materialization_type: "VirtualViewSearchDocumentGraphQLField" = (
         VirtualViewSearchDocumentGraphQLField("dbtMaterializationType")
+    )
+    dbt_tags: "VirtualViewSearchDocumentGraphQLField" = (
+        VirtualViewSearchDocumentGraphQLField("dbtTags")
     )
     description: "VirtualViewSearchDocumentGraphQLField" = (
         VirtualViewSearchDocumentGraphQLField("description")
@@ -16560,6 +17501,9 @@ class VirtualViewSearchDocumentFields(GraphQLField):
     last_refreshed: "VirtualViewSearchDocumentGraphQLField" = (
         VirtualViewSearchDocumentGraphQLField("lastRefreshed")
     )
+    looker_tags: "VirtualViewSearchDocumentGraphQLField" = (
+        VirtualViewSearchDocumentGraphQLField("lookerTags")
+    )
     model: "VirtualViewSearchDocumentGraphQLField" = (
         VirtualViewSearchDocumentGraphQLField("model")
     )
@@ -16580,8 +17524,14 @@ class VirtualViewSearchDocumentFields(GraphQLField):
     def score_details(cls) -> "SearchScoreDetailsFields":
         return SearchScoreDetailsFields("score_details")
 
+    tableau_tags: "VirtualViewSearchDocumentGraphQLField" = (
+        VirtualViewSearchDocumentGraphQLField("tableauTags")
+    )
     thought_spot_data_object_type: "VirtualViewSearchDocumentGraphQLField" = (
         VirtualViewSearchDocumentGraphQLField("thoughtSpotDataObjectType")
+    )
+    thought_spot_tags: "VirtualViewSearchDocumentGraphQLField" = (
+        VirtualViewSearchDocumentGraphQLField("thoughtSpotTags")
     )
     type: "VirtualViewSearchDocumentGraphQLField" = (
         VirtualViewSearchDocumentGraphQLField("type")

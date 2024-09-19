@@ -2,10 +2,18 @@ import typer
 import yaml
 from typing_extensions import Annotated
 
-from aesop.commands.upload import upload as upload_impl
+from aesop.commands import info_command, upload_command
 from aesop.config import DEFAULT_CONFIG_PATH, AesopConfig
 
 app = typer.Typer(add_completion=False)
+
+
+@app.command()
+def info(
+    ctx: typer.Context,
+) -> None:
+    "Display information about the Metaphor instance."
+    info_command(ctx.obj)
 
 
 @app.command()
@@ -19,7 +27,7 @@ def upload(
     """
     Upload data assets from a CSV file.
     """
-    upload_impl(csv_path, ctx.obj)
+    upload_command(csv_path, ctx.obj)
 
 
 @app.callback()

@@ -1,38 +1,32 @@
-import asyncio
 import csv
 from enum import Enum
-import sys
 from typing import Any, Dict, List
 
 from aesop.commands.common.exception_handler import exception_handler
 from aesop.console import console
 from aesop.config import AesopConfig
-from aesop.generated.base_operation import GraphQLField
-from aesop.generated.custom_mutations import Mutation
-from aesop.generated.input_types import KnowledgeCardInput
+from aesop.graphql.generated.base_operation import GraphQLField
+from aesop.graphql.generated.custom_mutations import Mutation
+from aesop.graphql.generated.input_types import KnowledgeCardInput
 
 
 @exception_handler(command="upload", exception_type=Exception)
 def upload(csv_path: str, config: AesopConfig):
-    asyncio.run(_upload_assets(_load_assets(csv_path), config))
-    console.ok("All data assets uploaded successfully.")
-
-
-async def _upload_assets(data_assets: List[Dict[str, Any]], config: AesopConfig):
+    assets = _load_assets(csv_path)
     client = config.get_graphql_client()
-    for asset in data_assets:
+    for asset in assets:
         if isinstance(asset, KnowledgeCardInput):
             mutation = Mutation.create_knowledge_card(data=asset)
             output_fields = [GraphQLField("id")]
             mutation._subfields.extend(output_fields)
             operation_name = "createKnowledgeCard"
-            response = await client.mutation(mutation, operation_name=operation_name)
+            response = client.mutation(mutation, operation_name=operation_name)
             console.ok(
                 f"Data asset with {operation_name} uploaded successfully with ID: {response[operation_name]['id']}"
             )
         else:
             console.warning(f"Skipping asset with unsupported type: {type(asset)}")
-
+    console.ok("All data assets uploaded successfully.")
 
 class AssetType(str, Enum):
     KNOWLEDGE_CARD = "KNOWLEDGE_CARD"
@@ -99,7 +93,7 @@ def _load_assets(csv_path: str) -> List[Dict[str, Any]]:
 
             model_class = SUPPORTED_ASSET_TYPES[asset_type]
             try:
-                data_asset_nested = _convert_to_nested_structure(row)
+                data_asset_nested = _csv_row_to_dict(row)
 
                 # Need to check for required fields else upload will fail
                 # This is not done by pydantic models generated from the schema
@@ -116,7 +110,7 @@ def _load_assets(csv_path: str) -> List[Dict[str, Any]]:
     return data_assets
 
 
-def _convert_to_nested_structure(row: Dict[str, str]) -> Dict[str, Any]:
+def _csv_row_to_dict(row: Dict[str, str]) -> Dict[str, Any]:
     """
     Converts a flattened dictionary with keys separated by '>' into a nested dictionary structure.
 
