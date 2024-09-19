@@ -15,8 +15,5 @@ def info(config: AesopConfig) -> None:
     #         SAMLFields.entity_id, SAMLFields.reply_acs_url, SAMLFields.sign_on_url
     #     ),
     # )
-    # res = config.get_graphql_client().query(
-    #     info_query, Query.crawler_ip_addresses(), operation_name="getInfo"
-    # )
-    # print(res)
-    pass
+    res = config.get_graphql_client().query(Query.crawler_ip_addresses(), operation_name="getInfo")
+    print(res)
