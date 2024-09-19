@@ -6,7 +6,7 @@ authors = ["Metaphor <dev@metaphor.io>"]
 
 [tool.poetry.dependencies]
 aiohttp = "^3.9.5"
-ariadne-codegen = "^0.14.0"
+ariadne-codegen = { git = "https://github.com/mirumee/ariadne-codegen.git", rev = "11bfe35b" }
 pydantic = "^2.0.0"
 python = "^3.9"
 pyyaml = "^6.0.2"
@@ -52,6 +52,7 @@ aesop = "aesop.app:app"
 schema_path = "schema.gql"
 target_package_name = "generated"
 target_package_path = "./aesop/graphql"
+convert_to_snake_case = false
 enable_custom_operations = true
 async_client = false
 
@@ -61,9 +62,5 @@ _isort = "isort ."
 format = ["_black", "_isort"]
 
 [tool.poe.tasks.codegen]
-help = "Generates the GraphQL client code from schema.gql. To run codegen, copy `@www/data/schema.gql` to the root directory, then run `poe codegen`. This command only works on macOS, since we are using sed, which is not portable across platforms, to change the generated client from async to sync."
-shell = """
-    ariadne-codegen
-    sed -i '' -e 's/await //' aesop/graphql/generated/client.py
-    sed -i '' -e 's/async //' aesop/graphql/generated/client.py
-"""
+help = "Generates the GraphQL client code from schema.gql. To run codegen, copy `@www/data/schema.gql` to the root directory, then run `poe codegen`."
+cmd = "ariadne-codegen"

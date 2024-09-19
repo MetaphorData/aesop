@@ -99,9 +99,7 @@ class Client(BaseClient):
             *fields, operation_type=OperationType.QUERY, operation_name=operation_name
         )
 
-    def mutation(
-        self, *fields: GraphQLField, operation_name: str
-    ) -> Dict[str, Any]:
+    def mutation(self, *fields: GraphQLField, operation_name: str) -> Dict[str, Any]:
         return self.execute_custom_operation(
             *fields,
             operation_type=OperationType.MUTATION,
