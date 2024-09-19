@@ -18,10 +18,11 @@ from aesop.graphql.generated.custom_queries import Query
 from aesop.graphql.generated.input_types import ResourceInfoConnectionFilterInput
 
 
-def get_query(end_cursor: Optional[str]):
+def get_query(end_cursor: Optional[str], name: Optional[str]):
     return Query.user_defined_resources(
         filters=ResourceInfoConnectionFilterInput(
             type=["GOVERNED_TAG"],
+            name=name,
         ),
         first=50,
         after=end_cursor,
@@ -51,13 +52,13 @@ class Node:
     description: Optional[str] = None
 
 
-def paginate_queries(config: AesopConfig):
+def paginate_queries(config: AesopConfig, name: str):
     client = config.get_graphql_client()
     nodes: List[Node] = []
     has_next_page = True
     end_cursor = None
     while has_next_page:
-        query = get_query(end_cursor)
+        query = get_query(end_cursor, name)
         resp = client.query(query, operation_name="listGovernedTags")
         user_defined_resources = resp["userDefinedResources"]
         edges = [edge["node"] for edge in user_defined_resources["edges"]]
@@ -81,9 +82,10 @@ def paginate_queries(config: AesopConfig):
 
 @exception_handler("list tags", exception_type=Exception)
 def list(
+    name: Optional[str],
     config: AesopConfig,
 ) -> None:
-    res = paginate_queries(config)
+    res = paginate_queries(config, name)
     table = Table(
         Column(header="ID", no_wrap=True, style="bold"), "Name", "Description", show_lines=True
     )
