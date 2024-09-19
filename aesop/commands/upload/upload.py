@@ -3,9 +3,10 @@ from enum import Enum
 from typing import Any, Dict, List
 
 from aesop.commands.common.exception_handler import exception_handler
-from aesop.console import console
 from aesop.config import AesopConfig
+from aesop.console import console
 from aesop.graphql.generated.base_operation import GraphQLField
+from aesop.graphql.generated.custom_fields import KnowledgeCardFields
 from aesop.graphql.generated.custom_mutations import Mutation
 from aesop.graphql.generated.input_types import KnowledgeCardInput
 
@@ -16,17 +17,18 @@ def upload(csv_path: str, config: AesopConfig):
     client = config.get_graphql_client()
     for asset in assets:
         if isinstance(asset, KnowledgeCardInput):
-            mutation = Mutation.create_knowledge_card(data=asset)
-            output_fields = [GraphQLField("id")]
-            mutation._subfields.extend(output_fields)
             operation_name = "createKnowledgeCard"
-            response = client.mutation(mutation, operation_name=operation_name)
+            response = client.mutation(
+                Mutation.create_knowledge_card(data=asset).fields(KnowledgeCardFields.id),
+                operation_name=operation_name,
+            )
             console.ok(
                 f"Data asset with {operation_name} uploaded successfully with ID: {response[operation_name]['id']}"
             )
         else:
             console.warning(f"Skipping asset with unsupported type: {type(asset)}")
     console.ok("All data assets uploaded successfully.")
+
 
 class AssetType(str, Enum):
     KNOWLEDGE_CARD = "KNOWLEDGE_CARD"

@@ -1,5 +1,0 @@
-[tool.ariadne-codegen]
-schema_path = "schema.gql"
-target_package_name = "generated"
-enable_custom_operations = true
-async_client = false

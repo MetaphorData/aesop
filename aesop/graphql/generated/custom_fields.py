@@ -1056,8 +1056,8 @@ class AssetFollowersFields(GraphQLField):
     viewer_does_follow: "AssetFollowersGraphQLField" = AssetFollowersGraphQLField(
         "viewerDoesFollow"
     )
-    viewer_is_muted: "AssetFollowersGraphQLField" = AssetFollowersGraphQLField(
-        "viewerIsMuted"
+    viewer_is_muted_notifications: "AssetFollowersGraphQLField" = (
+        AssetFollowersGraphQLField("viewerIsMutedNotifications")
     )
 
     def fields(
