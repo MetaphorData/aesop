@@ -228,6 +228,7 @@ from .custom_typing_fields import (
     NamespaceTypeDetailGraphQLField,
     NodeGraphQLField,
     NonProdGraphQLField,
+    OIDCGraphQLField,
     OktaSSOGraphQLField,
     OnboardingEmailGraphQLField,
     OnboardingExperienceGraphQLField,
@@ -292,6 +293,7 @@ from .custom_typing_fields import (
     RecentUserActivitiesGraphQLField,
     ResultRowGraphQLField,
     RunCrawlerResponseGraphQLField,
+    SAMLGraphQLField,
     SampleSearchQuestionGraphQLField,
     SavedLiveQueryGraphQLField,
     SchemaFieldGraphQLField,
@@ -300,6 +302,7 @@ from .custom_typing_fields import (
     SearchScoreDetailsGraphQLField,
     SearchStatisticsResultGraphQLField,
     SettingsGraphQLField,
+    SetupInfoGraphQLField,
     SimilarAssetsResultItemGraphQLField,
     SnowflakeStreamInfoGraphQLField,
     SocialLoginGraphQLField,
@@ -573,23 +576,13 @@ class AnchorEntityLabelFields(GraphQLField):
 
 
 class ApiKeyFields(GraphQLField):
-    @classmethod
-    def created(cls) -> "AuditStampFields":
-        return AuditStampFields("created")
-
     description: "ApiKeyGraphQLField" = ApiKeyGraphQLField("description")
     enabled: "ApiKeyGraphQLField" = ApiKeyGraphQLField("enabled")
     id: "ApiKeyGraphQLField" = ApiKeyGraphQLField("id")
-
-    @classmethod
-    def last_modified(cls) -> "AuditStampFields":
-        return AuditStampFields("last_modified")
-
     name: "ApiKeyGraphQLField" = ApiKeyGraphQLField("name")
+    value: "ApiKeyGraphQLField" = ApiKeyGraphQLField("value")
 
-    def fields(
-        self, *subfields: Union[ApiKeyGraphQLField, "AuditStampFields"]
-    ) -> "ApiKeyFields":
+    def fields(self, *subfields: ApiKeyGraphQLField) -> "ApiKeyFields":
         """Subfields should come from the ApiKeyFields class"""
         self._subfields.extend(subfields)
         return self
@@ -11075,6 +11068,19 @@ class NonProdFields(GraphQLField):
         return self
 
 
+class OIDCFields(GraphQLField):
+    sign_in_redirect_url: "OIDCGraphQLField" = OIDCGraphQLField("signInRedirectUrl")
+
+    def fields(self, *subfields: OIDCGraphQLField) -> "OIDCFields":
+        """Subfields should come from the OIDCFields class"""
+        self._subfields.extend(subfields)
+        return self
+
+    def alias(self, alias: str) -> "OIDCFields":
+        self._alias = alias
+        return self
+
+
 class OktaSSOFields(GraphQLField):
     client_id: "OktaSSOGraphQLField" = OktaSSOGraphQLField("clientId")
     client_secret: "OktaSSOGraphQLField" = OktaSSOGraphQLField("clientSecret")
@@ -14063,6 +14069,21 @@ class RunCrawlerResponseFields(GraphQLField):
         return self
 
 
+class SAMLFields(GraphQLField):
+    entity_id: "SAMLGraphQLField" = SAMLGraphQLField("entityId")
+    reply_acs_url: "SAMLGraphQLField" = SAMLGraphQLField("replyACSUrl")
+    sign_on_url: "SAMLGraphQLField" = SAMLGraphQLField("signOnUrl")
+
+    def fields(self, *subfields: SAMLGraphQLField) -> "SAMLFields":
+        """Subfields should come from the SAMLFields class"""
+        self._subfields.extend(subfields)
+        return self
+
+    def alias(self, alias: str) -> "SAMLFields":
+        self._alias = alias
+        return self
+
+
 class SQLExplainerResultFields(GraphQLField):
     business_summary: "SQLExplainerResultGraphQLField" = SQLExplainerResultGraphQLField(
         "businessSummary"
@@ -14405,6 +14426,27 @@ class SettingsFields(GraphQLField):
         return self
 
     def alias(self, alias: str) -> "SettingsFields":
+        self._alias = alias
+        return self
+
+
+class SetupInfoFields(GraphQLField):
+    @classmethod
+    def oidc(cls) -> "OIDCFields":
+        return OIDCFields("oidc")
+
+    @classmethod
+    def saml(cls) -> "SAMLFields":
+        return SAMLFields("saml")
+
+    def fields(
+        self, *subfields: Union[SetupInfoGraphQLField, "OIDCFields", "SAMLFields"]
+    ) -> "SetupInfoFields":
+        """Subfields should come from the SetupInfoFields class"""
+        self._subfields.extend(subfields)
+        return self
+
+    def alias(self, alias: str) -> "SetupInfoFields":
         self._alias = alias
         return self
 

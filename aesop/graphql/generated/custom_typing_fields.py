@@ -1309,6 +1309,12 @@ class NonProdGraphQLField(GraphQLField):
         return self
 
 
+class OIDCGraphQLField(GraphQLField):
+    def alias(self, alias: str) -> "OIDCGraphQLField":
+        self._alias = alias
+        return self
+
+
 class OktaSSOGraphQLField(GraphQLField):
     def alias(self, alias: str) -> "OktaSSOGraphQLField":
         self._alias = alias
@@ -1693,6 +1699,12 @@ class RunCrawlerResponseGraphQLField(GraphQLField):
         return self
 
 
+class SAMLGraphQLField(GraphQLField):
+    def alias(self, alias: str) -> "SAMLGraphQLField":
+        self._alias = alias
+        return self
+
+
 class SQLExplainerResultGraphQLField(GraphQLField):
     def alias(self, alias: str) -> "SQLExplainerResultGraphQLField":
         self._alias = alias
@@ -1759,6 +1771,12 @@ class SearchStatisticsResultGraphQLField(GraphQLField):
 
 class SettingsGraphQLField(GraphQLField):
     def alias(self, alias: str) -> "SettingsGraphQLField":
+        self._alias = alias
+        return self
+
+
+class SetupInfoGraphQLField(GraphQLField):
+    def alias(self, alias: str) -> "SetupInfoGraphQLField":
         self._alias = alias
         return self
 
