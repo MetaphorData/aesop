@@ -3,12 +3,17 @@
 
 from typing import Any, Dict, List, Optional, Union
 
+from .assign_governed_tag import AssignGovernedTag
 from .base_client import BaseClient
 from .base_model import UNSET, UnsetType
 from .create_governed_tag import CreateGovernedTag
 from .create_knowledge_card import CreateKnowledgeCard
 from .get_setup_info import GetSetupInfo
-from .input_types import KnowledgeCardInput, UserDefinedResourceInput
+from .input_types import (
+    AssetGovernedTagsPatchInput,
+    KnowledgeCardInput,
+    UserDefinedResourceInput,
+)
 from .list_governed_tags import ListGovernedTags
 
 
@@ -17,6 +22,29 @@ def gql(q: str) -> str:
 
 
 class Client(BaseClient):
+    def assign_governed_tag(
+        self, input: List[AssetGovernedTagsPatchInput], **kwargs: Any
+    ) -> AssignGovernedTag:
+        query = gql(
+            """
+            mutation assignGovernedTag($input: [AssetGovernedTagsPatchInput!]!) {
+              upsertAssetGovernedTags(input: $input) {
+                __typename
+                id
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"input": input}
+        response = self.execute(
+            query=query,
+            operation_name="assignGovernedTag",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return AssignGovernedTag.model_validate(data)
+
     def create_governed_tag(
         self, input: List[UserDefinedResourceInput], **kwargs: Any
     ) -> CreateGovernedTag:

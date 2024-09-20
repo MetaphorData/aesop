@@ -5,9 +5,23 @@ import typer
 from aesop.commands.common.enums.output_format import OutputFormat
 
 from .commands.add import add as add_command
+from .commands.assign import assign as assign_command
 from .commands.list import list as list_command
 
 app = typer.Typer()
+
+
+@app.command(help="Attaches a governed tag to an entity.")
+def assign(
+    ctx: typer.Context,
+    entity_id: str = typer.Argument(
+        help="The target entity's ID",
+    ),
+    tag_id: str = typer.Argument(
+        help="ID of the tag to assign",
+    ),
+):
+    assign_command(entity_id, tag_id, ctx.obj)
 
 
 @app.command(help="Adds a governed tag with optional description text.")
