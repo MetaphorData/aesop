@@ -1,13 +1,15 @@
 import csv
 import sys
 from wsgiref import headers
+
 import rich
 import rich.table
 import typer
-from aesop.console import console
+
 from aesop.commands.common.enums.output_format import OutputFormat
 from aesop.commands.common.exception_handler import exception_handler
 from aesop.config import AesopConfig
+from aesop.console import console
 from aesop.graphql.generated.custom_fields import OIDCFields, SAMLFields, SetupInfoFields
 from aesop.graphql.generated.custom_queries import Query
 
@@ -40,8 +42,7 @@ def info(
             ["SAML", "Sign-on URL", setup_info["saml"]["signOnUrl"]],
         ]
         crawler_ip_rows = [
-            ["CRAWLER", "IP Address", value]
-            for value in setup_info["crawlerIpAddresses"]
+            ["CRAWLER", "IP Address", value] for value in setup_info["crawlerIpAddresses"]
         ]
         if output is OutputFormat.CSV:
             spamwriter = csv.writer(sys.stdout)
@@ -60,4 +61,3 @@ def info(
                     last_key = row[1] if last_key != row[1] else last_key
                     table.add_row(service, key, row[2], end_section=(i == len(rows) - 1))
             console.print(table)
-                

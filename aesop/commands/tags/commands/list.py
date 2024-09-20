@@ -94,7 +94,10 @@ def list(
     res = _paginate_queries(config, name)
     if output is OutputFormat.TABULAR:
         table = Table(
-            Column(header="ID", no_wrap=True, style="bold cyan"), "Name", "Description", show_lines=True
+            Column(header="ID", no_wrap=True, style="bold cyan"),
+            "Name",
+            "Description",
+            show_lines=True,
         )
         for node in res:
             table.add_row(node.id, node.name, node.description)
