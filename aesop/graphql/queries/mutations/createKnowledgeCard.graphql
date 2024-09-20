@@ -1,0 +1,30 @@
+mutation createKnowledgeCard($data: KnowledgeCardInput!){
+    createKnowledgeCard(data: $data) {
+    knowledgeCardInfo {
+        detail {
+        type
+        changeRequest {
+            status {
+            status
+            lastModified {
+                time
+                actingPerson {
+                    properties {
+                        firstName
+                    }
+                }
+            }
+            created {
+                time
+                actingPerson {
+                    properties {
+                        firstName
+                    }
+                }
+            }
+            }
+        }
+        }
+    }
+    }
+}

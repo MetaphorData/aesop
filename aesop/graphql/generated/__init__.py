@@ -3,6 +3,24 @@
 from .base_client import BaseClient
 from .base_model import BaseModel, Upload
 from .client import Client
+from .create_governed_tag import (
+    CreateGovernedTag,
+    CreateGovernedTagCreateUserDefinedResource,
+)
+from .create_knowledge_card import (
+    CreateKnowledgeCard,
+    CreateKnowledgeCardCreateKnowledgeCard,
+    CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfo,
+    CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetail,
+    CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetailChangeRequest,
+    CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetailChangeRequestStatus,
+    CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetailChangeRequestStatusCreated,
+    CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetailChangeRequestStatusCreatedActingPerson,
+    CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetailChangeRequestStatusCreatedActingPersonProperties,
+    CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetailChangeRequestStatusLastModified,
+    CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetailChangeRequestStatusLastModifiedActingPerson,
+    CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetailChangeRequestStatusLastModifiedActingPersonProperties,
+)
 from .enums import (
     AggregationMetadataName,
     AnchorEntityType,
@@ -80,6 +98,12 @@ from .exceptions import (
     GraphQLClientGraphQLMultiError,
     GraphQLClientHttpError,
     GraphQLClientInvalidResponseError,
+)
+from .get_setup_info import (
+    GetSetupInfo,
+    GetSetupInfoSetupInfo,
+    GetSetupInfoSetupInfoOidc,
+    GetSetupInfoSetupInfoSaml,
 )
 from .input_types import (
     AcknowledgeChangeRequestInput,
@@ -264,6 +288,15 @@ from .input_types import (
     VirtualViewLogicalIdInput,
     VirtualViewSort,
 )
+from .list_governed_tags import (
+    ListGovernedTags,
+    ListGovernedTagsUserDefinedResources,
+    ListGovernedTagsUserDefinedResourcesEdges,
+    ListGovernedTagsUserDefinedResourcesEdgesNode,
+    ListGovernedTagsUserDefinedResourcesEdgesNodeUserDefinedResourceInfo,
+    ListGovernedTagsUserDefinedResourcesEdgesNodeUserDefinedResourceInfoDescription,
+    ListGovernedTagsUserDefinedResourcesPageInfo,
+)
 
 __all__ = [
     "AISearchQueryInput",
@@ -318,6 +351,20 @@ __all__ = [
     "CreateApiKeyInput",
     "CreateCrawlerInput",
     "CreateCrawlerScheduleInput",
+    "CreateGovernedTag",
+    "CreateGovernedTagCreateUserDefinedResource",
+    "CreateKnowledgeCard",
+    "CreateKnowledgeCardCreateKnowledgeCard",
+    "CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfo",
+    "CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetail",
+    "CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetailChangeRequest",
+    "CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetailChangeRequestStatus",
+    "CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetailChangeRequestStatusCreated",
+    "CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetailChangeRequestStatusCreatedActingPerson",
+    "CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetailChangeRequestStatusCreatedActingPersonProperties",
+    "CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetailChangeRequestStatusLastModified",
+    "CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetailChangeRequestStatusLastModifiedActingPerson",
+    "CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetailChangeRequestStatusLastModifiedActingPersonProperties",
     "CustomAttributesInput",
     "CustomMetadataConfigInput",
     "CustomMetadataDataType",
@@ -360,6 +407,10 @@ __all__ = [
     "FieldTagPatchInput",
     "FollowAssetInput",
     "GeneratedAssetDescriptionInput",
+    "GetSetupInfo",
+    "GetSetupInfoSetupInfo",
+    "GetSetupInfoSetupInfoOidc",
+    "GetSetupInfoSetupInfoSaml",
     "GoogleSocialLoginInput",
     "GoogleWorkspaceSSOInput",
     "GovernedTagFilterInput",
@@ -407,6 +458,13 @@ __all__ = [
     "LineageFilterInput",
     "LineageType",
     "LinkedInSocialLoginInput",
+    "ListGovernedTags",
+    "ListGovernedTagsUserDefinedResources",
+    "ListGovernedTagsUserDefinedResourcesEdges",
+    "ListGovernedTagsUserDefinedResourcesEdgesNode",
+    "ListGovernedTagsUserDefinedResourcesEdgesNodeUserDefinedResourceInfo",
+    "ListGovernedTagsUserDefinedResourcesEdgesNodeUserDefinedResourceInfoDescription",
+    "ListGovernedTagsUserDefinedResourcesPageInfo",
     "MaterializationType",
     "MetricConnectionFilterInput",
     "MetricFilters",

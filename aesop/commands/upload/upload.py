@@ -5,9 +5,6 @@ from typing import Any, Dict, List
 from aesop.commands.common.exception_handler import exception_handler
 from aesop.config import AesopConfig
 from aesop.console import console
-from aesop.graphql.generated.base_operation import GraphQLField
-from aesop.graphql.generated.custom_fields import KnowledgeCardFields
-from aesop.graphql.generated.custom_mutations import Mutation
 from aesop.graphql.generated.input_types import KnowledgeCardInput
 
 
@@ -17,14 +14,8 @@ def upload(csv_path: str, config: AesopConfig):
     client = config.get_graphql_client()
     for asset in assets:
         if isinstance(asset, KnowledgeCardInput):
-            operation_name = "createKnowledgeCard"
-            response = client.mutation(
-                Mutation.create_knowledge_card(data=asset).fields(KnowledgeCardFields.id),
-                operation_name=operation_name,
-            )
-            console.ok(
-                f"Data asset with {operation_name} uploaded successfully with ID: {response[operation_name]['id']}"
-            )
+            client.create_knowledge_card(data=asset)
+            console.ok("Created knowledge card")
         else:
             console.warning(f"Skipping asset with unsupported type: {type(asset)}")
     console.ok("All data assets uploaded successfully.")
@@ -71,7 +62,8 @@ def _load_assets(csv_path: str) -> List[Dict[str, Any]]:
         csv_path (str): Path to the CSV file.
 
     Returns:
-        List[pydantic_models]: A list of pydantic models, where each model represents a data asset.
+        List[pydantic_models]: A list of pydantic models,
+        where each model represents a data asset.
     """
     with open(csv_path, "r") as file:
         reader = csv.DictReader(file)
@@ -87,7 +79,9 @@ def _load_assets(csv_path: str) -> List[Dict[str, Any]]:
                 raise ValueError(f"Invalid type: {raw_type}")
             asset_type = AssetType(raw_type)
             if asset_type not in SUPPORTED_ASSET_TYPES:
-                console.warning(f"Warning: Unsupported asset type '{raw_type}', skipping this row.")
+                console.warning(
+                    f"Warning: Unsupported asset type '{raw_type}', skipping this row."
+                )
                 continue
 
             if asset_type not in ASSET_REQUIRED_FIELDS:
@@ -100,7 +94,9 @@ def _load_assets(csv_path: str) -> List[Dict[str, Any]]:
                 # Need to check for required fields else upload will fail
                 # This is not done by pydantic models generated from the schema
                 # The models only validate the fields that are present
-                if not validate_data_asset(data_asset_nested, ASSET_REQUIRED_FIELDS[asset_type]):
+                if not validate_data_asset(
+                    data_asset_nested, ASSET_REQUIRED_FIELDS[asset_type]
+                ):
                     continue
                 data_assets.append(model_class.model_validate(data_asset_nested))
             except Exception as e:
@@ -114,13 +110,16 @@ def _load_assets(csv_path: str) -> List[Dict[str, Any]]:
 
 def _csv_row_to_dict(row: Dict[str, str]) -> Dict[str, Any]:
     """
-    Converts a flattened dictionary with keys separated by '>' into a nested dictionary structure.
+    Converts a flattened dictionary with keys separated by '>' into
+    a nested dictionary structure.
 
     Args:
-        row (Dict[str, str]): A dictionary representing a flattened data structure.
+        row (Dict[str, str]): A dictionary representing a flattened
+        data structure.
 
     Returns:
-        Dict[str, Any]: A dictionary with nested structure based on the '>' separators in the keys.
+        Dict[str, Any]: A dictionary with nested structure based on
+        the '>' separators in the keys.
     """
     result = {}
     for key, value in row.items():

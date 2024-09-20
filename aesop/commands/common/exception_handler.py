@@ -5,7 +5,9 @@ import typer
 from aesop.console import console
 
 
-def exception_handler(command: str, exception_type: type[Exception], exit_code: int = 1):
+def exception_handler(
+    command: str, exception_type: type[Exception], exit_code: int = 1
+):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):

@@ -14,8 +14,10 @@ rich = "^13.3.5"
 typer = "^0.9.0"
 
 [tool.poetry.dev-dependencies]
+autoflake = "^2.3.1"
 black = "^24.2.0"
 flake8 = "^7.0.0"
+flake8-pyproject = "^1.2.3"
 isort = "^5.11.0"
 mypy = "^1.9.0"
 poethepoet = "^0.28.0"
@@ -31,13 +33,13 @@ build-backend = "poetry.core.masonry.api"
 asyncio_mode = "strict"
 
 [tool.black]
-line-length = 100
+line-length = 88
 target-version = ['py39']
 extend-exclude = "aesop/graphql/generated"
 
 [tool.isort]
 profile = "black"
-line_length = 100
+line_length = 88
 skip_glob = ["aesop/graphql/generated/*"]
 
 [tool.mypy]
@@ -45,16 +47,24 @@ ignore_missing_imports = true
 strict = true
 exclude = "aesop/graphql/generated/"
 
+[tool.flake8]
+ignore = ['E231', 'E241', 'W503']
+max-line-length = 88
+exclude = "aesop/graphql/generated"
+
+[tool.autoflake]
+check = true
+
 # Add this section to create a CLI entry point
 [tool.poetry.scripts]
 aesop = "aesop.app:app"
 
 [tool.ariadne-codegen]
 schema_path = "schema.gql"
+queries_path = "aesop/graphql/queries"
 target_package_name = "generated"
 target_package_path = "./aesop/graphql"
-convert_to_snake_case = false
-enable_custom_operations = true
+# convert_to_snake_case = false
 async_client = false
 
 [tool.poe.tasks]

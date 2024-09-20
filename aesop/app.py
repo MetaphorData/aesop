@@ -15,7 +15,8 @@ def info(
     ctx: typer.Context,
     output: OutputFormat = typer.Option(
         default=OutputFormat.TABULAR,
-        help=f"The output format. Supported formats: [{', '.join(f for f in OutputFormat)}]",
+        help="The output format. "
+        f"Supported formats: [{', '.join(f for f in OutputFormat)}]",
     ),
 ) -> None:
     "Display information about the Metaphor instance."

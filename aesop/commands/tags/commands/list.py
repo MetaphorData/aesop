@@ -1,7 +1,5 @@
 import csv
-import json
 import sys
-from dataclasses import dataclass
 from typing import List, Optional
 
 from pydantic import BaseModel
@@ -11,43 +9,6 @@ from aesop.commands.common.enums.output_format import OutputFormat
 from aesop.commands.common.exception_handler import exception_handler
 from aesop.config import AesopConfig
 from aesop.console import console
-from aesop.graphql.generated.custom_fields import (
-    PageInfoFields,
-    UserDefinedResourceConnectionFields,
-    UserDefinedResourceDescriptionFields,
-    UserDefinedResourceEdgeFields,
-    UserDefinedResourceFields,
-    UserDefinedResourceInfoFields,
-)
-from aesop.graphql.generated.custom_queries import Query
-from aesop.graphql.generated.input_types import ResourceInfoConnectionFilterInput
-
-
-def _get_query(end_cursor: Optional[str], name: Optional[str]):
-    return Query.user_defined_resources(
-        filters=ResourceInfoConnectionFilterInput(
-            type=["GOVERNED_TAG"],
-            name=name,
-        ),
-        first=50,
-        after=end_cursor,
-    ).fields(
-        UserDefinedResourceConnectionFields.edges().fields(
-            UserDefinedResourceEdgeFields.node().fields(
-                UserDefinedResourceFields.id,
-                UserDefinedResourceFields.userDefinedResourceInfo().fields(
-                    UserDefinedResourceInfoFields.name,
-                    UserDefinedResourceInfoFields.description().fields(
-                        UserDefinedResourceDescriptionFields.text,
-                    ),
-                ),
-            )
-        ),
-        UserDefinedResourceConnectionFields.pageInfo().fields(
-            PageInfoFields.endCursor,
-            PageInfoFields.hasNextPage,
-        ),
-    )
 
 
 class _Node(BaseModel):
@@ -56,31 +17,30 @@ class _Node(BaseModel):
     description: Optional[str] = None
 
 
-def _paginate_queries(config: AesopConfig, name: str):
+def _paginate_queries(config: AesopConfig, name: Optional[str]):
     client = config.get_graphql_client()
     nodes: List[_Node] = []
     has_next_page = True
     end_cursor = None
     while has_next_page:
-        query = _get_query(end_cursor, name)
-        resp = client.query(query, operation_name="listGovernedTags")
-        user_defined_resources = resp["userDefinedResources"]
-        edges = [edge["node"] for edge in user_defined_resources["edges"]]
-        page_info = user_defined_resources["pageInfo"]
-        end_cursor = page_info["endCursor"]
-        has_next_page = page_info["hasNextPage"]
+        resp = client.list_governed_tags(name, end_cursor=end_cursor)
+        edges = resp.user_defined_resources.edges
+        page_info = resp.user_defined_resources.page_info
+        end_cursor = page_info.end_cursor
+        has_next_page = page_info.has_next_page
         nodes.extend(
             _Node(
-                id=edge["id"],
-                name=edge["userDefinedResourceInfo"]["name"],
+                id=edge.node.id,
+                name=edge.node.user_defined_resource_info.name,
                 description=(
-                    edge["userDefinedResourceInfo"]["description"]["text"]
-                    if edge["userDefinedResourceInfo"]["description"]
-                    and edge["userDefinedResourceInfo"]["description"]["text"]
+                    edge.node.user_defined_resource_info.description.text
+                    if edge.node.user_defined_resource_info.description
+                    and edge.node.user_defined_resource_info.description.text
                     else None
                 ),
             )
             for edge in edges
+            if edge is not None
         )
     return nodes
 
