@@ -38,9 +38,7 @@ jobs:
         run: poetry install --with=dev
 
       - name: Check format
-        run: |
-          poetry run mypy --install-types
-          poetry run poe check-format
+        run: poetry run poe check-format
 
       - name: Check type
         run: poetry run poe check-type
