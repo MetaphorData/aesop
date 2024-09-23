@@ -36,7 +36,8 @@ def enabled(
         raise ValueError
     if soft_deletion.enabled is not None and soft_deletion.enabled == enabled:
         console.warning(
-            f"Not updating: soft deletion already {'enabled' if enabled else 'disabled'}"
+            "Not updating: soft deletion already "
+            f"{'enabled' if enabled else 'disabled'}"
         )
         return
 

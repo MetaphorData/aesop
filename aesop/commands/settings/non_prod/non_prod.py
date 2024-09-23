@@ -49,7 +49,7 @@ def set(
 ) -> None:
     config: AesopConfig = ctx.obj
     client = config.get_graphql_client()
-    resp = client.update_settings(
+    client.update_settings(
         input=SettingsInput(
             nonProd=NonProdInput(
                 datasetPatterns=[DatasetPatternInput.model_validate_json(input)]

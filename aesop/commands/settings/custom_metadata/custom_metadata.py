@@ -76,5 +76,6 @@ def remove(
     )
     removed_config_count = len(existing_configs) - len(updated_configs)
     console.ok(
-        f"Removed {removed_config_count} custom metadata config{'s' if removed_config_count > 1 else ''}"
+        f"Removed {removed_config_count} "
+        f"custom metadata config{'s' if removed_config_count > 1 else ''}"
     )
