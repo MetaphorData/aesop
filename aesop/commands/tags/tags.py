@@ -20,7 +20,7 @@ def assign(
     tag_id: str = typer.Argument(
         help="ID of the tag to assign",
     ),
-):
+) -> None:
     assign_command(entity_id, tag_id, ctx.obj)
 
 
@@ -33,7 +33,7 @@ def add(
     description: Optional[str] = typer.Argument(
         default=None, help="Description for the tag. Optional"
     ),
-):
+) -> None:
     add_command(name, description, ctx.obj)
 
 
@@ -49,5 +49,5 @@ def list(
         help="The output format."
         f"Supported formats: [{', '.join(f for f in OutputFormat)}]",
     ),
-):
+) -> None:
     list_command(name, output, ctx.obj)

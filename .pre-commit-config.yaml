@@ -1,4 +1,6 @@
 ---
+fail_fast: true
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
@@ -18,7 +20,6 @@ repos:
     rev: 1.8.3
     hooks:
       - id: poetry-check
-      - id: poetry-lock
 
   - repo: local
     hooks:
@@ -26,5 +27,12 @@ repos:
         name: format
         language: system
         entry: poe format
+        pass_filenames: false
+        always_run: true
+
+      - id: check-type
+        name: check-type
+        language: system
+        entry: poe check-type
         pass_filenames: false
         always_run: true

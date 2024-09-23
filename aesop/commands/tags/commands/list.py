@@ -17,7 +17,7 @@ class _Node(BaseModel):
     description: Optional[str] = None
 
 
-def _paginate_queries(config: AesopConfig, name: Optional[str]):
+def _paginate_queries(config: AesopConfig, name: Optional[str]) -> List[_Node]:
     client = config.get_graphql_client()
     nodes: List[_Node] = []
     has_next_page = True
@@ -27,7 +27,7 @@ def _paginate_queries(config: AesopConfig, name: Optional[str]):
         edges = resp.user_defined_resources.edges
         page_info = resp.user_defined_resources.page_info
         end_cursor = page_info.end_cursor
-        has_next_page = page_info.has_next_page
+        has_next_page = page_info.has_next_page or False
         nodes.extend(
             _Node(
                 id=edge.node.id,
@@ -40,7 +40,7 @@ def _paginate_queries(config: AesopConfig, name: Optional[str]):
                 ),
             )
             for edge in edges
-            if edge is not None
+            if edge is not None and edge.node.user_defined_resource_info is not None
         )
     return nodes
 

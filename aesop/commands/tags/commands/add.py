@@ -18,23 +18,22 @@ def add(
     config: AesopConfig,
 ) -> None:
     client = config.get_graphql_client()
-    id = (
-        client.create_governed_tag(
-            input=[
-                UserDefinedResourceInput(
-                    userDefinedResourceInfo=UserDefinedResourceInfoInput(
-                        name=name,
-                        type=UserDefinedResourceType.GOVERNED_TAG,
-                        description=(
-                            UserDefinedResourceDescriptionInput(text=description)
-                            if description
-                            else None
-                        ),
-                    )
+    resp = client.create_governed_tag(
+        input=[
+            UserDefinedResourceInput(
+                userDefinedResourceInfo=UserDefinedResourceInfoInput(
+                    name=name,
+                    type=UserDefinedResourceType.GOVERNED_TAG,
+                    description=(
+                        UserDefinedResourceDescriptionInput(text=description)
+                        if description
+                        else None
+                    ),
                 )
-            ]
-        )
-        .create_user_defined_resource[0]
-        .id
+            )
+        ]
     )
+    if not resp.create_user_defined_resource:
+        raise ValueError
+    id = resp.create_user_defined_resource[0].id
     console.ok(f"Created governed tag, id = {id}")

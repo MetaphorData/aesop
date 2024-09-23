@@ -9,7 +9,7 @@ from aesop.graphql.generated.input_types import KnowledgeCardInput
 
 
 @exception_handler(command="upload", exception_type=Exception)
-def upload(csv_path: str, config: AesopConfig):
+def upload(csv_path: str, config: AesopConfig) -> None:
     assets = _load_assets(csv_path)
     client = config.get_graphql_client()
     for asset in assets:
@@ -69,7 +69,7 @@ def _load_assets(csv_path: str) -> List[Dict[str, Any]]:
         reader = csv.DictReader(file)
 
         # Check if 'type' column exists
-        if "type" not in reader.fieldnames:
+        if not reader.fieldnames or "type" not in reader.fieldnames:
             raise ValueError("Column 'type' is required in CSV header row")
 
         data_assets = []
@@ -98,7 +98,9 @@ def _load_assets(csv_path: str) -> List[Dict[str, Any]]:
                     data_asset_nested, ASSET_REQUIRED_FIELDS[asset_type]
                 ):
                     continue
-                data_assets.append(model_class.model_validate(data_asset_nested))
+                data_assets.append(
+                    model_class.model_validate(data_asset_nested).model_dump()
+                )
             except Exception as e:
                 console.warning(f"Cannot parse row = {row}, error = {str(e)}")
 
@@ -121,7 +123,7 @@ def _csv_row_to_dict(row: Dict[str, str]) -> Dict[str, Any]:
         Dict[str, Any]: A dictionary with nested structure based on
         the '>' separators in the keys.
     """
-    result = {}
+    result: Dict[str, Any] = {}
     for key, value in row.items():
         if value.strip() == "":  # Skip empty values
             continue
