@@ -1273,6 +1273,17 @@ doc = ["cairosvg (>=2.5.2,<3.0.0)", "mdx-include (>=1.4.1,<2.0.0)", "mkdocs (>=1
 test = ["black (>=22.3.0,<23.0.0)", "coverage (>=6.2,<7.0)", "isort (>=5.0.6,<6.0.0)", "mypy (==0.971)", "pytest (>=4.4.0,<8.0.0)", "pytest-cov (>=2.10.0,<5.0.0)", "pytest-sugar (>=0.9.4,<0.10.0)", "pytest-xdist (>=1.32.0,<4.0.0)", "rich (>=10.11.0,<14.0.0)", "shellingham (>=1.3.0,<2.0.0)"]
 
 [[package]]
+name = "types-pyyaml"
+version = "6.0.12.20240917"
+description = "Typing stubs for PyYAML"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "types-PyYAML-6.0.12.20240917.tar.gz", hash = "sha256:d1405a86f9576682234ef83bcb4e6fff7c9305c8b1fbad5e0bcd4f7dbdc9c587"},
+    {file = "types_PyYAML-6.0.12.20240917-py3-none-any.whl", hash = "sha256:392b267f1c0fe6022952462bf5d6523f31e37f6cea49b14cee7ad634b6301570"},
+]
+
+[[package]]
 name = "typing-extensions"
 version = "4.12.2"
 description = "Backported and Experimental Type Hints for Python 3.8+"
@@ -1411,4 +1422,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "c4d4eac726b16758bcbbe796e67375d8135c090399118b5283fd02b2d9ed5e79"
+content-hash = "1938630de84201149cb29f88829ca46b8eecef4ba25ce5ad6a72dbb14452fb48"
