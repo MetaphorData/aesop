@@ -82,7 +82,7 @@ format = ["_black", "_isort", "_autoflake"]
 
 check-type = "mypy ."
 
-[tool.poe.tasks.check_format]
+[tool.poe.tasks.check-format]
 sequence = ["_check_black", "_check_isort", "_flake8"]
 
 [tool.poe.tasks.codegen]
