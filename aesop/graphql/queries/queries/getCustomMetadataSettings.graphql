@@ -1,0 +1,11 @@
+query getCustomMetadataSettings {
+  settings {
+    customMetadataConfig {
+      key
+      displayName
+      dataType
+      highlight
+      searchable
+    }
+  }
+}

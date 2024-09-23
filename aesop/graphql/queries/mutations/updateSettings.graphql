@@ -1,0 +1,5 @@
+mutation updateSettings($input: SettingsInput!) {
+  updateSettings(input: $input) {
+    __typename
+  }
+}

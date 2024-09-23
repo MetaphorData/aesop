@@ -103,11 +103,36 @@ from .exceptions import (
     GraphQLClientHttpError,
     GraphQLClientInvalidResponseError,
 )
+from .get_custom_metadata_settings import (
+    GetCustomMetadataSettings,
+    GetCustomMetadataSettingsSettings,
+    GetCustomMetadataSettingsSettingsCustomMetadataConfig,
+)
+from .get_non_prod_settings import (
+    GetNonProdSettings,
+    GetNonProdSettingsSettings,
+    GetNonProdSettingsSettingsNonProd,
+    GetNonProdSettingsSettingsNonProdDatasetPatterns,
+)
 from .get_setup_info import (
     GetSetupInfo,
     GetSetupInfoSetupInfo,
     GetSetupInfoSetupInfoOidc,
     GetSetupInfoSetupInfoSaml,
+)
+from .get_soft_deletion_settings import (
+    GetSoftDeletionSettings,
+    GetSoftDeletionSettingsSettings,
+    GetSoftDeletionSettingsSettingsSoftDeletion,
+)
+from .get_sso_settings import (
+    GetSSOSettings,
+    GetSSOSettingsSettings,
+    GetSSOSettingsSettingsSso,
+    GetSSOSettingsSettingsSsoAzureAd,
+    GetSSOSettingsSettingsSsoGoogleWorkspace,
+    GetSSOSettingsSettingsSsoLdap,
+    GetSSOSettingsSettingsSsoOkta,
 )
 from .input_types import (
     AcknowledgeChangeRequestInput,
@@ -301,6 +326,7 @@ from .list_governed_tags import (
     ListGovernedTagsUserDefinedResourcesEdgesNodeUserDefinedResourceInfoDescription,
     ListGovernedTagsUserDefinedResourcesPageInfo,
 )
+from .update_settings import UpdateSettings, UpdateSettingsUpdateSettings
 
 __all__ = [
     "AISearchQueryInput",
@@ -413,10 +439,27 @@ __all__ = [
     "FieldTagPatchInput",
     "FollowAssetInput",
     "GeneratedAssetDescriptionInput",
+    "GetCustomMetadataSettings",
+    "GetCustomMetadataSettingsSettings",
+    "GetCustomMetadataSettingsSettingsCustomMetadataConfig",
+    "GetNonProdSettings",
+    "GetNonProdSettingsSettings",
+    "GetNonProdSettingsSettingsNonProd",
+    "GetNonProdSettingsSettingsNonProdDatasetPatterns",
+    "GetSSOSettings",
+    "GetSSOSettingsSettings",
+    "GetSSOSettingsSettingsSso",
+    "GetSSOSettingsSettingsSsoAzureAd",
+    "GetSSOSettingsSettingsSsoGoogleWorkspace",
+    "GetSSOSettingsSettingsSsoLdap",
+    "GetSSOSettingsSettingsSsoOkta",
     "GetSetupInfo",
     "GetSetupInfoSetupInfo",
     "GetSetupInfoSetupInfoOidc",
     "GetSetupInfoSetupInfoSaml",
+    "GetSoftDeletionSettings",
+    "GetSoftDeletionSettingsSettings",
+    "GetSoftDeletionSettingsSettingsSoftDeletion",
     "GoogleSocialLoginInput",
     "GoogleWorkspaceSSOInput",
     "GovernedTagFilterInput",
@@ -567,6 +610,8 @@ __all__ = [
     "UpdateApiKeyInput",
     "UpdateCrawlerInput",
     "UpdateCrawlerScheduleInput",
+    "UpdateSettings",
+    "UpdateSettingsUpdateSettings",
     "Upload",
     "UsageKnowledgeCardInput",
     "UsageLevel",
