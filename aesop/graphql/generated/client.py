@@ -12,7 +12,6 @@ from .get_custom_metadata_settings import GetCustomMetadataSettings
 from .get_non_prod_settings import GetNonProdSettings
 from .get_setup_info import GetSetupInfo
 from .get_soft_deletion_settings import GetSoftDeletionSettings
-from .get_sso_settings import GetSSOSettings
 from .input_types import (
     AssetGovernedTagsPatchInput,
     KnowledgeCardInput,
@@ -191,40 +190,6 @@ class Client(BaseClient):
         )
         data = self.get_data(response)
         return GetNonProdSettings.model_validate(data)
-
-    def get_sso_settings(self, **kwargs: Any) -> GetSSOSettings:
-        query = gql(
-            """
-            query getSSOSettings {
-              settings {
-                sso {
-                  okta {
-                    issuer
-                    clientId
-                    clientSecret
-                  }
-                  azureAd {
-                    metadataUrl
-                  }
-                  googleWorkspace {
-                    metadataFile
-                  }
-                  ldap {
-                    host
-                    bindDN
-                    bindPassword
-                  }
-                }
-              }
-            }
-            """
-        )
-        variables: Dict[str, object] = {}
-        response = self.execute(
-            query=query, operation_name="getSSOSettings", variables=variables, **kwargs
-        )
-        data = self.get_data(response)
-        return GetSSOSettings.model_validate(data)
 
     def get_setup_info(self, **kwargs: Any) -> GetSetupInfo:
         query = gql(

@@ -125,15 +125,6 @@ from .get_soft_deletion_settings import (
     GetSoftDeletionSettingsSettings,
     GetSoftDeletionSettingsSettingsSoftDeletion,
 )
-from .get_sso_settings import (
-    GetSSOSettings,
-    GetSSOSettingsSettings,
-    GetSSOSettingsSettingsSso,
-    GetSSOSettingsSettingsSsoAzureAd,
-    GetSSOSettingsSettingsSsoGoogleWorkspace,
-    GetSSOSettingsSettingsSsoLdap,
-    GetSSOSettingsSettingsSsoOkta,
-)
 from .input_types import (
     AcknowledgeChangeRequestInput,
     ActivityFeedConnectionFilterInput,
@@ -446,13 +437,6 @@ __all__ = [
     "GetNonProdSettingsSettings",
     "GetNonProdSettingsSettingsNonProd",
     "GetNonProdSettingsSettingsNonProdDatasetPatterns",
-    "GetSSOSettings",
-    "GetSSOSettingsSettings",
-    "GetSSOSettingsSettingsSso",
-    "GetSSOSettingsSettingsSsoAzureAd",
-    "GetSSOSettingsSettingsSsoGoogleWorkspace",
-    "GetSSOSettingsSettingsSsoLdap",
-    "GetSSOSettingsSettingsSsoOkta",
     "GetSetupInfo",
     "GetSetupInfoSetupInfo",
     "GetSetupInfoSetupInfoOidc",
