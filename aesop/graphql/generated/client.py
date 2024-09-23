@@ -8,13 +8,18 @@ from .base_client import BaseClient
 from .base_model import UNSET, UnsetType
 from .create_governed_tag import CreateGovernedTag
 from .create_knowledge_card import CreateKnowledgeCard
+from .get_custom_metadata_settings import GetCustomMetadataSettings
+from .get_non_prod_settings import GetNonProdSettings
 from .get_setup_info import GetSetupInfo
+from .get_soft_deletion_settings import GetSoftDeletionSettings
 from .input_types import (
     AssetGovernedTagsPatchInput,
     KnowledgeCardInput,
+    SettingsInput,
     UserDefinedResourceInput,
 )
 from .list_governed_tags import ListGovernedTags
+from .update_settings import UpdateSettings
 
 
 def gql(q: str) -> str:
@@ -114,6 +119,78 @@ class Client(BaseClient):
         _data = self.get_data(response)
         return CreateKnowledgeCard.model_validate(_data)
 
+    def update_settings(self, input: SettingsInput, **kwargs: Any) -> UpdateSettings:
+        query = gql(
+            """
+            mutation updateSettings($input: SettingsInput!) {
+              updateSettings(input: $input) {
+                __typename
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"input": input}
+        response = self.execute(
+            query=query, operation_name="updateSettings", variables=variables, **kwargs
+        )
+        data = self.get_data(response)
+        return UpdateSettings.model_validate(data)
+
+    def get_custom_metadata_settings(self, **kwargs: Any) -> GetCustomMetadataSettings:
+        query = gql(
+            """
+            query getCustomMetadataSettings {
+              settings {
+                customMetadataConfig {
+                  key
+                  displayName
+                  dataType
+                  highlight
+                  searchable
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {}
+        response = self.execute(
+            query=query,
+            operation_name="getCustomMetadataSettings",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return GetCustomMetadataSettings.model_validate(data)
+
+    def get_non_prod_settings(self, **kwargs: Any) -> GetNonProdSettings:
+        query = gql(
+            """
+            query getNonProdSettings {
+              settings {
+                nonProd {
+                  datasetPatterns {
+                    platform
+                    account
+                    database
+                    schema
+                    table
+                    isCaseSensitive
+                  }
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {}
+        response = self.execute(
+            query=query,
+            operation_name="getNonProdSettings",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return GetNonProdSettings.model_validate(data)
+
     def get_setup_info(self, **kwargs: Any) -> GetSetupInfo:
         query = gql(
             """
@@ -138,6 +215,29 @@ class Client(BaseClient):
         )
         data = self.get_data(response)
         return GetSetupInfo.model_validate(data)
+
+    def get_soft_deletion_settings(self, **kwargs: Any) -> GetSoftDeletionSettings:
+        query = gql(
+            """
+            query getSoftDeletionSettings {
+              settings {
+                softDeletion {
+                  enabled
+                  thresholdHours
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {}
+        response = self.execute(
+            query=query,
+            operation_name="getSoftDeletionSettings",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return GetSoftDeletionSettings.model_validate(data)
 
     def list_governed_tags(
         self,

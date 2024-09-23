@@ -2,12 +2,13 @@ import typer
 import yaml
 from typing_extensions import Annotated
 
-from aesop.commands import info_command, tags_app, upload_command
+from aesop.commands import info_command, settings_app, tags_app, upload_command
 from aesop.commands.common.enums.output_format import OutputFormat
 from aesop.config import DEFAULT_CONFIG_PATH, AesopConfig
 
 app = typer.Typer(add_completion=False)
 app.add_typer(tags_app, name="tags")
+app.add_typer(settings_app, name="settings")
 
 
 @app.command()

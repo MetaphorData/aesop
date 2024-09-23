@@ -34,22 +34,11 @@ jobs:
       - name: Install Poetry
         uses: abatilo/actions-poetry@v3.0.0
 
-      - name: Setup a local virtual environment (if no poetry.toml file)
-        run: |
-          poetry config virtualenvs.create true --local
-          poetry config virtualenvs.in-project true --local
-
-      - uses: actions/cache@v3
-        name: Populate cache
-        with:
-          path: ./.venv
-          key: venv-${{ hashFiles('poetry.lock') }}
-
       - name: Install the project dependencies
-        run: poetry install
+        run: poetry install --with=dev
 
       - name: Check format
-        run: poe check-format
+        run: poetry run poe check-format
 
       - name: Check type
-        run: poe check-type
+        run: poetry run poe check-type

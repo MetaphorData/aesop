@@ -1,0 +1,14 @@
+query getNonProdSettings {
+  settings {
+    nonProd {
+      datasetPatterns {
+        platform
+        account
+        database
+        schema
+        table
+        isCaseSensitive
+      }
+    }
+  }
+}

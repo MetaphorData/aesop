@@ -1,0 +1,8 @@
+query getSoftDeletionSettings {
+  settings {
+    softDeletion {
+      enabled
+      thresholdHours
+    }
+  }
+}

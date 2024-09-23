@@ -30,6 +30,13 @@ repos:
         pass_filenames: false
         always_run: true
 
+      - id: check-format
+        name: check-format
+        language: system
+        entry: poe check-type
+        pass_filenames: false
+        always_run: true
+
       - id: check-type
         name: check-type
         language: system
