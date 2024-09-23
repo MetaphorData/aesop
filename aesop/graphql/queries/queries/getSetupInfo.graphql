@@ -1,0 +1,13 @@
+query getSetupInfo {
+    setupInfo {
+        oidc {
+            signInRedirectUrl
+        }
+        saml {
+            entityId
+            replyACSUrl
+            signOnUrl
+        }
+        crawlerIpAddresses
+    }
+}

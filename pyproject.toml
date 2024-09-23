@@ -14,11 +14,14 @@ rich = "^13.3.5"
 typer = "^0.9.0"
 
 [tool.poetry.dev-dependencies]
+autoflake = "^2.3.1"
 black = "^24.2.0"
 flake8 = "^7.0.0"
+flake8-pyproject = "^1.2.3"
 isort = "^5.11.0"
 mypy = "^1.9.0"
 poethepoet = "^0.28.0"
+pre-commit = "^3.8.0"
 pytest = "^8.2.1"
 pytest-asyncio = "^0.23.7"
 
@@ -26,17 +29,21 @@ pytest-asyncio = "^0.23.7"
 requires = ["poetry-core>=1.2.0"]
 build-backend = "poetry.core.masonry.api"
 
+# Add this section to create a CLI entry point
+[tool.poetry.scripts]
+aesop = "aesop.app:app"
+
 [tool.pytest.ini_options]
 asyncio_mode = "strict"
 
+# === TOOLS ===
+
 [tool.black]
-line-length = 100
 target-version = ['py39']
 extend-exclude = "aesop/graphql/generated"
 
 [tool.isort]
 profile = "black"
-line_length = 100
 skip_glob = ["aesop/graphql/generated/*"]
 
 [tool.mypy]
@@ -44,22 +51,39 @@ ignore_missing_imports = true
 strict = true
 exclude = "aesop/graphql/generated/"
 
-# Add this section to create a CLI entry point
-[tool.poetry.scripts]
-aesop = "aesop.app:app"
+[tool.flake8]
+ignore = ['E231', 'E241', 'W503']
+max-line-length = 88
+exclude = "aesop/graphql/generated"
+
+[tool.autoflake]
+recursive = true
+in-place = true
+remove-all-unused-imports = true
 
 [tool.ariadne-codegen]
 schema_path = "schema.gql"
+queries_path = "aesop/graphql/queries"
 target_package_name = "generated"
 target_package_path = "./aesop/graphql"
-convert_to_snake_case = false
-enable_custom_operations = true
 async_client = false
+
+# === POE TASKS ===
 
 [tool.poe.tasks]
 _black = "black ."
+_check_black = "black --check ."
 _isort = "isort ."
-format = ["_black", "_isort"]
+_check_isort = "isort --check ."
+_flake8 = "flake8"
+_autoflake = "autoflake ."
+
+format = ["_black", "_isort", "_autoflake"]
+
+check-type = "mypy ."
+
+[tool.poe.tasks.check_format]
+sequence = ["_check_black", "_check_isort", "_flake8"]
 
 [tool.poe.tasks.codegen]
 help = "Generates the GraphQL client code from schema.gql. To run codegen, copy `@www/data/schema.gql` to the root directory, then run `poe codegen`."

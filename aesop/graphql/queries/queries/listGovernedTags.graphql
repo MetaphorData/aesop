@@ -1,0 +1,26 @@
+query listGovernedTags($name: String, $endCursor: String) {
+    userDefinedResources(
+        first: 50,
+        after: $endCursor,
+        filters: {
+            name: $name,
+            type: [GOVERNED_TAG],
+        },
+    ) {
+        edges {
+            node {
+                id
+                userDefinedResourceInfo {
+                    name
+                    description {
+                        text
+                    }
+                }
+            }
+        }
+        pageInfo {
+            hasNextPage
+            endCursor
+        }
+    }
+}

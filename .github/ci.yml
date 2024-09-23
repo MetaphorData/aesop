@@ -1,0 +1,55 @@
+---
+name: CI
+
+env:
+  PYTHON_VERSION: 3.9
+
+# Run this build workflow for every new PR
+on:
+  pull_request:
+    branches: [main]
+  merge_group:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  check-py:
+    name: Check Python code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v3.0.0
+
+      - name: Setup a local virtual environment (if no poetry.toml file)
+        run: |
+          poetry config virtualenvs.create true --local
+          poetry config virtualenvs.in-project true --local
+
+      - uses: actions/cache@v3
+        name: Populate cache
+        with:
+          path: ./.venv
+          key: venv-${{ hashFiles('poetry.lock') }}
+
+      - name: Install the project dependencies
+        run: poetry install
+
+      - name: Check format
+        run: poe check-format
+
+      - name: Check type
+        run: poe check-type
