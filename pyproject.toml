@@ -71,6 +71,13 @@ target_package_name = "generated"
 target_package_path = "./aesop/graphql"
 async_client = false
 
+[tool.coverage.run]
+omit = [
+    "aesop/graphql/*",  # These are either generated code or graphql definition, no need to test them
+    "*/__init__.py",
+    "aesop/__main__.py"  # This is the entrypoint if you fire up the program thru debugger
+]
+
 # === POE TASKS ===
 
 [tool.poe.tasks]

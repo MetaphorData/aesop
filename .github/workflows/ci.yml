@@ -61,7 +61,7 @@ jobs:
         run: |
           poetry run pytest --cov=aesop --cov-report=xml tests
 
-      - name: Upload File
+      - name: Upload coverage XML file
         uses: actions/upload-artifact@v4
         with:
           name: coverage.xml
