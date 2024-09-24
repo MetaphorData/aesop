@@ -16,7 +16,9 @@ jobs:
   # 1. Check version
   #    - Checks if the provided version is valid (i.e. larger than current version). Fails if version is invalid.
   # 2. Bump version
+  #    - Gets the commit sha from last release in `.github/release.sha1`.
   #    - Populates `CHANGELOG.md`.
+  #    - Updates `.github/release.sha1`.
   #    - Updates the package version.
   #    - Creates a new commit to `main` branch, and a new tag for the provided version.
   # 3. Publish version
@@ -55,10 +57,11 @@ jobs:
       - name: Create changelog
         run: |
           SHA=$(git rev-parse HEAD)
-          OLD_SHA=$(cat ./github/release.sha1)
+          OLD_SHA=$(cat ./.github/release.sha1)
           NEW_SHA=${{ github.event.inputs.commit || env.SHA }}
           echo -e '# '${{ inputs.target_version }}' CHANGELOG\n' > ./CHANGELOG.md
           git log --oneline ${OLD_SHA}..${NEW_SHA} >> ./CHANGELOG.md
+          echo $NEW_SHA > ./.github/release.sha1
 
       - name: Setup environment
         uses: ./.github/actions/setup_environment
@@ -66,7 +69,7 @@ jobs:
       - name: Bump version
         run: poetry version ${{ inputs.target_version }}
 
-      - name: Add & Commit
+      - name: Commit, add tag, and push to main
         uses: EndBug/add-and-commit@v9.1.4
         with:
           default_author: github_actions
