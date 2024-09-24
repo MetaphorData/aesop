@@ -4,6 +4,7 @@ from typing_extensions import Annotated
 
 from aesop.commands import info_command, settings_app, tags_app, upload_command
 from aesop.commands.common.enums.output_format import OutputFormat
+from aesop.commands.common.exception_handler import exception_handler
 from aesop.config import DEFAULT_CONFIG_PATH, AesopConfig
 
 app = typer.Typer(add_completion=False)
@@ -39,6 +40,7 @@ def upload(
 
 
 @app.callback()
+@exception_handler("main")
 def main(
     ctx: typer.Context,
     config_file: Annotated[

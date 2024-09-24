@@ -11,7 +11,7 @@ from aesop.graphql.generated.input_types import (
 )
 
 
-@exception_handler("add tag", exception_type=Exception)
+@exception_handler("add tag")
 def add(
     name: str,
     description: Optional[str],

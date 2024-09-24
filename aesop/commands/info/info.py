@@ -10,7 +10,7 @@ from aesop.config import AesopConfig
 from aesop.console import console
 
 
-@exception_handler(command="info", exception_type=Exception)
+@exception_handler(command="info")
 def info(
     output: OutputFormat,
     config: AesopConfig,

@@ -4,7 +4,7 @@ from aesop.console import console
 from aesop.graphql.generated.input_types import AssetGovernedTagsPatchInput
 
 
-@exception_handler("Assign tag", Exception)
+@exception_handler("assign tag")
 def assign(
     entity_id: str,
     tag_id: str,
