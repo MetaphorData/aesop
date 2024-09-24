@@ -8,7 +8,7 @@ from aesop.console import console
 from aesop.graphql.generated.input_types import KnowledgeCardInput
 
 
-@exception_handler(command="upload", exception_type=Exception)
+@exception_handler(command="upload")
 def upload(csv_path: str, config: AesopConfig) -> None:
     assets = _load_assets(csv_path)
     client = config.get_graphql_client()

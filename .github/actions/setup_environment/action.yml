@@ -1,0 +1,17 @@
+---
+name: Setup Python environment
+description: A shared action to setup Python environment
+runs:
+  using: composite
+  steps:
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Install Poetry
+      uses: abatilo/actions-poetry@v3.0.0
+
+    - name: Install the project dependencies
+      shell: bash
+      run: poetry install --with=dev

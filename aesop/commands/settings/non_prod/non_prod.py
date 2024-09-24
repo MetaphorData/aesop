@@ -1,8 +1,6 @@
-import json
-
 import typer
 
-from aesop.commands.common.all_platforms import ALL_PLATFORMS
+from aesop.commands.common.exception_handler import exception_handler
 from aesop.config import AesopConfig
 from aesop.console import console
 from aesop.graphql.generated.input_types import (
@@ -27,14 +25,10 @@ def get(
     console.print(non_prod.model_dump())
 
 
+@exception_handler("Set non-prod config")
 def _validate_dataset_pattern_input(
     value: str,
 ) -> str:
-    obj = json.loads(value)
-    if "platform" in obj and obj["platform"] not in ALL_PLATFORMS:
-        raise typer.BadParameter(
-            f"Invalid platform: {obj['platform']}. Valid platforms are: {ALL_PLATFORMS}"
-        )
     DatasetPatternInput.model_validate_json(value)
     return value
 

@@ -3,6 +3,8 @@ name: CI
 
 env:
   PYTHON_VERSION: 3.9
+  CONFIG: qa
+  METAPHOR_API_KEY: meta-03f22b24-faaf-4b0e-9ab7-27e91701a7d1
 
 # Run this build workflow for every new PR
 on:
@@ -19,26 +21,62 @@ defaults:
     shell: bash
 
 jobs:
-  check-py:
-    name: Check Python code
+  check-format:
+    name: Check format
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install Poetry
-        uses: abatilo/actions-poetry@v3.0.0
-
-      - name: Install the project dependencies
-        run: poetry install --with=dev
+      - name: Setup environment
+        uses: ./.github/actions/setup_environment
 
       - name: Check format
         run: poetry run poe check-format
 
+  check-type:
+    name: Check typing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup_environment
+
       - name: Check type
         run: poetry run poe check-type
+
+  run-tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup_environment
+
+      - name: Run tests
+        run: |
+          poetry run pytest --cov=aesop --cov-report=xml tests
+
+      - name: Upload coverage XML file
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage.xml
+          path: ./coverage.xml
+
+  report-coverage:
+    name: Report coverage
+    needs: run-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: coverage.xml
+      - name: Get coverage
+        uses: orgoro/coverage@v3.2
+        with:
+          coverageFile: ./coverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}

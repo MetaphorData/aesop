@@ -1,7 +1,9 @@
 from typing import List
 
 import typer
+from rich import print
 
+from aesop.commands.common.exception_handler import exception_handler
 from aesop.config import AesopConfig
 from aesop.console import console
 from aesop.graphql.generated import client
@@ -19,10 +21,11 @@ def get(
     settings = client.get_custom_metadata_settings()
     custom_metadata_configs = settings.settings.custom_metadata_config
     if not custom_metadata_configs:
-        raise ValueError
-    console.print([cfg.model_dump() for cfg in custom_metadata_configs])
+        raise ValueError  # Impossible!
+    print([cfg.model_dump() for cfg in custom_metadata_configs])
 
 
+@exception_handler("Add custom metadata")
 def _validate_custom_metadata_config(
     value: str,
 ) -> str:

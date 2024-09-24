@@ -2,7 +2,23 @@
 name = "aesop"
 version = "0.1.0"
 description = "A CLI application for Metaphor data ingestion and upload"
-authors = ["Metaphor <dev@metaphor.io>"]
+authors = [
+    "Metaphor <dev@metaphor.io>",
+    "Tsung-Ju Lii <andy@metaphor.io>"
+]
+readme = "README.md"
+homepage = "https://metaphor.io/"
+repository = "https://github.com/MetaphorData/aesop"
+documentation = "https://docs.metaphor.io/"
+keywords = [
+    "metadata",
+    "data catalog"
+]
+classifiers = [
+    "Topic :: Software Development",
+    "Intended Audience :: Developers",
+    "Development Status :: 3 - Alpha"
+]
 
 [tool.poetry.dependencies]
 aiohttp = "^3.9.5"
@@ -19,11 +35,13 @@ black = "^24.2.0"
 flake8 = "^7.0.0"
 flake8-pyproject = "^1.2.3"
 isort = "^5.11.0"
+loguru = "^0.7.2"
 mypy = "^1.9.0"
 poethepoet = "^0.28.0"
 pre-commit = "^3.8.0"
 pytest = "^8.2.1"
 pytest-asyncio = "^0.23.7"
+pytest-cov = "^5.0.0"
 types-pyyaml = "^6.0.12.20240917"
 
 [build-system]
@@ -34,10 +52,10 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 aesop = "aesop.app:app"
 
+# === TOOLS ===
+
 [tool.pytest.ini_options]
 asyncio_mode = "strict"
-
-# === TOOLS ===
 
 [tool.black]
 target-version = ['py39']
@@ -68,6 +86,13 @@ queries_path = "aesop/graphql/queries"
 target_package_name = "generated"
 target_package_path = "./aesop/graphql"
 async_client = false
+
+[tool.coverage.run]
+omit = [
+    "aesop/graphql/*",  # These are either generated code or graphql definition, no need to test them
+    "*/__init__.py",
+    "aesop/__main__.py"  # This is the entrypoint if you fire up the program thru debugger
+]
 
 # === POE TASKS ===
 
