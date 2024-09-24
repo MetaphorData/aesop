@@ -2,7 +2,23 @@
 name = "aesop"
 version = "0.1.0"
 description = "A CLI application for Metaphor data ingestion and upload"
-authors = ["Metaphor <dev@metaphor.io>"]
+authors = [
+    "Metaphor <dev@metaphor.io>",
+    "Tsung-Ju Lii <andy@metaphor.io>"
+]
+readme = "README.md"
+homepage = "https://metaphor.io/"
+repository = "https://github.com/MetaphorData/aesop"
+documentation = "https://docs.metaphor.io/"
+keywords = [
+    "metadata",
+    "data catalog"
+]
+classifiers = [
+    "Topic :: Software Development",
+    "Intended Audience :: Developers",
+    "Development Status :: 3 - Alpha"
+]
 
 [tool.poetry.dependencies]
 aiohttp = "^3.9.5"
