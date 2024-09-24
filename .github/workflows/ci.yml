@@ -58,4 +58,25 @@ jobs:
         uses: ./.github/actions/setup_environment
 
       - name: Run tests
-        run: poetry run pytest tests
+        run: |
+          poetry run pytest --cov=aesop --cov-report=xml tests
+
+      - name: Upload File
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage.xml
+          path: ./coverage.xml
+
+  report-coverage:
+    name: Report coverage
+    needs: run-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: coverage.xml
+      - name: Get coverage
+        uses: orgoro/coverage@v3.2
+        with:
+          coverageFile: ./coverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
