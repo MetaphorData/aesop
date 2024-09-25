@@ -176,8 +176,10 @@ version = "0.14.0"
 description = "Generate fully typed GraphQL client from schema, queries and mutations!"
 optional = false
 python-versions = "*"
-files = []
-develop = false
+files = [
+    {file = "ariadne_codegen-0.14.0-py2.py3-none-any.whl", hash = "sha256:e0553960bd298ddc49aeeb748a0be3a37acbdfdee7d7c26fce7154715fa826e0"},
+    {file = "ariadne_codegen-0.14.0.tar.gz", hash = "sha256:d5b15470195c3858b88a2bae855b5c04602ffae40228077b6cfb26a57d3f14f6"},
+]
 
 [package.dependencies]
 autoflake = "*"
@@ -193,12 +195,6 @@ toml = ">=0.10,<1.0"
 dev = ["ariadne", "freezegun", "mypy", "pylint", "pytest", "pytest-asyncio", "pytest-httpx", "pytest-mock", "requests-toolbelt", "types-toml"]
 opentelemetry = ["opentelemetry-api"]
 subscriptions = ["websockets (>=11.0,<12.0)"]
-
-[package.source]
-type = "git"
-url = "https://github.com/mirumee/ariadne-codegen.git"
-reference = "11bfe35b"
-resolved_reference = "11bfe35bd62b2489927e0e93c6891bccc29c7f37"
 
 [[package]]
 name = "async-timeout"
@@ -1559,4 +1555,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "e8f3140c710672570b0ba86698aa77c445452fe4f74a0a1decd38b1668589d12"
+content-hash = "b3fad0b87ef9d6f0157b44f272526bea28bd08eb02bf50cfcb8e5a312eed0044"
