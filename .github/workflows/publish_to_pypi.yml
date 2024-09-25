@@ -25,5 +25,10 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup_environment
 
+      - name: Build package
+        run: poetry build
+
       - name: Publish to PyPI
-        run: poetry publish --build --skip-existing
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/
