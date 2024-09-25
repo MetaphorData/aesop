@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "aesop"
+name = "metaphor-aesop"
 version = "0.0.0"  # Just a placeholder
 description = "A CLI application for Metaphor data ingestion and upload"
 authors = [
