@@ -6,6 +6,9 @@ on:
     types:
       - published
 
+env:
+  PYTHON_VERSION: 3.9
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -20,7 +23,4 @@ jobs:
         uses: ./.github/actions/setup_environment
 
       - name: Publish to PyPI
-        run: >
-          poetry publish --build --skip-existing
-          -u ${{ secrets.PYPI_USERNAME }}
-          -p ${{ secrets.PYPI_PASSWORD }}
+        run: poetry publish --build --skip-existing
