@@ -14,8 +14,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: getsentry/action-github-app-token@v2
+        id: bot-token
+        with:
+          app_id: ${{ secrets.RELEASE_BOT_APP_ID }}
+          private_key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
+
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ steps.bot-token.outputs.token }}
 
       - name: Set up Git user
         run: |
