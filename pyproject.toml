@@ -19,6 +19,9 @@ classifiers = [
     "Intended Audience :: Developers",
     "Development Status :: 3 - Alpha"
 ]
+packages = [
+    { include = "aesop" },
+]
 
 [tool.poetry.dependencies]
 aiohttp = "^3.9.5"
