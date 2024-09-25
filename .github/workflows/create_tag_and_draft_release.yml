@@ -9,6 +9,10 @@ on:
         required: true
         default: 1.0.0
 
+permissions:
+  contents: write # For creating tags
+  actions: read # https://github.com/softprops/turnstyle?tab=readme-ov-file#required-permissions
+
 jobs:
   create_tag:
     runs-on: ubuntu-latest
