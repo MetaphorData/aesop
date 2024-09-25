@@ -1,6 +1,7 @@
 [tool.poetry]
 name = "metaphor-aesop"
 version = "0.0.0"  # Just a placeholder
+license = "Apache-2.0"
 description = "A CLI application for Metaphor data ingestion and upload"
 authors = [
     "Metaphor <dev@metaphor.io>",
