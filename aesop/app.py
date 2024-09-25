@@ -1,5 +1,8 @@
+from importlib import metadata
+
 import typer
 import yaml
+from rich import print
 from typing_extensions import Annotated
 
 from aesop.commands import info_command, settings_app, tags_app, upload_command
@@ -37,6 +40,14 @@ def upload(
     Upload data assets from a CSV file.
     """
     upload_command(csv_path, ctx.obj)
+
+
+@app.command()
+def version() -> None:
+    """
+    Print Aesop's version.
+    """
+    print(f"Aesop version: {metadata.version('aesop')}")
 
 
 @app.callback()

@@ -8,7 +8,12 @@ from .commands.add import add as add_command
 from .commands.assign import assign as assign_command
 from .commands.list import list as list_command
 
-app = typer.Typer()
+app = typer.Typer(
+    help="""
+Manage tags in Metaphor.
+
+The `tags` command allows you to perform various operations related to tags."""
+)
 
 
 @app.command(help="Attaches a governed tag to an entity.")

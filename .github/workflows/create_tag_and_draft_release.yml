@@ -1,0 +1,37 @@
+---
+name: Create Tag and Draft Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to release (e.g., 1.0.0)
+        required: true
+        default: 1.0.0
+
+jobs:
+  create_tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Git user
+        run: |
+          git config --global user.name 'Release Bot'
+          git config --global user.email 'release-bot@users.noreply.github.com'
+
+      - name: Create and push tag
+        run: |
+          VERSION=${{ github.event.inputs.version }}
+          git tag "v$VERSION"
+          git push origin "v$VERSION"
+
+      - name: Create draft release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          tag_name: v${{ github.event.inputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

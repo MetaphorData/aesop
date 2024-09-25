@@ -4,3 +4,4 @@ schema.gql
 .vscode
 .coverage
 coverage.xml
+dist

@@ -1,0 +1,24 @@
+---
+name: Publish to PyPI
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup_environment
+
+      - name: Publish to PyPI
+        run: >
+          poetry publish --build --skip-existing
+          -u ${{ secrets.PYPI_USERNAME }}
+          -p ${{ secrets.PYPI_PASSWORD }}
