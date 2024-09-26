@@ -6,7 +6,6 @@ from pydantic import BaseModel
 from rich.table import Column, Table
 
 from aesop.commands.common.enums.output_format import OutputFormat
-from aesop.commands.common.exception_handler import exception_handler
 from aesop.config import AesopConfig
 from aesop.console import console
 
@@ -45,7 +44,6 @@ def _paginate_queries(config: AesopConfig, name: Optional[str]) -> List[_Node]:
     return nodes
 
 
-@exception_handler("get tags")
 def get(
     name: Optional[str],
     output: OutputFormat,

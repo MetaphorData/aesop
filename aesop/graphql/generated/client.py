@@ -16,9 +16,11 @@ from .input_types import (
     AssetGovernedTagsPatchInput,
     KnowledgeCardInput,
     SettingsInput,
+    UserDefinedResourceDeleteInput,
     UserDefinedResourceInput,
 )
 from .list_governed_tags import ListGovernedTags
+from .remove_governed_tags import RemoveGovernedTags
 from .update_settings import UpdateSettings
 
 
@@ -118,6 +120,29 @@ class Client(BaseClient):
         )
         _data = self.get_data(response)
         return CreateKnowledgeCard.model_validate(_data)
+
+    def remove_governed_tags(
+        self, input: UserDefinedResourceDeleteInput, **kwargs: Any
+    ) -> RemoveGovernedTags:
+        query = gql(
+            """
+            mutation removeGovernedTags($input: UserDefinedResourceDeleteInput!) {
+              deleteUserDefinedResource(input: $input) {
+                deletedIds
+                failedIds
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"input": input}
+        response = self.execute(
+            query=query,
+            operation_name="removeGovernedTags",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return RemoveGovernedTags.model_validate(data)
 
     def update_settings(self, input: SettingsInput, **kwargs: Any) -> UpdateSettings:
         query = gql(

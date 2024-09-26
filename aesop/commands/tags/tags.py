@@ -6,11 +6,12 @@ from aesop.commands.common.arguments import InputFileArg
 from aesop.commands.common.enums.output_format import OutputFormat
 from aesop.commands.common.exception_handler import exception_handler
 from aesop.commands.common.options import OutputFormatOption
-from aesop.commands.tags.models import AddTagsInput, add_tags_input_example
+from aesop.commands.tags.models import AddTagsInput, RemoveTagsInput
 
 from .commands.add import add as add_command
 from .commands.assign import assign as assign_command
 from .commands.get import get as get_command
+from .commands.remove import remove as remove_command
 
 app = typer.Typer(help="Manage tags in Metaphor.")
 
@@ -29,17 +30,26 @@ def assign(
 
 
 @app.command(help="Add governed tags with optional description text to Metaphor.")
-@exception_handler("add tag")
+@exception_handler("add tags")
 def add(
     ctx: typer.Context,
-    input_file: typer.FileText = InputFileArg(add_tags_input_example),
+    input_file: typer.FileText = InputFileArg(AddTagsInput),
 ) -> None:
-    add_tags_input = AddTagsInput.model_validate_json(input_file.read())
-    add_command(add_tags_input, ctx.obj)
+    add_command(AddTagsInput.model_validate_json(input_file.read()), ctx.obj)
+
+
+@app.command(help="Removes governed tags from Metaphor.")
+@exception_handler("remove tags")
+def remove(
+    ctx: typer.Context,
+    input_file: typer.FileText = InputFileArg(RemoveTagsInput),
+) -> None:
+    remove_command(RemoveTagsInput.model_validate_json(input_file.read()), ctx.obj)
 
 
 @app.command(help="Get governed tags.")
-def list(
+@exception_handler("get tags")
+def get(
     ctx: typer.Context,
     name: Optional[str] = typer.Option(
         default=None,

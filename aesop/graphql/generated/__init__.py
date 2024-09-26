@@ -317,6 +317,10 @@ from .list_governed_tags import (
     ListGovernedTagsUserDefinedResourcesEdgesNodeUserDefinedResourceInfoDescription,
     ListGovernedTagsUserDefinedResourcesPageInfo,
 )
+from .remove_governed_tags import (
+    RemoveGovernedTags,
+    RemoveGovernedTagsDeleteUserDefinedResource,
+)
 from .update_settings import UpdateSettings, UpdateSettingsUpdateSettings
 
 __all__ = [
@@ -557,6 +561,8 @@ __all__ = [
     "QueryRequest",
     "RecentUserActivitiesFilterInput",
     "RelatedAssetsPatchInput",
+    "RemoveGovernedTags",
+    "RemoveGovernedTagsDeleteUserDefinedResource",
     "ResourceInfoConnectionFilterInput",
     "RunStatus",
     "SQLExplainerInput",
