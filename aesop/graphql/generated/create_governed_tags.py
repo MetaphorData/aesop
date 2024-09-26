@@ -8,14 +8,14 @@ from pydantic import Field
 from .base_model import BaseModel
 
 
-class CreateGovernedTag(BaseModel):
+class CreateGovernedTags(BaseModel):
     create_user_defined_resource: Optional[
-        List["CreateGovernedTagCreateUserDefinedResource"]
+        List["CreateGovernedTagsCreateUserDefinedResource"]
     ] = Field(alias="createUserDefinedResource")
 
 
-class CreateGovernedTagCreateUserDefinedResource(BaseModel):
+class CreateGovernedTagsCreateUserDefinedResource(BaseModel):
     id: str
 
 
-CreateGovernedTag.model_rebuild()
+CreateGovernedTags.model_rebuild()

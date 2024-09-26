@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Optional, Union
 from .assign_governed_tag import AssignGovernedTag
 from .base_client import BaseClient
 from .base_model import UNSET, UnsetType
-from .create_governed_tag import CreateGovernedTag
+from .create_governed_tags import CreateGovernedTags
 from .create_knowledge_card import CreateKnowledgeCard
 from .get_custom_metadata_settings import GetCustomMetadataSettings
 from .get_non_prod_settings import GetNonProdSettings
@@ -50,12 +50,12 @@ class Client(BaseClient):
         data = self.get_data(response)
         return AssignGovernedTag.model_validate(data)
 
-    def create_governed_tag(
+    def create_governed_tags(
         self, input: List[UserDefinedResourceInput], **kwargs: Any
-    ) -> CreateGovernedTag:
+    ) -> CreateGovernedTags:
         query = gql(
             """
-            mutation createGovernedTag($input: [UserDefinedResourceInput!]!) {
+            mutation createGovernedTags($input: [UserDefinedResourceInput!]!) {
               createUserDefinedResource(input: $input) {
                 id
               }
@@ -65,12 +65,12 @@ class Client(BaseClient):
         variables: Dict[str, object] = {"input": input}
         response = self.execute(
             query=query,
-            operation_name="createGovernedTag",
+            operation_name="createGovernedTags",
             variables=variables,
             **kwargs
         )
         data = self.get_data(response)
-        return CreateGovernedTag.model_validate(data)
+        return CreateGovernedTags.model_validate(data)
 
     def create_knowledge_card(
         self, data: KnowledgeCardInput, **kwargs: Any

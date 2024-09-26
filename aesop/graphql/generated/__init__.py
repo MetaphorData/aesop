@@ -7,9 +7,9 @@ from .assign_governed_tag import (
 from .base_client import BaseClient
 from .base_model import BaseModel, Upload
 from .client import Client
-from .create_governed_tag import (
-    CreateGovernedTag,
-    CreateGovernedTagCreateUserDefinedResource,
+from .create_governed_tags import (
+    CreateGovernedTags,
+    CreateGovernedTagsCreateUserDefinedResource,
 )
 from .create_knowledge_card import (
     CreateKnowledgeCard,
@@ -374,8 +374,8 @@ __all__ = [
     "CreateApiKeyInput",
     "CreateCrawlerInput",
     "CreateCrawlerScheduleInput",
-    "CreateGovernedTag",
-    "CreateGovernedTagCreateUserDefinedResource",
+    "CreateGovernedTags",
+    "CreateGovernedTagsCreateUserDefinedResource",
     "CreateKnowledgeCard",
     "CreateKnowledgeCardCreateKnowledgeCard",
     "CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfo",

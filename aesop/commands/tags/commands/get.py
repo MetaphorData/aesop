@@ -45,8 +45,8 @@ def _paginate_queries(config: AesopConfig, name: Optional[str]) -> List[_Node]:
     return nodes
 
 
-@exception_handler("list tags")
-def list(
+@exception_handler("get tags")
+def get(
     name: Optional[str],
     output: OutputFormat,
     config: AesopConfig,
