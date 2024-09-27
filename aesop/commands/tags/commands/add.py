@@ -28,7 +28,7 @@ def add(
         )
         for tag in add_tags_input.tags
     ]
-    resp = client.create_governed_tags(input=input)
+    resp = client.add_governed_tags(input=input)
     if not resp.create_user_defined_resource:
         raise ValueError
     created_ids = [res.id for res in resp.create_user_defined_resource]

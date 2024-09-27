@@ -4,20 +4,20 @@ from aesop.console import console
 from aesop.graphql.generated.input_types import AssetGovernedTagsPatchInput
 
 
-def assign(
+def unassign(
     input: AssignTagsInput,
     config: AesopConfig,
 ) -> None:
     client = config.get_graphql_client()
     ids = [
         res.id
-        for res in client.assign_governed_tags(
+        for res in client.unassign_governed_tags(
             input=[
                 AssetGovernedTagsPatchInput(
                     entityIds=input.asset_ids,
-                    governedTagsToAdd=input.tag_ids,
+                    governedTagsToRemove=input.tag_ids,
                 ),
             ]
         ).upsert_asset_governed_tags
     ]
-    console.ok(f"Assigned governed tags {input.tag_ids} to assets {ids}")
+    console.ok(f"Unassigned governed tags {input.tag_ids} from assets {ids}")

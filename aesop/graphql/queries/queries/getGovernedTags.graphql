@@ -1,4 +1,4 @@
-query listGovernedTags($name: String, $endCursor: String) {
+query getGovernedTags($name: String, $endCursor: String) {
     userDefinedResources(
         first: 50,
         after: $endCursor,

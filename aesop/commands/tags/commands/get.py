@@ -1,4 +1,5 @@
 import csv
+import json
 import sys
 from typing import List, Optional
 
@@ -22,7 +23,7 @@ def _paginate_queries(config: AesopConfig, name: Optional[str]) -> List[_Node]:
     has_next_page = True
     end_cursor = None
     while has_next_page:
-        resp = client.list_governed_tags(name, end_cursor=end_cursor)
+        resp = client.get_governed_tags(name, end_cursor=end_cursor)
         edges = resp.user_defined_resources.edges
         page_info = resp.user_defined_resources.page_info
         end_cursor = page_info.end_cursor
@@ -65,4 +66,6 @@ def get(
         spamwriter.writerow(["ID", "Name", "Description"])
         spamwriter.writerows([[node.id, node.name, node.description] for node in res])
     elif output is OutputFormat.JSON:
-        console.print([node.model_dump() for node in res])
+        console.print_json(
+            json.dumps([node.model_dump(exclude_none=True) for node in res]), indent=2
+        )

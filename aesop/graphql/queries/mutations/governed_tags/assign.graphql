@@ -1,0 +1,5 @@
+mutation assignGovernedTags($input: [AssetGovernedTagsPatchInput!]!) {
+  upsertAssetGovernedTags(input: $input) {
+    id
+  }
+}

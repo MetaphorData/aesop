@@ -14,7 +14,7 @@ class AddTagsInput(InputModel):
     tags: List[GovernedTag]
 
     @staticmethod
-    def example_json() -> str:
+    def example_json(indent: int = 0) -> str:
         return AddTagsInput(
             tags=[
                 GovernedTag(
@@ -22,18 +22,36 @@ class AddTagsInput(InputModel):
                     description=None,
                 )
             ]
-        ).model_dump_json(indent=2)
+        ).model_dump_json(indent=indent)
+
+
+class AssignTagsInput(InputModel):
+    tag_ids: List[str]
+    asset_ids: List[str]
+
+    @staticmethod
+    def example_json(indent: int = 0) -> str:
+        return AssignTagsInput(
+            tag_ids=[
+                "USER_DEFINED_RESOURCE~00000000000000000000000000000001",
+                "USER_DEFINED_RESOURCE~00000000000000000000000000000002",
+                "USER_DEFINED_RESOURCE~00000000000000000000000000000003",
+            ],
+            asset_ids=[
+                "DATASET~00000000000000000000000000000001",
+            ],
+        ).model_dump_json(indent=indent)
 
 
 class RemoveTagsInput(InputModel):
     tag_ids: List[str]
 
     @staticmethod
-    def example_json() -> str:
+    def example_json(indent: int = 0) -> str:
         return RemoveTagsInput(
             tag_ids=[
                 "USER_DEFINED_RESOURCE~00000000000000000000000000000001",
                 "USER_DEFINED_RESOURCE~00000000000000000000000000000002",
                 "USER_DEFINED_RESOURCE~00000000000000000000000000000003",
             ]
-        ).model_dump_json(indent=2)
+        ).model_dump_json(indent=indent)
