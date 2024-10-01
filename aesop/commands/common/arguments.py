@@ -29,11 +29,11 @@ def _validate_input_file(
             "Pipe the JSON body into the command:",
             "",
             "```bash",
-            f"$ cat {''.join(input_model.example_json(indent=0).splitlines())} | aesop {commands}",
+            f"$ cat {''.join(input_model.example_json(indent=0).splitlines())} | aesop {commands}",  # noqa E501
             "```",
             "Or provide an input file to the command:",
             "```bash",
-            f"$ echo {''.join(input_model.example_json(indent=0).splitlines())} > input.json",
+            f"$ echo {''.join(input_model.example_json(indent=0).splitlines())} > input.json",  # noqa E501
             "",
             f"$ aesop {commands} input.json",
             "```",

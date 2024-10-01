@@ -10,12 +10,12 @@ class GovernedTag(BaseModel):
     description: Optional[str] = None
 
 
-class AddTagsInput(InputModel):
+class BatchAddTagsInput(InputModel):
     tags: List[GovernedTag]
 
     @staticmethod
     def example_json(indent: int = 0) -> str:
-        return AddTagsInput(
+        return BatchAddTagsInput(
             tags=[
                 GovernedTag(
                     name="name of the tag",
@@ -25,13 +25,13 @@ class AddTagsInput(InputModel):
         ).model_dump_json(indent=indent)
 
 
-class AssignTagsInput(InputModel):
+class BatchAssignTagsInput(InputModel):
     tag_ids: List[str]
     asset_ids: List[str]
 
     @staticmethod
     def example_json(indent: int = 0) -> str:
-        return AssignTagsInput(
+        return BatchAssignTagsInput(
             tag_ids=[
                 "USER_DEFINED_RESOURCE~00000000000000000000000000000001",
                 "USER_DEFINED_RESOURCE~00000000000000000000000000000002",
@@ -43,12 +43,12 @@ class AssignTagsInput(InputModel):
         ).model_dump_json(indent=indent)
 
 
-class RemoveTagsInput(InputModel):
+class BatchRemoveTagsInput(InputModel):
     tag_ids: List[str]
 
     @staticmethod
     def example_json(indent: int = 0) -> str:
-        return RemoveTagsInput(
+        return BatchRemoveTagsInput(
             tag_ids=[
                 "USER_DEFINED_RESOURCE~00000000000000000000000000000001",
                 "USER_DEFINED_RESOURCE~00000000000000000000000000000002",
