@@ -3,25 +3,23 @@ from typing import Optional
 
 import typer
 
+from aesop.commands.aspects.user_defined_resources.tags.models import (
+    BatchAddTagsInput,
+    BatchAssignTagsInput,
+    BatchRemoveTagsInput,
+    GovernedTag,
+)
 from aesop.commands.common.arguments import InputFileArg
 from aesop.commands.common.enums.output_format import OutputFormat
 from aesop.commands.common.exception_handler import exception_handler
 from aesop.commands.common.options import OutputFormatOption
-from aesop.commands.tags.models import (
-    BatchAddTagsInput,
-    BatchAssignTagsInput,
-    BatchRemoveTagsInput,
-)
+from aesop.console import console
 
-from .commands.add import add as add_command
-from .commands.add import batch_add as batch_add_command
-from .commands.assign import assign as assign_command
-from .commands.assign import batch_assign as batch_assign_command
+from .commands.add import add_tags
+from .commands.assign import assign_tags
 from .commands.get import get as get_command
-from .commands.remove import batch_remove as batch_remove_command
-from .commands.remove import remove as remove_command
-from .commands.unassign import batch_unassign as batch_unassign_command
-from .commands.unassign import unassign as unassign_command
+from .commands.remove import remove_tags
+from .commands.unassign import unassign_tags
 
 app = typer.Typer(help="Manage tags in Metaphor.")
 
@@ -44,7 +42,10 @@ def add(
     name: str,
     description: Optional[str] = typer.Argument(default=None),
 ) -> None:
-    add_command(name, description, ctx.obj)
+    tag = GovernedTag(name=name, description=description)
+    created_ids = add_tags([tag], ctx.obj)
+    console.ok("Successfully created governed tag")
+    console.print(created_ids[0])
 
 
 @app.command(
@@ -56,7 +57,10 @@ def batch_add(
     ctx: typer.Context,
     input_file: typer.FileText = InputFileArg(BatchAddTagsInput),
 ) -> None:
-    batch_add_command(BatchAddTagsInput.model_validate_json(input_file.read()), ctx.obj)
+    batch_add_tags_input = BatchAddTagsInput.model_validate_json(input_file.read())
+    created_ids = add_tags(batch_add_tags_input.tags, ctx.obj)
+    console.ok("Successfully created governed tags")
+    console.print(created_ids)
 
 
 @app.command(
@@ -69,7 +73,8 @@ def assign(
     tag_id: str,
     asset_id: str,
 ) -> None:
-    assign_command(tag_id, asset_id, ctx.obj)
+    ids = assign_tags([tag_id], [asset_id], ctx.obj)
+    console.ok(f"Assigned governed tag {tag_id} to asset {ids[0]}")
 
 
 @app.command(
@@ -81,9 +86,9 @@ def batch_assign(
     ctx: typer.Context,
     input_file: typer.FileText = InputFileArg(BatchAssignTagsInput),
 ) -> None:
-    batch_assign_command(
-        BatchAssignTagsInput.model_validate_json(input_file.read()), ctx.obj
-    )
+    input = BatchAssignTagsInput.model_validate_json(input_file.read())
+    ids = assign_tags(input.tag_ids, input.asset_ids, ctx.obj)
+    console.ok(f"Assigned governed tags {input.tag_ids} to assets {ids}")
 
 
 @app.command(
@@ -111,7 +116,8 @@ def remove(
     tag_id: str,
     ctx: typer.Context,
 ) -> None:
-    remove_command(tag_id, ctx.obj)
+    remove_tags([tag_id], ctx.obj)
+    console.print(f"Removed tag {tag_id}")
 
 
 @app.command(
@@ -123,9 +129,9 @@ def batch_remove(
     ctx: typer.Context,
     input_file: typer.FileText = InputFileArg(BatchRemoveTagsInput),
 ) -> None:
-    batch_remove_command(
-        BatchRemoveTagsInput.model_validate_json(input_file.read()), ctx.obj
-    )
+    input = BatchRemoveTagsInput.model_validate_json(input_file.read())
+    resp = remove_tags(input.tag_ids, ctx.obj)
+    console.print(resp.model_dump_json(indent=2))
 
 
 @app.command(
@@ -138,7 +144,8 @@ def unassign(
     tag_id: str,
     asset_id: str,
 ) -> None:
-    unassign_command(tag_id, asset_id, ctx.obj)
+    ids = unassign_tags([tag_id], [asset_id], ctx.obj)
+    console.ok(f"Unassigned governed tag {tag_id} from asset {ids[0]}")
 
 
 @app.command(
@@ -150,6 +157,6 @@ def batch_unassign(
     ctx: typer.Context,
     input_file: typer.FileText = InputFileArg(BatchAssignTagsInput),
 ) -> None:
-    batch_unassign_command(
-        BatchAssignTagsInput.model_validate_json(input_file.read()), ctx.obj
-    )
+    input = BatchAssignTagsInput.model_validate_json(input_file.read())
+    ids = unassign_tags(input.tag_ids, input.asset_ids, ctx.obj)
+    console.ok(f"Unassigned governed tags {input.tag_ids} from assets {ids}")
