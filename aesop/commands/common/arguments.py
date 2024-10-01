@@ -5,7 +5,7 @@ import typer
 from rich.markdown import Markdown
 from rich.panel import Panel
 
-from aesop.commands.common.input_model import InputModel
+from aesop.commands.common.models import InputModel
 from aesop.console import console
 
 

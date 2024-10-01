@@ -4,10 +4,12 @@ from typing import Optional
 import typer
 
 from aesop.commands.aspects.user_defined_resources.tags.models import (
+    AddTagsOutput,
     BatchAddTagsInput,
     BatchAssignTagsInput,
     BatchRemoveTagsInput,
     GovernedTag,
+    RemoveTagsOutput,
 )
 from aesop.commands.common.arguments import InputFileArg
 from aesop.commands.common.enums.output_format import OutputFormat
@@ -41,11 +43,11 @@ def add(
     ctx: typer.Context,
     name: str,
     description: Optional[str] = typer.Argument(default=None),
+    output: OutputFormat = OutputFormatOption,
 ) -> None:
     tag = GovernedTag(name=name, description=description)
     created_ids = add_tags([tag], ctx.obj)
-    console.ok("Successfully created governed tag")
-    console.print(created_ids[0])
+    AddTagsOutput(created_ids=created_ids).display(output)
 
 
 @app.command(
@@ -56,11 +58,11 @@ def add(
 def batch_add(
     ctx: typer.Context,
     input_file: typer.FileText = InputFileArg(BatchAddTagsInput),
+    output: OutputFormat = OutputFormatOption,
 ) -> None:
     batch_add_tags_input = BatchAddTagsInput.model_validate_json(input_file.read())
     created_ids = add_tags(batch_add_tags_input.tags, ctx.obj)
-    console.ok("Successfully created governed tags")
-    console.print(created_ids)
+    AddTagsOutput(created_ids=created_ids).display(output)
 
 
 @app.command(
@@ -115,9 +117,13 @@ def get(
 def remove(
     tag_id: str,
     ctx: typer.Context,
+    output: OutputFormat = OutputFormatOption,
 ) -> None:
-    remove_tags([tag_id], ctx.obj)
-    console.print(f"Removed tag {tag_id}")
+    resp = remove_tags([tag_id], ctx.obj)
+    RemoveTagsOutput(
+        removed_ids=resp.delete_user_defined_resource.deleted_ids,
+        failed_ids=resp.delete_user_defined_resource.failed_ids,
+    ).display(output)
 
 
 @app.command(
@@ -128,10 +134,14 @@ def remove(
 def batch_remove(
     ctx: typer.Context,
     input_file: typer.FileText = InputFileArg(BatchRemoveTagsInput),
+    output: OutputFormat = OutputFormatOption,
 ) -> None:
     input = BatchRemoveTagsInput.model_validate_json(input_file.read())
     resp = remove_tags(input.tag_ids, ctx.obj)
-    console.print(resp.model_dump_json(indent=2))
+    RemoveTagsOutput(
+        removed_ids=resp.delete_user_defined_resource.deleted_ids,
+        failed_ids=resp.delete_user_defined_resource.failed_ids,
+    ).display(output)
 
 
 @app.command(

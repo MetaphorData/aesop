@@ -2,7 +2,9 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
-from aesop.commands.common.input_model import InputModel
+from aesop import console
+from aesop.commands.common.enums.output_format import OutputFormat
+from aesop.commands.common.models import InputModel, OutputModel
 
 
 class GovernedTag(BaseModel):
@@ -55,3 +57,34 @@ class BatchRemoveTagsInput(InputModel):
                 "USER_DEFINED_RESOURCE~00000000000000000000000000000003",
             ]
         ).model_dump_json(indent=indent)
+
+
+class AddTagsOutput(OutputModel):
+    created_ids: List[str]
+
+    def display(self, output: OutputFormat) -> None:
+        if output is OutputFormat.JSON:
+            console.console.print(self.model_dump_json())
+        else:
+            if output is OutputFormat.CSV:
+                console.console.warning(
+                    "CSV not supported, falling back to showing plain text"
+                )
+            console.console.print(f"Added tags: {self.created_ids}")
+
+
+class RemoveTagsOutput(OutputModel):
+    removed_ids: List[str]
+    failed_ids: List[str]
+
+    def display(self, output: OutputFormat) -> None:
+        if output is OutputFormat.JSON:
+            console.console.print(self.model_dump_json())
+        else:
+            if output is OutputFormat.CSV:
+                console.console.warning(
+                    "CSV not supported, falling back to showing plain text"
+                )
+            console.console.print(f"Removed tags: {self.removed_ids}")
+            if self.failed_ids:
+                console.console.warning(f"Failed to delete: {self.failed_ids}")
