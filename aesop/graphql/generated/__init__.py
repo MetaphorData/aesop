@@ -105,6 +105,17 @@ from .get_custom_metadata_settings import (
     GetCustomMetadataSettingsSettings,
     GetCustomMetadataSettingsSettingsCustomMetadataConfig,
 )
+from .get_dataset_governed_tags import (
+    GetDatasetGovernedTags,
+    GetDatasetGovernedTagsNodeDataset,
+    GetDatasetGovernedTagsNodeDatasetGovernedTags,
+    GetDatasetGovernedTagsNodeDatasetGovernedTagsEdges,
+    GetDatasetGovernedTagsNodeDatasetGovernedTagsEdgesNode,
+    GetDatasetGovernedTagsNodeDatasetGovernedTagsEdgesNodeUserDefinedResourceInfo,
+    GetDatasetGovernedTagsNodeDatasetGovernedTagsEdgesNodeUserDefinedResourceInfoDescription,
+    GetDatasetGovernedTagsNodeDatasetGovernedTagsPageInfo,
+    GetDatasetGovernedTagsNodeNode,
+)
 from .get_governed_tags import (
     GetGovernedTags,
     GetGovernedTagsUserDefinedResources,
@@ -438,6 +449,15 @@ __all__ = [
     "GetCustomMetadataSettings",
     "GetCustomMetadataSettingsSettings",
     "GetCustomMetadataSettingsSettingsCustomMetadataConfig",
+    "GetDatasetGovernedTags",
+    "GetDatasetGovernedTagsNodeDataset",
+    "GetDatasetGovernedTagsNodeDatasetGovernedTags",
+    "GetDatasetGovernedTagsNodeDatasetGovernedTagsEdges",
+    "GetDatasetGovernedTagsNodeDatasetGovernedTagsEdgesNode",
+    "GetDatasetGovernedTagsNodeDatasetGovernedTagsEdgesNodeUserDefinedResourceInfo",
+    "GetDatasetGovernedTagsNodeDatasetGovernedTagsEdgesNodeUserDefinedResourceInfoDescription",
+    "GetDatasetGovernedTagsNodeDatasetGovernedTagsPageInfo",
+    "GetDatasetGovernedTagsNodeNode",
     "GetGovernedTags",
     "GetGovernedTagsUserDefinedResources",
     "GetGovernedTagsUserDefinedResourcesEdges",

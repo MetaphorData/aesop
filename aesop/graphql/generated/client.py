@@ -9,6 +9,7 @@ from .base_client import BaseClient
 from .base_model import UNSET, UnsetType
 from .create_knowledge_card import CreateKnowledgeCard
 from .get_custom_metadata_settings import GetCustomMetadataSettings
+from .get_dataset_governed_tags import GetDatasetGovernedTags
 from .get_governed_tags import GetGovernedTags
 from .get_non_prod_settings import GetNonProdSettings
 from .get_setup_info import GetSetupInfo
@@ -207,6 +208,50 @@ class Client(BaseClient):
         )
         data = self.get_data(response)
         return GetCustomMetadataSettings.model_validate(data)
+
+    def get_dataset_governed_tags(
+        self,
+        id: str,
+        end_cursor: Union[Optional[str], UnsetType] = UNSET,
+        **kwargs: Any
+    ) -> GetDatasetGovernedTags:
+        query = gql(
+            """
+            query getDatasetGovernedTags($id: ID!, $endCursor: String) {
+              node(id: $id) {
+                __typename
+                ... on Dataset {
+                  governedTags(first: 50, after: $endCursor) {
+                    edges {
+                      node {
+                        id
+                        userDefinedResourceInfo {
+                          name
+                          description {
+                            text
+                          }
+                        }
+                      }
+                    }
+                    pageInfo {
+                      endCursor
+                      hasNextPage
+                    }
+                  }
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"id": id, "endCursor": end_cursor}
+        response = self.execute(
+            query=query,
+            operation_name="getDatasetGovernedTags",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return GetDatasetGovernedTags.model_validate(data)
 
     def get_governed_tags(
         self,

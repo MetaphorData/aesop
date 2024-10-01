@@ -1,0 +1,29 @@
+query getDatasetGovernedTags(
+  $id: ID!,
+  $endCursor: String
+) {
+  node(id: $id) {
+    ...on Dataset {
+      governedTags(
+        first: 50,
+        after: $endCursor
+    	) {
+        edges {
+          node {
+            id
+            userDefinedResourceInfo {
+              name
+              description {
+                text
+              }
+            }
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+      }
+    }
+  }
+}
