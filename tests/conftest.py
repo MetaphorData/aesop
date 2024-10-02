@@ -29,9 +29,8 @@ def config_file(
         _user_config
         if _user_config
         else AesopConfig(
-            config=os.environ.get("CONFIG", ""),
+            domain=os.environ.get("DOMAIN", ""),
             api_key=os.environ.get("METAPHOR_API_KEY", ""),
-            tenant=os.environ.get("TENANT"),
         )
     )
     loguru.logger.info(f"Config = {config}")

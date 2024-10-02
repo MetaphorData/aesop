@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Optional
 
 import yarl
 from pydantic import BaseModel
@@ -10,14 +9,12 @@ DEFAULT_CONFIG_PATH = Path.home() / ".aesop" / "config.yml"
 
 
 class AesopConfig(BaseModel):
-    config: str
+    domain: str
     api_key: str
-    tenant: Optional[str] = None
 
     @property
     def base_url(self) -> yarl.URL:
-        prefix = f"{self.tenant}.{self.config}" if self.tenant else self.config
-        return yarl.URL(f"https://{prefix}.metaphor.io")
+        return yarl.URL(f"https://{self.domain}.metaphor.io")
 
     def get_graphql_client(self) -> Client:
         return Client(

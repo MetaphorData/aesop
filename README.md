@@ -14,8 +14,7 @@ This repository contains a command-line interface (CLI) tool designed for easy i
 The config file should include the following fields:
 
 ```yaml
-config: <CONFIG>
-tenant: <TENANT> # This is only applicable to multi-tenant environments.
+domain: <DOMAIN> # Domain of the Metaphor instance. For `https://acme.metaphor.io`, use `acme` here.
 api_key: <API_KEY>
 ```
 
