@@ -1,6 +1,7 @@
-from aesop.commands.tags.models import AddTagsInput
+from typing import List
+
+from aesop.commands.aspects.user_defined_resources.tags.models import GovernedTag
 from aesop.config import AesopConfig
-from aesop.console import console
 from aesop.graphql.generated.enums import UserDefinedResourceType
 from aesop.graphql.generated.input_types import (
     UserDefinedResourceDescriptionInput,
@@ -9,10 +10,10 @@ from aesop.graphql.generated.input_types import (
 )
 
 
-def add(
-    add_tags_input: AddTagsInput,
+def add_tags(
+    tags: List[GovernedTag],
     config: AesopConfig,
-) -> None:
+) -> List[str]:
     client = config.get_graphql_client()
     input = [
         UserDefinedResourceInput(
@@ -26,11 +27,10 @@ def add(
                 ),
             )
         )
-        for tag in add_tags_input.tags
+        for tag in tags
     ]
-    resp = client.create_governed_tags(input=input)
+    resp = client.add_governed_tags(input=input)
     if not resp.create_user_defined_resource:
         raise ValueError
     created_ids = [res.id for res in resp.create_user_defined_resource]
-    console.ok("Successfully created governed tags")
-    console.print(created_ids)
+    return created_ids

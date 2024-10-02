@@ -1,5 +1,0 @@
-mutation createGovernedTags($input: [UserDefinedResourceInput!]!) {
-  createUserDefinedResource(input: $input) {
-    id
-  }
-}
