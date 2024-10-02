@@ -1,0 +1,6 @@
+mutation removeGovernedTags($input: UserDefinedResourceDeleteInput!) {
+  deleteUserDefinedResource(input: $input) {
+    deletedIds
+    failedIds
+  }
+}

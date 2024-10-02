@@ -5,14 +5,21 @@ import yaml
 from rich import print
 from typing_extensions import Annotated
 
-from aesop.commands import info_command, settings_app, tags_app, upload_command
+from aesop.commands import (
+    datasets_app,
+    info_command,
+    settings_app,
+    tags_app,
+    upload_command,
+)
 from aesop.commands.common.enums.output_format import OutputFormat
 from aesop.commands.common.exception_handler import exception_handler
 from aesop.config import DEFAULT_CONFIG_PATH, AesopConfig
 
-app = typer.Typer(add_completion=False)
+app = typer.Typer(add_completion=False, rich_markup_mode="markdown")
 app.add_typer(tags_app, name="tags")
 app.add_typer(settings_app, name="settings")
+app.add_typer(datasets_app, name="datasets")
 
 
 @app.command()
