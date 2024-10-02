@@ -14,7 +14,7 @@ class PageInfoProtocol(Protocol):
 
 
 class ClientQueryCallback(Protocol, Generic[R]):
-    def __call__(self, client: Client, end_cursor: Optional[str]) -> R: ...
+    def __call__(self, client: Client, end_cursor: Optional[str]) -> R: ...  # noqa E704
 
 
 def paginate_query(
