@@ -1,8 +1,12 @@
+import glob
+from enum import Enum
 from importlib import metadata
+from pathlib import Path
 
 import typer
 import yaml
 from rich import print
+from rich.markdown import Markdown
 from typing_extensions import Annotated
 
 from aesop.commands import (
@@ -55,6 +59,32 @@ def version() -> None:
     Print Aesop's version.
     """
     print(f"Aesop version: {metadata.version('aesop')}")
+
+
+root_path = Path(__file__).parents[1].resolve()  # This is the root directory
+commands_path = root_path / "docs" / "commands"
+CommandsWithHelpDoc = Enum(  # type: ignore
+    "CommandsWithHelpDoc",
+    {
+        f"v_{v}": v
+        for v in [
+            filename.split(".", maxsplit=1)[0].split("/")[-1]
+            for filename in glob.glob((commands_path / "*.md").as_posix())
+        ]
+    },
+)
+
+
+@app.command()
+def help(
+    command: CommandsWithHelpDoc,  # type: ignore
+) -> None:
+    """
+    Print help for a command.
+    """
+    command_name: str = command.value
+    with open(commands_path / f"{command_name}.md") as f:
+        print(Markdown(f.read()))
 
 
 @app.callback()
