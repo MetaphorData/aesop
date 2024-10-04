@@ -1,0 +1,3 @@
+query getWebhookPayloadSchema($trigger: WebhookTriggerType!) {
+  webhookPayloadSchema(input: {trigger: $trigger})
+}

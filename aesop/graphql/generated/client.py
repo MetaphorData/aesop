@@ -4,16 +4,20 @@
 from typing import Any, Dict, List, Optional, Union
 
 from .add_governed_tags import AddGovernedTags
+from .add_webhook import AddWebhook
 from .assign_governed_tags import AssignGovernedTags
 from .base_client import BaseClient
 from .base_model import UNSET, UnsetType
 from .create_knowledge_card import CreateKnowledgeCard
+from .enums import WebhookTriggerType
 from .get_custom_metadata_settings import GetCustomMetadataSettings
 from .get_dataset_governed_tags import GetDatasetGovernedTags
 from .get_governed_tags import GetGovernedTags
 from .get_non_prod_settings import GetNonProdSettings
 from .get_setup_info import GetSetupInfo
 from .get_soft_deletion_settings import GetSoftDeletionSettings
+from .get_webhook_payload_schema import GetWebhookPayloadSchema
+from .get_webhooks import GetWebhooks
 from .input_types import (
     AssetGovernedTagsPatchInput,
     KnowledgeCardInput,
@@ -22,6 +26,7 @@ from .input_types import (
     UserDefinedResourceInput,
 )
 from .remove_governed_tags import RemoveGovernedTags
+from .remove_webhook import RemoveWebhook
 from .unassign_governed_tags import UnassignGovernedTags
 from .update_settings import UpdateSettings
 
@@ -182,6 +187,42 @@ class Client(BaseClient):
         )
         data = self.get_data(response)
         return UpdateSettings.model_validate(data)
+
+    def add_webhook(
+        self, trigger: WebhookTriggerType, url: str, **kwargs: Any
+    ) -> AddWebhook:
+        query = gql(
+            """
+            mutation addWebhook($trigger: WebhookTriggerType!, $url: String!) {
+              addWebhook(input: {trigger: $trigger, url: $url}) {
+                _id
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"trigger": trigger, "url": url}
+        response = self.execute(
+            query=query, operation_name="addWebhook", variables=variables, **kwargs
+        )
+        data = self.get_data(response)
+        return AddWebhook.model_validate(data)
+
+    def remove_webhook(self, id: str, **kwargs: Any) -> RemoveWebhook:
+        query = gql(
+            """
+            mutation removeWebhook($id: ID!) {
+              deleteWebhooks(input: {ids: [$id]}) {
+                deletedIds
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"id": id}
+        response = self.execute(
+            query=query, operation_name="removeWebhook", variables=variables, **kwargs
+        )
+        data = self.get_data(response)
+        return RemoveWebhook.model_validate(data)
 
     def get_custom_metadata_settings(self, **kwargs: Any) -> GetCustomMetadataSettings:
         query = gql(
@@ -369,3 +410,44 @@ class Client(BaseClient):
         )
         data = self.get_data(response)
         return GetSoftDeletionSettings.model_validate(data)
+
+    def get_webhook_payload_schema(
+        self, trigger: WebhookTriggerType, **kwargs: Any
+    ) -> GetWebhookPayloadSchema:
+        query = gql(
+            """
+            query getWebhookPayloadSchema($trigger: WebhookTriggerType!) {
+              webhookPayloadSchema(input: {trigger: $trigger})
+            }
+            """
+        )
+        variables: Dict[str, object] = {"trigger": trigger}
+        response = self.execute(
+            query=query,
+            operation_name="getWebhookPayloadSchema",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return GetWebhookPayloadSchema.model_validate(data)
+
+    def get_webhooks(
+        self,
+        trigger: Union[Optional[WebhookTriggerType], UnsetType] = UNSET,
+        **kwargs: Any
+    ) -> GetWebhooks:
+        query = gql(
+            """
+            query getWebhooks($trigger: WebhookTriggerType) {
+              webhooks(input: {trigger: $trigger}) {
+                _id
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"trigger": trigger}
+        response = self.execute(
+            query=query, operation_name="getWebhooks", variables=variables, **kwargs
+        )
+        data = self.get_data(response)
+        return GetWebhooks.model_validate(data)

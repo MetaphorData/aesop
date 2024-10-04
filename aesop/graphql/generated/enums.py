@@ -88,6 +88,7 @@ class AssetEntityType(str, Enum):
 
 class AssetPlatform(str, Enum):
     AIRFLOW = "AIRFLOW"
+    ATHENA = "ATHENA"
     AZURE_BLOB_STORAGE = "AZURE_BLOB_STORAGE"
     AZURE_DATA_FACTORY_PIPELINE = "AZURE_DATA_FACTORY_PIPELINE"
     AZURE_DATA_LAKE_STORAGE = "AZURE_DATA_LAKE_STORAGE"
@@ -108,6 +109,7 @@ class AssetPlatform(str, Enum):
     KAFKA = "KAFKA"
     LOOKER = "LOOKER"
     METABASE = "METABASE"
+    MONGODB = "MONGODB"
     MSSQL = "MSSQL"
     MYSQL = "MYSQL"
     ORACLE = "ORACLE"
@@ -263,6 +265,7 @@ class CrawlerType(str, Enum):
     LOOKER = "LOOKER"
     METABASE = "METABASE"
     MONDAY = "MONDAY"
+    MONGODB = "MONGODB"
     MONTE_CARLO = "MONTE_CARLO"
     MSSQL = "MSSQL"
     MYSQL = "MYSQL"
@@ -272,6 +275,7 @@ class CrawlerType(str, Enum):
     POSTGRESQL_PROFILE = "POSTGRESQL_PROFILE"
     POSTGRESQL_USAGE = "POSTGRESQL_USAGE"
     POWER_BI = "POWER_BI"
+    QUICK_SIGHT = "QUICK_SIGHT"
     REDSHIFT = "REDSHIFT"
     REDSHIFT_PROFILE = "REDSHIFT_PROFILE"
     S3 = "S3"
@@ -333,6 +337,7 @@ class DataMonitorStatus(str, Enum):
 
 
 class DataPlatform(str, Enum):
+    ATHENA = "ATHENA"
     AZURE_BLOB_STORAGE = "AZURE_BLOB_STORAGE"
     AZURE_DATA_LAKE_STORAGE = "AZURE_DATA_LAKE_STORAGE"
     BIGQUERY = "BIGQUERY"
@@ -345,6 +350,7 @@ class DataPlatform(str, Enum):
     HIVE = "HIVE"
     HTTP = "HTTP"
     KAFKA = "KAFKA"
+    MONGODB = "MONGODB"
     MSSQL = "MSSQL"
     MYSQL = "MYSQL"
     ORACLE = "ORACLE"
@@ -421,6 +427,7 @@ class HierarchyType(str, Enum):
     POWER_BI_WORKSPACE = "POWER_BI_WORKSPACE"
     THOUGHT_SPOT_VIRTUAL_HIERARCHY = "THOUGHT_SPOT_VIRTUAL_HIERARCHY"
     UNKNOWN = "UNKNOWN"
+    VIRTUAL_HIERARCHY = "VIRTUAL_HIERARCHY"
 
 
 class InAppOnboardingCompletionStep(str, Enum):
@@ -500,6 +507,7 @@ class NativeType(str, Enum):
     AIRFLOW = "AIRFLOW"
     ASSET_CONTACT = "ASSET_CONTACT"
     ASSET_DESCRIPTION = "ASSET_DESCRIPTION"
+    ATHENA = "ATHENA"
     AZURE_BLOB_STORAGE = "AZURE_BLOB_STORAGE"
     AZURE_DATA_FACTORY_PIPELINE = "AZURE_DATA_FACTORY_PIPELINE"
     AZURE_DATA_LAKE_STORAGE = "AZURE_DATA_LAKE_STORAGE"
@@ -542,6 +550,7 @@ class NativeType(str, Enum):
     LOOKER_VIEW = "LOOKER_VIEW"
     METABASE = "METABASE"
     MONDAY = "MONDAY"
+    MONGODB = "MONGODB"
     MONTE_CARLO = "MONTE_CARLO"
     MSSQL = "MSSQL"
     MYSQL = "MYSQL"
@@ -598,6 +607,7 @@ class PipelineType(str, Enum):
 
 class PlatformType(str, Enum):
     AIRFLOW = "AIRFLOW"
+    ATHENA = "ATHENA"
     AZURE_BLOB_STORAGE = "AZURE_BLOB_STORAGE"
     AZURE_DATA_FACTORY_PIPELINE = "AZURE_DATA_FACTORY_PIPELINE"
     AZURE_DATA_LAKE_STORAGE = "AZURE_DATA_LAKE_STORAGE"
@@ -629,6 +639,7 @@ class PlatformType(str, Enum):
     LOOKER_VIEW = "LOOKER_VIEW"
     METABASE = "METABASE"
     MONDAY = "MONDAY"
+    MONGODB = "MONGODB"
     MONTE_CARLO = "MONTE_CARLO"
     MSSQL = "MSSQL"
     MYSQL = "MYSQL"
@@ -698,6 +709,7 @@ class RunStatus(str, Enum):
 
 class SchemaType(str, Enum):
     AVRO = "AVRO"
+    BSON = "BSON"
     DYNAMODB = "DYNAMODB"
     JSON = "JSON"
     ORC = "ORC"
@@ -740,6 +752,13 @@ class SearchIndex(str, Enum):
     Pipelines = "Pipelines"
     UserDefinedResource = "UserDefinedResource"
     VirtualViews = "VirtualViews"
+
+
+class SnowflakeIcebergTableType(str, Enum):
+    MANAGED = "MANAGED"
+    NOT_ICEBERG = "NOT_ICEBERG"
+    UNKNOWN = "UNKNOWN"
+    UNMANAGED = "UNMANAGED"
 
 
 class SnowflakeStreamSourceType(str, Enum):
@@ -902,10 +921,12 @@ class VersionUpdateField(str, Enum):
     powerBIDataset = "powerBIDataset"
     powerBiDataflow = "powerBiDataflow"
     properties = "properties"
+    quickSight = "quickSight"
     relatedAssets = "relatedAssets"
     schema = "schema"
     scimProfile = "scimProfile"
     slackProfile = "slackProfile"
+    snowflakeIcebergInfo = "snowflakeIcebergInfo"
     snowflakeStreamInfo = "snowflakeStreamInfo"
     sodaDataQuality = "sodaDataQuality"
     sourceInfo = "sourceInfo"
