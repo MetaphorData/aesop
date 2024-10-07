@@ -143,6 +143,9 @@ class AssetConnectionFilterInput(BaseModel):
     knowledge_card_filters: Optional["KnowledgeCardConnectionFilterInput"] = Field(
         alias="knowledgeCardFilters", default=None
     )
+    namespace_filters: Optional["NamespaceInfoConnectionFilterInput"] = Field(
+        alias="namespaceFilters", default=None
+    )
 
 
 class AssetContactsPatchInput(BaseModel):
@@ -234,6 +237,9 @@ class AssociatedAssetConnectionFilterInput(BaseModel):
     entity_type: List[EntityType] = Field(alias="entityType")
     knowledge_card_filters: Optional["KnowledgeCardConnectionFilterInput"] = Field(
         alias="knowledgeCardFilters", default=None
+    )
+    namespace_filters: Optional["NamespaceInfoConnectionFilterInput"] = Field(
+        alias="namespaceFilters", default=None
     )
 
 
@@ -365,6 +371,7 @@ class CreateApiKeyInput(BaseModel):
 
 
 class CreateCrawlerInput(BaseModel):
+    description: Optional[str] = None
     display_name: Optional[str] = Field(alias="displayName", default=None)
     is_metaphor_managed: Optional[bool] = Field(alias="isMetaphorManaged", default=True)
     schedule: Optional["CreateCrawlerScheduleInput"] = Field(
@@ -379,7 +386,6 @@ class CreateCrawlerInput(BaseModel):
 
 
 class CreateCrawlerScheduleInput(BaseModel):
-    description: Optional[str] = None
     enabled: Optional[bool] = False
     is_daily: Optional[bool] = Field(alias="isDaily", default=True)
     schedule: Optional[str] = None
@@ -398,6 +404,9 @@ class CustomMetadataConfigInput(BaseModel):
     display_name: Optional[str] = Field(alias="displayName", default=None)
     highlight: Optional[bool] = True
     key: Optional[str] = ""
+    search_operator_example: Optional[str] = Field(
+        alias="searchOperatorExample", default=None
+    )
     searchable: Optional[bool] = True
 
 
@@ -582,6 +591,14 @@ class GeneratedAssetDescriptionInput(BaseModel):
     entity_id: Optional[str] = Field(alias="entityId", default="")
     field_paths: Optional[List[str]] = Field(alias="fieldPaths", default=None)
     table: Optional[str] = None
+
+
+class GetWebhookPayloadSchemaInput(BaseModel):
+    trigger: Optional[WebhookTriggerType] = WebhookTriggerType.UNKNOWN
+
+
+class GetWebhooksInput(BaseModel):
+    trigger: Optional[WebhookTriggerType] = None
 
 
 class GoogleSocialLoginInput(BaseModel):
@@ -1318,6 +1335,11 @@ class QueryRequest(BaseModel):
     statement: Optional[str] = ""
 
 
+class QueryUserEmailInput(BaseModel):
+    email: Optional[str] = ""
+    user_id: Optional[str] = Field(alias="userId", default="")
+
+
 class RecentUserActivitiesFilterInput(BaseModel):
     activity_type: Optional[UserActivityType] = Field(
         alias="activityType", default=None
@@ -1544,6 +1566,9 @@ class SettingsInput(BaseModel):
     purge_data_quality: Optional["PurgeDataQualityInput"] = Field(
         alias="purgeDataQuality", default=None
     )
+    query_user_emails: Optional[List["QueryUserEmailInput"]] = Field(
+        alias="queryUserEmails", default=None
+    )
     service_accounts: Optional[List[str]] = Field(alias="serviceAccounts", default=None)
     social_login: Optional["SocialLoginInput"] = Field(
         alias="socialLogin", default=None
@@ -1621,12 +1646,12 @@ class UpdateApiKeyInput(BaseModel):
 class UpdateCrawlerInput(BaseModel):
     contacts: Optional[List[str]] = None
     crawler_config: Optional[str] = Field(alias="crawlerConfig", default=None)
+    description: Optional[str] = None
     display_name: Optional[str] = Field(alias="displayName", default=None)
     schedule: Optional["UpdateCrawlerScheduleInput"] = None
 
 
 class UpdateCrawlerScheduleInput(BaseModel):
-    description: Optional[str] = None
     enabled: Optional[bool] = False
     is_daily: Optional[bool] = Field(alias="isDaily", default=True)
     schedule: Optional[str] = None

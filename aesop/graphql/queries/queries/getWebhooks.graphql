@@ -1,0 +1,7 @@
+query getWebhooks($trigger: WebhookTriggerType) {
+  webhooks(input: {
+    trigger: $trigger
+  }) {
+    _id
+  }
+}

@@ -1,0 +1,11 @@
+mutation addWebhook(
+  $trigger: WebhookTriggerType!,
+  $url: String!
+) {
+  addWebhook(input: {
+    trigger: $trigger,
+    url: $url
+  }) {
+    _id
+  }
+}
