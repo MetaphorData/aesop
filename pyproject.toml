@@ -76,6 +76,7 @@ skip_glob = ["aesop/graphql/generated/*"]
 [tool.mypy]
 ignore_missing_imports = true
 strict = true
+warn_unused_ignores = false
 exclude = "aesop/graphql/generated/"
 
 [tool.flake8]
