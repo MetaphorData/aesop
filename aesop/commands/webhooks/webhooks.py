@@ -6,7 +6,7 @@ from typer import Argument, Context, Typer
 from aesop.config import AesopConfig
 from aesop.graphql.generated.enums import WebhookTriggerType
 
-app = Typer(help="Manages webhooks")
+app = Typer(help="Manages webhooks.")
 
 
 @app.command(help="Registers a webhook to Metaphor.")
