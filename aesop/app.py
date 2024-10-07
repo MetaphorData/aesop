@@ -61,14 +61,14 @@ def version() -> None:
     print(f"Aesop version: {metadata.version('aesop')}")
 
 
-root_path = Path(__file__).parents[1].resolve()  # This is the root directory
+root_path = Path(__file__).parent.resolve()  # This is the aesop app directory
 commands_path = root_path / "docs" / "commands"
 CommandsWithHelpDoc = Enum(  # type: ignore
     "CommandsWithHelpDoc",
     {
         f"v_{v}": v
         for v in [
-            filename.split(".", maxsplit=1)[0].split("/")[-1]
+            Path(filename).stem
             for filename in glob.glob((commands_path / "*.md").as_posix())
         ]
     },
