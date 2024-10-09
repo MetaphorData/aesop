@@ -23,17 +23,16 @@ def _validate_input_file(
             title_align="left",
         )
         console.print(example_panel)
-
         commands = " ".join(sys.argv[1:])
         usage_contents = [
             "Pipe the JSON body into the command:",
             "",
             "```bash",
-            f"$ cat {''.join(input_model.example_json(indent=0).splitlines())} | aesop {commands}",  # noqa E501
+            f"$ echo '{''.join(input_model.example_json(indent=0).splitlines())}' | aesop {commands}",  # noqa E501
             "```",
             "Or provide an input file to the command:",
             "```bash",
-            f"$ echo {''.join(input_model.example_json(indent=0).splitlines())} > input.json",  # noqa E501
+            f"$ echo '{''.join(input_model.example_json(indent=0).splitlines())}' > input.json",  # noqa E501
             "",
             f"$ aesop {commands} input.json",
             "```",

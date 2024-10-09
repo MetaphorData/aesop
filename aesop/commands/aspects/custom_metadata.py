@@ -6,10 +6,12 @@ from typing import Dict, List
 from pydantic import BaseModel, TypeAdapter
 from rich import print, print_json
 from rich.table import Column, Table
-from typer import Context, Typer
+from typer import Context, FileText, Typer
 
+from aesop.commands.common.arguments import InputFileArg
 from aesop.commands.common.enums.output_format import OutputFormat
 from aesop.commands.common.exception_handler import exception_handler
+from aesop.commands.common.models import InputModel
 from aesop.commands.common.options import OutputFormatOption
 from aesop.config import AesopConfig
 from aesop.graphql.generated.get_dataset_custom_metadata import (
@@ -130,3 +132,36 @@ def remove(
     output: OutputFormat = OutputFormatOption,
 ) -> None:
     _update(ctx.obj, output, dataset_id, unset=[key])
+
+
+class _UpdateInputModel(InputModel, UpdateCustomMetadataInput):
+    @staticmethod
+    def example_json(indent: int = 0) -> str:
+        return UpdateCustomMetadataInput(
+            entityId="DATASET~00000000000000000000000000000001",
+            set=[
+                CustomMetadataItemInput(key="key_to_add", value='{"key": "value"}'),
+            ],
+            unset=[
+                "key_to_remove",
+                "another_key_to_remove",
+            ],
+        ).model_dump_json(indent=indent)
+
+
+@exception_handler("update custom metadata")
+@app.command(help="Batch updates custom metadata for a dataset.")
+def update(
+    ctx: Context,
+    input_file: FileText = InputFileArg(_UpdateInputModel),
+    output: OutputFormat = OutputFormatOption,
+) -> None:
+    input = UpdateCustomMetadataInput.model_validate_json(input_file.read())
+    assert input.entity_id
+    _update(
+        ctx.obj,
+        output,
+        input.entity_id,
+        {item.key or "": item.value or "" for item in input.set} if input.set else {},
+        input.unset or [],
+    )
