@@ -1,0 +1,12 @@
+query getDatasetCustomMetadata($id: ID!) {
+  node(id: $id) {
+    ... on Dataset {
+      customMetadata {
+        metadata {
+          key
+          value
+        }
+      }
+    }
+  }
+}

@@ -11,6 +11,7 @@ from .base_model import UNSET, UnsetType
 from .create_knowledge_card import CreateKnowledgeCard
 from .enums import WebhookTriggerType
 from .get_custom_metadata_settings import GetCustomMetadataSettings
+from .get_dataset_custom_metadata import GetDatasetCustomMetadata
 from .get_dataset_governed_tags import GetDatasetGovernedTags
 from .get_governed_tags import GetGovernedTags
 from .get_non_prod_settings import GetNonProdSettings
@@ -22,12 +23,14 @@ from .input_types import (
     AssetGovernedTagsPatchInput,
     KnowledgeCardInput,
     SettingsInput,
+    UpdateCustomMetadataInput,
     UserDefinedResourceDeleteInput,
     UserDefinedResourceInput,
 )
 from .remove_governed_tags import RemoveGovernedTags
 from .remove_webhook import RemoveWebhook
 from .unassign_governed_tags import UnassignGovernedTags
+from .update_dataset_custom_metadata import UpdateDatasetCustomMetadata
 from .update_settings import UpdateSettings
 
 
@@ -171,6 +174,31 @@ class Client(BaseClient):
         data = self.get_data(response)
         return UnassignGovernedTags.model_validate(data)
 
+    def update_dataset_custom_metadata(
+        self, input: UpdateCustomMetadataInput, **kwargs: Any
+    ) -> UpdateDatasetCustomMetadata:
+        query = gql(
+            """
+            mutation updateDatasetCustomMetadata($input: UpdateCustomMetadataInput!) {
+              updateCustomMetadata(input: $input) {
+                metadata {
+                  key
+                  value
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"input": input}
+        response = self.execute(
+            query=query,
+            operation_name="updateDatasetCustomMetadata",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return UpdateDatasetCustomMetadata.model_validate(data)
+
     def update_settings(self, input: SettingsInput, **kwargs: Any) -> UpdateSettings:
         query = gql(
             """
@@ -249,6 +277,36 @@ class Client(BaseClient):
         )
         data = self.get_data(response)
         return GetCustomMetadataSettings.model_validate(data)
+
+    def get_dataset_custom_metadata(
+        self, id: str, **kwargs: Any
+    ) -> GetDatasetCustomMetadata:
+        query = gql(
+            """
+            query getDatasetCustomMetadata($id: ID!) {
+              node(id: $id) {
+                __typename
+                ... on Dataset {
+                  customMetadata {
+                    metadata {
+                      key
+                      value
+                    }
+                  }
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"id": id}
+        response = self.execute(
+            query=query,
+            operation_name="getDatasetCustomMetadata",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return GetDatasetCustomMetadata.model_validate(data)
 
     def get_dataset_governed_tags(
         self,

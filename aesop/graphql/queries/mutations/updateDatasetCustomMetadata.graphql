@@ -1,0 +1,8 @@
+mutation updateDatasetCustomMetadata($input: UpdateCustomMetadataInput!) {
+  updateCustomMetadata(input: $input) {
+    metadata {
+      key
+      value
+    }
+  }
+}

@@ -139,7 +139,7 @@ class ApiKeyDeleteInput(BaseModel):
 
 
 class AssetConnectionFilterInput(BaseModel):
-    entity_type: List[EntityType] = Field(alias="entityType")
+    entity_types: List[EntityType] = Field(alias="entityTypes")
     knowledge_card_filters: Optional["KnowledgeCardConnectionFilterInput"] = Field(
         alias="knowledgeCardFilters", default=None
     )
@@ -234,7 +234,7 @@ class AssociatedAssetConnectionFilterInput(BaseModel):
     designated_contacts: Optional[List[str]] = Field(
         alias="designatedContacts", default=None
     )
-    entity_type: List[EntityType] = Field(alias="entityType")
+    entity_types: List[EntityType] = Field(alias="entityTypes")
     knowledge_card_filters: Optional["KnowledgeCardConnectionFilterInput"] = Field(
         alias="knowledgeCardFilters", default=None
     )
@@ -413,6 +413,11 @@ class CustomMetadataConfigInput(BaseModel):
 class CustomMetadataFacetFilterInput(BaseModel):
     key: Optional[str] = ""
     values: Optional[List[str]] = Field(default_factory=lambda: [])
+
+
+class CustomMetadataItemInput(BaseModel):
+    key: Optional[str] = ""
+    value: Optional[str] = ""
 
 
 class CustomOrder(BaseModel):
@@ -1291,6 +1296,10 @@ class QueryExplainerInput(BaseModel):
     type: Optional[QueryDescriptionType] = QueryDescriptionType.Freeform
 
 
+class QueryInfoAssetsConnectionFilterInput(BaseModel):
+    exclude_ids: Optional[List[str]] = Field(alias="excludeIds", default=None)
+
+
 class QueryInfoConnectionFilterInput(BaseModel):
     dataset_id: Optional[str] = Field(alias="datasetId", default=None)
     hide_duplicates: Optional[bool] = Field(alias="hideDuplicates", default=True)
@@ -1657,6 +1666,12 @@ class UpdateCrawlerScheduleInput(BaseModel):
     schedule: Optional[str] = None
 
 
+class UpdateCustomMetadataInput(BaseModel):
+    entity_id: Optional[str] = Field(alias="entityId", default="")
+    set: Optional[List["CustomMetadataItemInput"]] = None
+    unset: Optional[List[str]] = None
+
+
 class UsageKnowledgeCardInput(BaseModel):
     detail: Optional[str] = ""
     example: Optional[str] = None
@@ -1786,6 +1801,7 @@ SearchResultSort.model_rebuild()
 SettingsInput.model_rebuild()
 SocialLoginInput.model_rebuild()
 UpdateCrawlerInput.model_rebuild()
+UpdateCustomMetadataInput.model_rebuild()
 UsageKnowledgeCardInput.model_rebuild()
 UserDefinedResourceInfoInput.model_rebuild()
 UserDefinedResourceInput.model_rebuild()
