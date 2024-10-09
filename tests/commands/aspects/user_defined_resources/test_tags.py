@@ -1,6 +1,4 @@
 import json
-import random
-import string
 
 from aesop.commands.aspects.user_defined_resources.tags.models import (
     AddTagsOutput,
@@ -15,10 +13,8 @@ class TestTags(BaseTestSuite):
     def test_add_get_then_remove_tag(self) -> None:
 
         # Create bogus name and description
-        name = "".join(random.choices(string.ascii_uppercase + string.digits, k=10))
-        description = "".join(
-            random.choices(string.ascii_uppercase + string.digits, k=40)
-        )
+        name = self.gen_rand_str(10)
+        description = self.gen_rand_str(40)
 
         # Add a tag
         res = self.run_app(

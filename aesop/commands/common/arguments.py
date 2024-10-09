@@ -2,6 +2,7 @@ import sys
 from typing import Any
 
 import typer
+from rich.box import SIMPLE
 from rich.markdown import Markdown
 from rich.panel import Panel
 
@@ -13,16 +14,20 @@ def _validate_input_file(
     input_model: type[InputModel], input_file: typer.FileText
 ) -> typer.FileText:
     if input_file.name == "<stdin>" and input_file.isatty():
+        console.print(Markdown("---"))
         # Got nothing, print example and exit
         example_contents = ["```json"]
         example_contents.extend(input_model.example_json(indent=2).splitlines())
         example_contents.append("```")
         example_panel = Panel(
             Markdown("\n".join(example_contents)),
-            title="[green][bold]Example input",
+            title="[green][bold][Example input]",
             title_align="left",
+            padding=1,
+            box=SIMPLE,
         )
         console.print(example_panel)
+        console.print(Markdown("---"))
         commands = " ".join(sys.argv[1:])
         usage_contents = [
             "Pipe the JSON body into the command:",
@@ -39,8 +44,10 @@ def _validate_input_file(
         ]
         usage_panel = Panel(
             Markdown("\n".join(usage_contents)),
-            title="[green][bold]Usage",
+            title="[green][bold][Usage]",
             title_align="left",
+            padding=1,
+            box=SIMPLE,
         )
         console.print(usage_panel)
 

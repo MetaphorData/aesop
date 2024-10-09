@@ -1,3 +1,5 @@
+import random
+import string
 from typing import Optional, Sequence
 
 import loguru
@@ -10,6 +12,10 @@ from aesop.commands.common.enums.output_format import OutputFormat
 
 
 class BaseTestSuite:
+    @staticmethod
+    def gen_rand_str(length: int) -> str:
+        return "".join(random.choices(string.ascii_uppercase + string.digits, k=length))
+
     @pytest.fixture(autouse=True)
     def _setup(self, config_file: str) -> None:
         self._config_file = config_file
