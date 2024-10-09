@@ -3,12 +3,14 @@ from typing import Optional
 from rich import print_json
 from typer import Argument, Context, Typer
 
+from aesop.commands.common.exception_handler import exception_handler
 from aesop.config import AesopConfig
 from aesop.graphql.generated.enums import WebhookTriggerType
 
 app = Typer(help="Manages webhooks.")
 
 
+@exception_handler("register webhook")
 @app.command(help="Registers a webhook to Metaphor.")
 def register(
     ctx: Context,
@@ -25,6 +27,7 @@ def register(
     )
 
 
+@exception_handler("unregister webhook")
 @app.command(help="Unregisters a webhook from Metaphor.")
 def unregister(
     ctx: Context,
@@ -38,6 +41,7 @@ def unregister(
     )
 
 
+@exception_handler("get webhooks")
 @app.command(help="Gets a list of webhooks that are registered to Metaphor.")
 def get(
     ctx: Context,
@@ -47,6 +51,7 @@ def get(
     print_json(config.get_graphql_client().get_webhooks(trigger).model_dump_json())
 
 
+@exception_handler("get webhook payload schema")
 @app.command(help="Gets the payload of a webhook trigger type.")
 def get_payload_schema(
     ctx: Context,

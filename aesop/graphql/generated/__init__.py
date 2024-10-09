@@ -107,6 +107,13 @@ from .get_custom_metadata_settings import (
     GetCustomMetadataSettingsSettings,
     GetCustomMetadataSettingsSettingsCustomMetadataConfig,
 )
+from .get_dataset_custom_metadata import (
+    GetDatasetCustomMetadata,
+    GetDatasetCustomMetadataNodeDataset,
+    GetDatasetCustomMetadataNodeDatasetCustomMetadata,
+    GetDatasetCustomMetadataNodeDatasetCustomMetadataMetadata,
+    GetDatasetCustomMetadataNodeNode,
+)
 from .get_dataset_governed_tags import (
     GetDatasetGovernedTags,
     GetDatasetGovernedTagsNodeDataset,
@@ -185,6 +192,7 @@ from .input_types import (
     CustomAttributesInput,
     CustomMetadataConfigInput,
     CustomMetadataFacetFilterInput,
+    CustomMetadataItemInput,
     CustomOrder,
     CustomTagAttributesInput,
     DashboardConnectionFilterInput,
@@ -289,6 +297,7 @@ from .input_types import (
     PurgeDataQualityInput,
     QueryDescriptionTokenizedContentInput,
     QueryExplainerInput,
+    QueryInfoAssetsConnectionFilterInput,
     QueryInfoConnectionFilterInput,
     QueryKnowledgeCardInput,
     QueryKnowledgeCardPatchInput,
@@ -320,6 +329,7 @@ from .input_types import (
     UpdateApiKeyInput,
     UpdateCrawlerInput,
     UpdateCrawlerScheduleInput,
+    UpdateCustomMetadataInput,
     UsageKnowledgeCardInput,
     UserDefinedResourceDeleteInput,
     UserDefinedResourceDescriptionInput,
@@ -340,6 +350,11 @@ from .remove_webhook import RemoveWebhook, RemoveWebhookDeleteWebhooks
 from .unassign_governed_tags import (
     UnassignGovernedTags,
     UnassignGovernedTagsUpsertAssetGovernedTags,
+)
+from .update_dataset_custom_metadata import (
+    UpdateDatasetCustomMetadata,
+    UpdateDatasetCustomMetadataUpdateCustomMetadata,
+    UpdateDatasetCustomMetadataUpdateCustomMetadataMetadata,
 )
 from .update_settings import UpdateSettings, UpdateSettingsUpdateSettings
 
@@ -418,6 +433,7 @@ __all__ = [
     "CustomMetadataConfigInput",
     "CustomMetadataDataType",
     "CustomMetadataFacetFilterInput",
+    "CustomMetadataItemInput",
     "CustomOrder",
     "CustomTagAttributesInput",
     "DashboardConnectionFilterInput",
@@ -459,6 +475,11 @@ __all__ = [
     "GetCustomMetadataSettings",
     "GetCustomMetadataSettingsSettings",
     "GetCustomMetadataSettingsSettingsCustomMetadataConfig",
+    "GetDatasetCustomMetadata",
+    "GetDatasetCustomMetadataNodeDataset",
+    "GetDatasetCustomMetadataNodeDatasetCustomMetadata",
+    "GetDatasetCustomMetadataNodeDatasetCustomMetadataMetadata",
+    "GetDatasetCustomMetadataNodeNode",
     "GetDatasetGovernedTags",
     "GetDatasetGovernedTagsNodeDataset",
     "GetDatasetGovernedTagsNodeDatasetGovernedTags",
@@ -591,6 +612,7 @@ __all__ = [
     "QueryDescriptionTokenizedContentInput",
     "QueryDescriptionType",
     "QueryExplainerInput",
+    "QueryInfoAssetsConnectionFilterInput",
     "QueryInfoConnectionFilterInput",
     "QueryKnowledgeCardInput",
     "QueryKnowledgeCardPatchInput",
@@ -642,6 +664,10 @@ __all__ = [
     "UpdateApiKeyInput",
     "UpdateCrawlerInput",
     "UpdateCrawlerScheduleInput",
+    "UpdateCustomMetadataInput",
+    "UpdateDatasetCustomMetadata",
+    "UpdateDatasetCustomMetadataUpdateCustomMetadata",
+    "UpdateDatasetCustomMetadataUpdateCustomMetadataMetadata",
     "UpdateSettings",
     "UpdateSettingsUpdateSettings",
     "Upload",

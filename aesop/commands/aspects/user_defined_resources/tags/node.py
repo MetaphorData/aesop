@@ -1,9 +1,8 @@
 import csv
-import json
 import sys
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, TypeAdapter
 from rich.table import Column, Table
 
 from aesop.commands.common.enums.output_format import OutputFormat
@@ -35,6 +34,4 @@ def display_nodes(
         spamwriter.writerow(["ID", "Name", "Description"])
         spamwriter.writerows([[node.id, node.name, node.description] for node in nodes])
     elif output is OutputFormat.JSON:
-        console.print_json(
-            json.dumps([node.model_dump(exclude_none=True) for node in nodes]), indent=2
-        )
+        console.print_json(TypeAdapter(List[GovernedTagNode]).dump_json(nodes).decode())
