@@ -1,37 +1,38 @@
 from typing import List, Optional
 
 from pydantic import BaseModel, model_validator
-from rich import print
-from typer import Argument, Context, FileText, Option, Typer
 
-from aesop.commands.common.exception_handler import exception_handler
 from aesop.commands.common.paginator import ClientQueryCallback, paginate_query
-from aesop.config import AesopConfig
 from aesop.graphql.generated.client import Client
 from aesop.graphql.generated.get_namespace import (
     GetNamespace,
     GetNamespaceNamespacesEdges,
     GetNamespaceNamespacesEdgesNode,
 )
+from aesop.graphql.generated.input_types import HashtagInput
 
-app = Typer()
 
-
-def _create_data_document(
+def create_data_document(
     client: Client,
     title: str,
     content: str,
+    hashtags: Optional[List[str]],
     publish: bool,
 ) -> str:
     """
     Creates a data document. Returns the document's id.
     """
-    res = client.create_data_document(title, content, publish).create_knowledge_card
+    hashtag_inputs = (
+        [HashtagInput(value=value) for value in hashtags] if hashtags else None
+    )
+    res = client.create_data_document(
+        title, content, publish, hashtag_inputs
+    ).create_knowledge_card
     assert res
     return res.id
 
 
-class _Directory(BaseModel):
+class Directory(BaseModel):
     """
     Splits the raw directory path into parts. It is possible to do more sophisticated
     path validation.
@@ -41,13 +42,13 @@ class _Directory(BaseModel):
     directories: List[str] = []
 
     @model_validator(mode="after")
-    def populate_directories(self) -> "_Directory":
+    def populate_directories(self) -> "Directory":
         self.directories = [x.strip() for x in self.dir.split("/") if x.strip()]
         return self
 
 
-def _get_namespace_id(
-    config: AesopConfig,
+def get_namespace_id(
+    client: Client,
     name: str,
     parent_id: Optional[str],
 ) -> Optional[str]:
@@ -67,7 +68,7 @@ def _get_namespace_id(
         return edge.node
 
     for node in paginate_query(
-        config,
+        client,
         callback,
         lambda resp: resp.namespaces.edges,
         lambda resp: resp.namespaces.page_info,
@@ -79,9 +80,9 @@ def _get_namespace_id(
     return None
 
 
-def _create_namespace(
-    config: AesopConfig,
-    directory: _Directory,
+def create_namespace(
+    client: Client,
+    directory: Directory,
 ) -> Optional[str]:
     """
     Creates the namespace. In `directory` we have a list of directory parts, to ensure
@@ -89,7 +90,6 @@ def _create_namespace(
     does not exist, and create every single subdirectory that follows it.
     """
     parent_id: Optional[str] = None
-    client = config.get_graphql_client()
 
     # Flag to stop searching for the directory and just create
     should_create = False
@@ -105,7 +105,7 @@ def _create_namespace(
             parent_id = res.id
             continue
 
-        namespace_id = _get_namespace_id(config, name, parent_id)
+        namespace_id = get_namespace_id(client, name, parent_id)
         if not namespace_id:
             # There's no directory that's called `name`, need to create it.
             # Not updating parent_id, need to toggle should_create and decrease `i`
@@ -120,7 +120,7 @@ def _create_namespace(
     return parent_id
 
 
-def _attach_document_to_namespace(
+def attach_document_to_namespace(
     client: Client,
     namespace_id: str,
     document_id: str,
@@ -129,36 +129,3 @@ def _attach_document_to_namespace(
     Attaches the document to the namespace.
     """
     client.attach_data_document_to_namespace(namespace_id, document_id)
-
-
-@exception_handler("sync document")
-@app.command(
-    help="Imports a local file to Metaphor's data document storage.", name="import"
-)
-def import_(
-    ctx: Context,
-    input_file: FileText = Argument(help="The input file to import to Metaphor."),
-    directory: str = Option(
-        help="The directory to import the file to. Should be in the format of a "
-        "single slash-separated string. Any nonexisting subdirectory will be created.",
-        default="",
-    ),
-    publish: bool = Option(
-        help="Whether to publish the imported file or not.", default=True
-    ),
-) -> None:
-    """
-    1. Creates the target namespace if it does not exist already.
-    2. Creates the data document.
-    3. Attaches the data document to the target namespace.
-    """
-    config: AesopConfig = ctx.obj
-    client = config.get_graphql_client()
-    namespace_id = _create_namespace(config, _Directory(dir=directory))
-    document_id = _create_data_document(
-        client, input_file.name, input_file.read(), publish
-    )
-    if namespace_id:
-        _attach_document_to_namespace(client, namespace_id, document_id)
-    document_url = config.base_url / "document" / document_id.split("~")[-1]
-    print(f"Created document: {document_url.human_repr()}")

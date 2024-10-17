@@ -1,18 +1,17 @@
-mutation createDataDocument($title: String!, $content: String!, $publish: Boolean!) {
-  createKnowledgeCard(
-    data: {
-      knowledgeCardInfo: {
-        detail: {
-          dataDocument: {
-            title: $title,
-            content: $content
-          }
-          type: DATA_DOCUMENT
+mutation createDataDocument($name: String!, $content: String!, $publish: Boolean!, $hashtags: [HashtagInput!]) {
+  createKnowledgeCard(data: {
+    knowledgeCardInfo: {
+      detail: {
+        type: DATA_DOCUMENT,
+        dataDocument: {
+          title: $name
+          content: $content
         }
       }
-      isPublished: $publish
+      hashtags: $hashtags
     }
-  ) {
+    isPublished: $publish
+  }) {
     id
   }
 }

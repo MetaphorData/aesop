@@ -1,5 +1,5 @@
 from .aspects import tags_app
-from .documents import app as documents_app
+from .documents.documents import app as documents_app
 from .entities import datasets_app
 from .info import info as info_command
 from .settings.settings import app as settings_app

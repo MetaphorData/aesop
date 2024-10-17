@@ -24,6 +24,7 @@ from .get_webhook_payload_schema import GetWebhookPayloadSchema
 from .get_webhooks import GetWebhooks
 from .input_types import (
     AssetGovernedTagsPatchInput,
+    HashtagInput,
     KnowledgeCardInput,
     SettingsInput,
     UserDefinedResourceDeleteInput,
@@ -125,13 +126,18 @@ class Client(BaseClient):
         return AttachDataDocumentToNamespace.model_validate(data)
 
     def create_data_document(
-        self, title: str, content: str, publish: bool, **kwargs: Any
+        self,
+        name: str,
+        content: str,
+        publish: bool,
+        hashtags: Union[Optional[List[HashtagInput]], UnsetType] = UNSET,
+        **kwargs: Any
     ) -> CreateDataDocument:
         query = gql(
             """
-            mutation createDataDocument($title: String!, $content: String!, $publish: Boolean!) {
+            mutation createDataDocument($name: String!, $content: String!, $publish: Boolean!, $hashtags: [HashtagInput!]) {
               createKnowledgeCard(
-                data: {knowledgeCardInfo: {detail: {dataDocument: {title: $title, content: $content}, type: DATA_DOCUMENT}}, isPublished: $publish}
+                data: {knowledgeCardInfo: {detail: {type: DATA_DOCUMENT, dataDocument: {title: $name, content: $content}}, hashtags: $hashtags}, isPublished: $publish}
               ) {
                 id
               }
@@ -139,9 +145,10 @@ class Client(BaseClient):
             """
         )
         variables: Dict[str, object] = {
-            "title": title,
+            "name": name,
             "content": content,
             "publish": publish,
+            "hashtags": hashtags,
         }
         response = self.execute(
             query=query,
