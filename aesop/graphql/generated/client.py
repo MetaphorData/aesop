@@ -6,13 +6,17 @@ from typing import Any, Dict, List, Optional, Union
 from .add_governed_tags import AddGovernedTags
 from .add_webhook import AddWebhook
 from .assign_governed_tags import AssignGovernedTags
+from .attach_data_document_to_namespace import AttachDataDocumentToNamespace
 from .base_client import BaseClient
 from .base_model import UNSET, UnsetType
+from .create_data_document import CreateDataDocument
 from .create_knowledge_card import CreateKnowledgeCard
+from .create_namespace import CreateNamespace
 from .enums import WebhookTriggerType
 from .get_custom_metadata_settings import GetCustomMetadataSettings
 from .get_dataset_governed_tags import GetDatasetGovernedTags
 from .get_governed_tags import GetGovernedTags
+from .get_namespace import GetNamespace
 from .get_non_prod_settings import GetNonProdSettings
 from .get_setup_info import GetSetupInfo
 from .get_soft_deletion_settings import GetSoftDeletionSettings
@@ -20,6 +24,7 @@ from .get_webhook_payload_schema import GetWebhookPayloadSchema
 from .get_webhooks import GetWebhooks
 from .input_types import (
     AssetGovernedTagsPatchInput,
+    HashtagInput,
     KnowledgeCardInput,
     SettingsInput,
     UserDefinedResourceDeleteInput,
@@ -82,6 +87,101 @@ class Client(BaseClient):
         )
         _data = self.get_data(response)
         return CreateKnowledgeCard.model_validate(_data)
+
+    def attach_data_document_to_namespace(
+        self, namespace_id: str, data_document_id: str, **kwargs: Any
+    ) -> AttachDataDocumentToNamespace:
+        query = gql(
+            """
+            mutation attachDataDocumentToNamespace($namespaceId: ID!, $dataDocumentId: ID!) {
+              updateNamespaceAssets(
+                input: {entityIds: [$namespaceId], assetIdsToAdd: [$dataDocumentId]}
+              ) {
+                id
+                namespaceAssets {
+                  assets(first: 20) {
+                    edges {
+                      node {
+                        __typename
+                        id
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {
+            "namespaceId": namespace_id,
+            "dataDocumentId": data_document_id,
+        }
+        response = self.execute(
+            query=query,
+            operation_name="attachDataDocumentToNamespace",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return AttachDataDocumentToNamespace.model_validate(data)
+
+    def create_data_document(
+        self,
+        name: str,
+        content: str,
+        publish: bool,
+        hashtags: Union[Optional[List[HashtagInput]], UnsetType] = UNSET,
+        **kwargs: Any
+    ) -> CreateDataDocument:
+        query = gql(
+            """
+            mutation createDataDocument($name: String!, $content: String!, $publish: Boolean!, $hashtags: [HashtagInput!]) {
+              createKnowledgeCard(
+                data: {knowledgeCardInfo: {detail: {type: DATA_DOCUMENT, dataDocument: {title: $name, content: $content}}, hashtags: $hashtags}, isPublished: $publish}
+              ) {
+                id
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {
+            "name": name,
+            "content": content,
+            "publish": publish,
+            "hashtags": hashtags,
+        }
+        response = self.execute(
+            query=query,
+            operation_name="createDataDocument",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return CreateDataDocument.model_validate(data)
+
+    def create_namespace(
+        self,
+        name: str,
+        parent_id: Union[Optional[str], UnsetType] = UNSET,
+        **kwargs: Any
+    ) -> CreateNamespace:
+        query = gql(
+            """
+            mutation createNamespace($name: String!, $parentId: ID) {
+              createNamespace(
+                data: {namespaceInfo: {name: $name, detail: {type: USER_DEFINED_SPACE}, parentId: $parentId}}
+              ) {
+                id
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"name": name, "parentId": parent_id}
+        response = self.execute(
+            query=query, operation_name="createNamespace", variables=variables, **kwargs
+        )
+        data = self.get_data(response)
+        return CreateNamespace.model_validate(data)
 
     def add_governed_tags(
         self, input: List[UserDefinedResourceInput], **kwargs: Any
@@ -223,6 +323,48 @@ class Client(BaseClient):
         )
         data = self.get_data(response)
         return RemoveWebhook.model_validate(data)
+
+    def get_namespace(
+        self,
+        name: str,
+        parent_id: Union[Optional[List[str]], UnsetType] = UNSET,
+        end_cursor: Union[Optional[str], UnsetType] = UNSET,
+        **kwargs: Any
+    ) -> GetNamespace:
+        query = gql(
+            """
+            query getNamespace($name: String!, $parentId: [ID!], $endCursor: String) {
+              namespaces(
+                first: 20
+                filters: {name: $name, type: USER_DEFINED_SPACE, isChildOf: $parentId}
+                after: $endCursor
+              ) {
+                edges {
+                  node {
+                    id
+                    namespaceInfo {
+                      name
+                    }
+                  }
+                }
+                pageInfo {
+                  hasNextPage
+                  endCursor
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {
+            "name": name,
+            "parentId": parent_id,
+            "endCursor": end_cursor,
+        }
+        response = self.execute(
+            query=query, operation_name="getNamespace", variables=variables, **kwargs
+        )
+        data = self.get_data(response)
+        return GetNamespace.model_validate(data)
 
     def get_custom_metadata_settings(self, **kwargs: Any) -> GetCustomMetadataSettings:
         query = gql(

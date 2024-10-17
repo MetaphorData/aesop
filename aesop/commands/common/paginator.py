@@ -1,4 +1,4 @@
-from typing import Callable, Generic, Iterator, List, Optional, Protocol, TypeVar
+from typing import Callable, Generic, Iterator, List, Optional, Protocol, TypeVar, Union
 
 from aesop.config import AesopConfig
 from aesop.graphql.generated.client import Client
@@ -18,7 +18,7 @@ class ClientQueryCallback(Protocol, Generic[R]):
 
 
 def paginate_query(
-    config: AesopConfig,
+    config_or_client: Union[AesopConfig, Client],
     client_query_callback: ClientQueryCallback[R],
     edges_projection: Callable[
         [R], List[Optional[E]]
@@ -28,7 +28,10 @@ def paginate_query(
     ],  # Function to extract page_info from the response
     edge_to_node: Callable[[E], Optional[T]],  # Function to convert an edge to a node
 ) -> Iterator[T]:
-    client = config.get_graphql_client()
+    if isinstance(config_or_client, Client):
+        client = config_or_client
+    else:
+        client = config_or_client.get_graphql_client()
     has_next_page = True
     end_cursor: Optional[str] = None
 

@@ -11,6 +11,7 @@ from typing_extensions import Annotated
 
 from aesop.commands import (
     datasets_app,
+    documents_app,
     info_command,
     settings_app,
     tags_app,
@@ -26,6 +27,7 @@ app.add_typer(tags_app, name="tags")
 app.add_typer(settings_app, name="settings")
 app.add_typer(datasets_app, name="datasets")
 app.add_typer(webhooks_app, name="webhooks")
+app.add_typer(documents_app, name="documents")
 
 
 @app.command()
