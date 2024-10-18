@@ -249,6 +249,7 @@ class CrawlerLatestStatus(str, Enum):
 
 
 class CrawlerType(str, Enum):
+    ATHENA = "ATHENA"
     AZURE_DATA_FACTORY = "AZURE_DATA_FACTORY"
     BIGQUERY = "BIGQUERY"
     BIGQUERY_LINEAGE = "BIGQUERY_LINEAGE"

@@ -1,0 +1,13 @@
+mutation createNamespace($name: String!, $parentId: ID) {
+  createNamespace(data: {
+    namespaceInfo: {
+      name: $name,
+      detail: {
+        type: USER_DEFINED_SPACE
+      }
+      parentId: $parentId
+    },
+  }) {
+    id
+  }
+}
