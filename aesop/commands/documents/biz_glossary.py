@@ -53,9 +53,9 @@ class Columns(BaseModel):
 
 
 @app.command(
-    help="Creates a example business glossary CSV file with some generated values."
+    help="Generates a template of business glossary CSV file with some example values."
 )
-def gen_example(
+def gen_template(
     file: FileTextWrite = Argument(
         default="biz_glossary.csv", help="The file to write to."
     )
@@ -70,7 +70,7 @@ def gen_example(
             name="jane.doe", content="some other content", hashtags=["tag1", "tag2"]
         ).model_dump(by_alias=True)
     )
-    print(f"Wrote example to {file.name}")
+    print(f"Wrote template to {file.name}")
 
 
 @app.command(help="Prints the expected schema for a business glossary CSV file.")
@@ -97,7 +97,9 @@ def schema(output_format: OutputFormat = OutputFormatOption) -> None:
 
 @exception_handler("import business glossary")
 @app.command(
-    help="Imports a local business glossary file to Metaphor's data document storage.",
+    help="Imports a local business glossary file to Metaphor's data document storage. "
+    "To see the schema or a simple template file, use `schema` or `gen-template` "
+    "subcommands.",
     name="import",
 )
 def import_(
