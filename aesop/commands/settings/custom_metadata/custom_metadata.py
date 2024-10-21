@@ -97,7 +97,8 @@ class UpdateConfigInput(UpdateCustomMetadataConfigInput, InputModel):
 
 @exception_handler("Update custom metadata config")
 @app.command(
-    help="Updates a config for a custom metadata. If no such config exists, it will be added."
+    help="Updates a config for a custom metadata. If no such config exists, "
+    "it will be added.",
 )
 def update(
     ctx: typer.Context,
