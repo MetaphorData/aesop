@@ -39,6 +39,7 @@ from .create_namespace import CreateNamespace, CreateNamespaceCreateNamespace
 from .enums import (
     AggregationMetadataName,
     AnchorEntityType,
+    APIPlatform,
     AppPlatform,
     AssetContactValueType,
     AssetEntityType,
@@ -173,6 +174,7 @@ from .input_types import (
     AddTenantInput,
     AddWebhookInput,
     AISearchQueryInput,
+    APIIdInput,
     ApiKeyDeleteInput,
     AssetConnectionFilterInput,
     AssetContactsPatchInput,
@@ -343,6 +345,7 @@ from .input_types import (
     UpdateApiKeyInput,
     UpdateCrawlerInput,
     UpdateCrawlerScheduleInput,
+    UpdateCustomMetadataConfigInput,
     UpdateCustomMetadataInput,
     UsageKnowledgeCardInput,
     UserDefinedResourceDeleteInput,
@@ -365,10 +368,16 @@ from .unassign_governed_tags import (
     UnassignGovernedTags,
     UnassignGovernedTagsUpsertAssetGovernedTags,
 )
+from .update_custom_metadata_config import (
+    UpdateCustomMetadataConfig,
+    UpdateCustomMetadataConfigUpdateCustomMetadataConfig,
+)
 from .update_settings import UpdateSettings, UpdateSettingsUpdateSettings
 
 __all__ = [
     "AISearchQueryInput",
+    "APIIdInput",
+    "APIPlatform",
     "AcknowledgeChangeRequestInput",
     "ActivityFeedConnectionFilterInput",
     "AddGovernedTags",
@@ -684,6 +693,9 @@ __all__ = [
     "UpdateApiKeyInput",
     "UpdateCrawlerInput",
     "UpdateCrawlerScheduleInput",
+    "UpdateCustomMetadataConfig",
+    "UpdateCustomMetadataConfigInput",
+    "UpdateCustomMetadataConfigUpdateCustomMetadataConfig",
     "UpdateCustomMetadataInput",
     "UpdateSettings",
     "UpdateSettingsUpdateSettings",

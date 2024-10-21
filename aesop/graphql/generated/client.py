@@ -27,12 +27,14 @@ from .input_types import (
     HashtagInput,
     KnowledgeCardInput,
     SettingsInput,
+    UpdateCustomMetadataConfigInput,
     UserDefinedResourceDeleteInput,
     UserDefinedResourceInput,
 )
 from .remove_governed_tags import RemoveGovernedTags
 from .remove_webhook import RemoveWebhook
 from .unassign_governed_tags import UnassignGovernedTags
+from .update_custom_metadata_config import UpdateCustomMetadataConfig
 from .update_settings import UpdateSettings
 
 
@@ -182,6 +184,33 @@ class Client(BaseClient):
         )
         data = self.get_data(response)
         return CreateNamespace.model_validate(data)
+
+    def update_custom_metadata_config(
+        self, input: UpdateCustomMetadataConfigInput, **kwargs: Any
+    ) -> UpdateCustomMetadataConfig:
+        query = gql(
+            """
+            mutation updateCustomMetadataConfig($input: UpdateCustomMetadataConfigInput!) {
+              updateCustomMetadataConfig(input: $input) {
+                key
+                displayName
+                dataType
+                searchable
+                highlight
+                searchable
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"input": input}
+        response = self.execute(
+            query=query,
+            operation_name="updateCustomMetadataConfig",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return UpdateCustomMetadataConfig.model_validate(data)
 
     def add_governed_tags(
         self, input: List[UserDefinedResourceInput], **kwargs: Any

@@ -16,6 +16,7 @@ class UnassignGovernedTags(BaseModel):
 
 class UnassignGovernedTagsUpsertAssetGovernedTags(BaseModel):
     typename__: Literal[
+        "API",
         "Dashboard",
         "Dataset",
         "Entity",

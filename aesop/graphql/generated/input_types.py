@@ -9,6 +9,7 @@ from .base_model import BaseModel
 from .enums import (
     AggregationMetadataName,
     AnchorEntityType,
+    APIPlatform,
     AppPlatform,
     AssetContactValueType,
     AssetEntityType,
@@ -56,6 +57,11 @@ from .enums import (
 
 class AISearchQueryInput(BaseModel):
     query: Optional[str] = ""
+
+
+class APIIdInput(BaseModel):
+    platform: Optional[APIPlatform] = APIPlatform.UNKNOWN
+    url: Optional[str] = ""
 
 
 class AcknowledgeChangeRequestInput(BaseModel):
@@ -1664,6 +1670,17 @@ class UpdateCrawlerScheduleInput(BaseModel):
     enabled: Optional[bool] = False
     is_daily: Optional[bool] = Field(alias="isDaily", default=True)
     schedule: Optional[str] = None
+
+
+class UpdateCustomMetadataConfigInput(BaseModel):
+    data_type: Optional[CustomMetadataDataType] = Field(alias="dataType", default=None)
+    display_name: Optional[str] = Field(alias="displayName", default=None)
+    highlight: Optional[bool] = None
+    key: Optional[str] = ""
+    search_operator_example: Optional[str] = Field(
+        alias="searchOperatorExample", default=None
+    )
+    searchable: Optional[bool] = None
 
 
 class UpdateCustomMetadataInput(BaseModel):

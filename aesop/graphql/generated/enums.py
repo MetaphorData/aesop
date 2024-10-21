@@ -4,6 +4,11 @@
 from enum import Enum
 
 
+class APIPlatform(str, Enum):
+    OPEN_API = "OPEN_API"
+    UNKNOWN = "UNKNOWN"
+
+
 class AggregationMetadataName(str, Enum):
     Unknown = "Unknown"
     anchorEntityType = "anchorEntityType"
@@ -46,6 +51,7 @@ class AggregationMetadataName(str, Enum):
 
 
 class AnchorEntityType(str, Enum):
+    API = "API"
     DASHBOARD = "DASHBOARD"
     DATASET = "DATASET"
     DATA_DOCUMENT = "DATA_DOCUMENT"
@@ -79,6 +85,7 @@ class AssetContactValueType(str, Enum):
 
 
 class AssetEntityType(str, Enum):
+    API = "API"
     DASHBOARD = "DASHBOARD"
     DATASET = "DATASET"
     METRIC = "METRIC"
@@ -112,6 +119,7 @@ class AssetPlatform(str, Enum):
     MONGODB = "MONGODB"
     MSSQL = "MSSQL"
     MYSQL = "MYSQL"
+    OPEN_API = "OPEN_API"
     ORACLE = "ORACLE"
     POSTGRESQL = "POSTGRESQL"
     POWER_BI = "POWER_BI"
@@ -403,6 +411,7 @@ class DependencyCondition(str, Enum):
 
 
 class EntityType(str, Enum):
+    API = "API"
     DASHBOARD = "DASHBOARD"
     DATASET = "DATASET"
     GROUP = "GROUP"
@@ -470,6 +479,7 @@ class KnowledgeCardType(str, Enum):
 
 
 class LineageType(str, Enum):
+    API = "API"
     DASHBOARD = "DASHBOARD"
     DATASET = "DATASET"
     DBT_MODEL = "DBT_MODEL"
@@ -556,6 +566,7 @@ class NativeType(str, Enum):
     MSSQL = "MSSQL"
     MYSQL = "MYSQL"
     NOTION = "NOTION"
+    OPEN_API = "OPEN_API"
     ORACLE = "ORACLE"
     PERSONAL_SPACE = "PERSONAL_SPACE"
     POSTGRESQL = "POSTGRESQL"
@@ -645,6 +656,7 @@ class PlatformType(str, Enum):
     MSSQL = "MSSQL"
     MYSQL = "MYSQL"
     NOTION = "NOTION"
+    OPEN_API = "OPEN_API"
     ORACLE = "ORACLE"
     POSTGRESQL = "POSTGRESQL"
     POWER_BI = "POWER_BI"
