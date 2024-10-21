@@ -21,6 +21,7 @@ class GetDatasetGovernedTags(BaseModel):
 
 class GetDatasetGovernedTagsNodeNode(BaseModel):
     typename__: Literal[
+        "API",
         "Crawler",
         "CrawlerRun",
         "Dashboard",

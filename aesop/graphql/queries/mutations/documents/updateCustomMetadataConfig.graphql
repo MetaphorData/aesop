@@ -1,0 +1,10 @@
+mutation updateCustomMetadataConfig($input: UpdateCustomMetadataConfigInput!) {
+  updateCustomMetadataConfig(input: $input) {
+    key
+    displayName
+    dataType
+    searchable
+    highlight
+    searchable
+  }
+}

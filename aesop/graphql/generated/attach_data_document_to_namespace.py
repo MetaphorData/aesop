@@ -45,6 +45,7 @@ class AttachDataDocumentToNamespaceUpdateNamespaceAssetsNamespaceAssetsAssetsEdg
     BaseModel
 ):
     typename__: Literal[
+        "API",
         "Dashboard",
         "Dataset",
         "Entity",
