@@ -11,8 +11,8 @@ from typing_extensions import Annotated
 
 from aesop.commands import (
     datasets_app,
-    domains_app,
     documents_app,
+    domains_app,
     info_command,
     settings_app,
     tags_app,
