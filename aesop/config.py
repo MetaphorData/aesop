@@ -18,7 +18,7 @@ class AesopConfig(BaseModel):
 
     @property
     def url(self) -> yarl.URL:
-        return yarl.URL(self.url_.unicode_string())
+        return yarl.URL(self.url_.scheme + "://" + (self.url_.unicode_host() or ""))
 
     def get_graphql_client(self) -> Client:
         # yarl does not care if there's a trailing slash, pydantic url does
