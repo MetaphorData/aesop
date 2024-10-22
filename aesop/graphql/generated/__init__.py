@@ -137,6 +137,8 @@ from .get_dataset_governed_tags import (
 from .get_domain import (
     GetDomain,
     GetDomainNodeNamespace,
+    GetDomainNodeNamespaceNamespaceAssets,
+    GetDomainNodeNamespaceNamespaceAssetsNamedAssetCollections,
     GetDomainNodeNamespaceNamespaceInfo,
     GetDomainNodeNamespaceNamespaceInfoCreated,
     GetDomainNodeNamespaceNamespaceInfoCustomAttributes,
@@ -146,6 +148,16 @@ from .get_domain import (
     GetDomainNodeNamespaceNamespaceInfoLastModified,
     GetDomainNodeNamespaceParentNamespace,
     GetDomainNodeNode,
+)
+from .get_domain_assets import (
+    GetDomainAssets,
+    GetDomainAssetsNodeNamespace,
+    GetDomainAssetsNodeNamespaceNamespaceAssets,
+    GetDomainAssetsNodeNamespaceNamespaceAssetsAssets,
+    GetDomainAssetsNodeNamespaceNamespaceAssetsAssetsEdges,
+    GetDomainAssetsNodeNamespaceNamespaceAssetsAssetsEdgesNode,
+    GetDomainAssetsNodeNamespaceNamespaceAssetsAssetsPageInfo,
+    GetDomainAssetsNodeNode,
 )
 from .get_governed_tags import (
     GetGovernedTags,
@@ -387,6 +399,10 @@ from .update_custom_metadata_config import (
     UpdateCustomMetadataConfig,
     UpdateCustomMetadataConfigUpdateCustomMetadataConfig,
 )
+from .update_domain_assets import (
+    UpdateDomainAssets,
+    UpdateDomainAssetsUpdateNamespaceAssets,
+)
 from .update_domain_info import (
     UpdateDomainInfo,
     UpdateDomainInfoPatchUpdateNamespaceInfo,
@@ -540,7 +556,17 @@ __all__ = [
     "GetDatasetGovernedTagsNodeDatasetGovernedTagsPageInfo",
     "GetDatasetGovernedTagsNodeNode",
     "GetDomain",
+    "GetDomainAssets",
+    "GetDomainAssetsNodeNamespace",
+    "GetDomainAssetsNodeNamespaceNamespaceAssets",
+    "GetDomainAssetsNodeNamespaceNamespaceAssetsAssets",
+    "GetDomainAssetsNodeNamespaceNamespaceAssetsAssetsEdges",
+    "GetDomainAssetsNodeNamespaceNamespaceAssetsAssetsEdgesNode",
+    "GetDomainAssetsNodeNamespaceNamespaceAssetsAssetsPageInfo",
+    "GetDomainAssetsNodeNode",
     "GetDomainNodeNamespace",
+    "GetDomainNodeNamespaceNamespaceAssets",
+    "GetDomainNodeNamespaceNamespaceAssetsNamedAssetCollections",
     "GetDomainNodeNamespaceNamespaceInfo",
     "GetDomainNodeNamespaceNamespaceInfoCreated",
     "GetDomainNodeNamespaceNamespaceInfoCustomAttributes",
@@ -735,6 +761,8 @@ __all__ = [
     "UpdateCustomMetadataConfigInput",
     "UpdateCustomMetadataConfigUpdateCustomMetadataConfig",
     "UpdateCustomMetadataInput",
+    "UpdateDomainAssets",
+    "UpdateDomainAssetsUpdateNamespaceAssets",
     "UpdateDomainInfo",
     "UpdateDomainInfoPatchUpdateNamespaceInfo",
     "UpdateDomainSavedQueries",

@@ -18,6 +18,7 @@ from .enums import WebhookTriggerType
 from .get_custom_metadata_settings import GetCustomMetadataSettings
 from .get_dataset_governed_tags import GetDatasetGovernedTags
 from .get_domain import GetDomain
+from .get_domain_assets import GetDomainAssets
 from .get_governed_tags import GetGovernedTags
 from .get_namespace import GetNamespace
 from .get_non_prod_settings import GetNonProdSettings
@@ -41,6 +42,7 @@ from .remove_governed_tags import RemoveGovernedTags
 from .remove_webhook import RemoveWebhook
 from .unassign_governed_tags import UnassignGovernedTags
 from .update_custom_metadata_config import UpdateCustomMetadataConfig
+from .update_domain_assets import UpdateDomainAssets
 from .update_domain_info import UpdateDomainInfo
 from .update_domain_saved_queries import UpdateDomainSavedQueries
 from .update_settings import UpdateSettings
@@ -270,6 +272,42 @@ class Client(BaseClient):
         )
         data = self.get_data(response)
         return DeleteDomain.model_validate(data)
+
+    def update_domain_assets(
+        self,
+        id: str,
+        asset_ids_to_add: Union[Optional[List[str]], UnsetType] = UNSET,
+        asset_ids_to_remove: Union[Optional[List[str]], UnsetType] = UNSET,
+        collection_name: Union[Optional[str], UnsetType] = UNSET,
+        remove_collection: Union[Optional[bool], UnsetType] = UNSET,
+        **kwargs: Any
+    ) -> UpdateDomainAssets:
+        query = gql(
+            """
+            mutation updateDomainAssets($id: ID!, $assetIdsToAdd: [ID!], $assetIdsToRemove: [ID!], $collectionName: String, $removeCollection: Boolean = false) {
+              updateNamespaceAssets(
+                input: {entityIds: [$id], assetIdsToAdd: $assetIdsToAdd, assetIdsToRemove: $assetIdsToRemove, namedAssetCollectionName: $collectionName, removeCollection: $removeCollection}
+              ) {
+                id
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {
+            "id": id,
+            "assetIdsToAdd": asset_ids_to_add,
+            "assetIdsToRemove": asset_ids_to_remove,
+            "collectionName": collection_name,
+            "removeCollection": remove_collection,
+        }
+        response = self.execute(
+            query=query,
+            operation_name="updateDomainAssets",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return UpdateDomainAssets.model_validate(data)
 
     def update_domain_info(
         self,
@@ -571,6 +609,12 @@ class Client(BaseClient):
                   parentNamespace {
                     id
                   }
+                  namespaceAssets {
+                    namedAssetCollections {
+                      name
+                      assetIds
+                    }
+                  }
                 }
               }
             }
@@ -582,6 +626,44 @@ class Client(BaseClient):
         )
         data = self.get_data(response)
         return GetDomain.model_validate(data)
+
+    def get_domain_assets(
+        self,
+        id: str,
+        end_cursor: Union[Optional[str], UnsetType] = UNSET,
+        **kwargs: Any
+    ) -> GetDomainAssets:
+        query = gql(
+            """
+            query getDomainAssets($id: ID!, $endCursor: String) {
+              node(id: $id) {
+                __typename
+                ... on Namespace {
+                  namespaceAssets {
+                    assets(first: 50, after: $endCursor) {
+                      edges {
+                        node {
+                          __typename
+                          id
+                        }
+                      }
+                      pageInfo {
+                        hasNextPage
+                        endCursor
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"id": id, "endCursor": end_cursor}
+        response = self.execute(
+            query=query, operation_name="getDomainAssets", variables=variables, **kwargs
+        )
+        data = self.get_data(response)
+        return GetDomainAssets.model_validate(data)
 
     def get_custom_metadata_settings(self, **kwargs: Any) -> GetCustomMetadataSettings:
         query = gql(

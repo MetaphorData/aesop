@@ -10,10 +10,12 @@ from aesop.config import AesopConfig
 from aesop.console import console
 from aesop.graphql.generated.input_types import NamespaceDescriptionInput
 
+from .assets import app as assets_app
 from .saved_queries import app as saved_queries_app
 
 app = Typer()
 app.add_typer(saved_queries_app, name="saved-queries")
+app.add_typer(assets_app, name="assets")
 
 
 @exception_handler("Add domain")

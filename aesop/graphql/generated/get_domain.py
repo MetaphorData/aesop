@@ -46,6 +46,9 @@ class GetDomainNodeNamespace(BaseModel):
     parent_namespace: Optional["GetDomainNodeNamespaceParentNamespace"] = Field(
         alias="parentNamespace"
     )
+    namespace_assets: Optional["GetDomainNodeNamespaceNamespaceAssets"] = Field(
+        alias="namespaceAssets"
+    )
 
 
 class GetDomainNodeNamespaceNamespaceInfo(BaseModel):
@@ -100,7 +103,19 @@ class GetDomainNodeNamespaceParentNamespace(BaseModel):
     id: str
 
 
+class GetDomainNodeNamespaceNamespaceAssets(BaseModel):
+    named_asset_collections: Optional[
+        List["GetDomainNodeNamespaceNamespaceAssetsNamedAssetCollections"]
+    ] = Field(alias="namedAssetCollections")
+
+
+class GetDomainNodeNamespaceNamespaceAssetsNamedAssetCollections(BaseModel):
+    name: str
+    asset_ids: List[str] = Field(alias="assetIds")
+
+
 GetDomain.model_rebuild()
 GetDomainNodeNamespace.model_rebuild()
 GetDomainNodeNamespaceNamespaceInfo.model_rebuild()
 GetDomainNodeNamespaceNamespaceInfoDetail.model_rebuild()
+GetDomainNodeNamespaceNamespaceAssets.model_rebuild()

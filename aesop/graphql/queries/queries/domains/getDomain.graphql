@@ -1,6 +1,6 @@
 query getDomain($id: ID!) {
   node(id: $id) {
-    ...on Namespace {
+    ... on Namespace {
       namespaceInfo {
         name
         created {
@@ -32,6 +32,12 @@ query getDomain($id: ID!) {
       }
       parentNamespace {
         id
+      }
+      namespaceAssets {
+        namedAssetCollections {
+          name
+          assetIds
+        }
       }
     }
   }
