@@ -140,9 +140,11 @@ from .get_domain import (
     GetDomainNodeNamespaceNamespaceInfo,
     GetDomainNodeNamespaceNamespaceInfoCreated,
     GetDomainNodeNamespaceNamespaceInfoCustomAttributes,
+    GetDomainNodeNamespaceNamespaceInfoDescription,
     GetDomainNodeNamespaceNamespaceInfoDetail,
     GetDomainNodeNamespaceNamespaceInfoDetailSavedQueries,
     GetDomainNodeNamespaceNamespaceInfoLastModified,
+    GetDomainNodeNamespaceParentNamespace,
     GetDomainNodeNode,
 )
 from .get_governed_tags import (
@@ -389,6 +391,10 @@ from .update_domain_info import (
     UpdateDomainInfo,
     UpdateDomainInfoPatchUpdateNamespaceInfo,
 )
+from .update_domain_saved_queries import (
+    UpdateDomainSavedQueries,
+    UpdateDomainSavedQueriesUpdateNamespaceInfo,
+)
 from .update_settings import UpdateSettings, UpdateSettingsUpdateSettings
 
 __all__ = [
@@ -538,9 +544,11 @@ __all__ = [
     "GetDomainNodeNamespaceNamespaceInfo",
     "GetDomainNodeNamespaceNamespaceInfoCreated",
     "GetDomainNodeNamespaceNamespaceInfoCustomAttributes",
+    "GetDomainNodeNamespaceNamespaceInfoDescription",
     "GetDomainNodeNamespaceNamespaceInfoDetail",
     "GetDomainNodeNamespaceNamespaceInfoDetailSavedQueries",
     "GetDomainNodeNamespaceNamespaceInfoLastModified",
+    "GetDomainNodeNamespaceParentNamespace",
     "GetDomainNodeNode",
     "GetGovernedTags",
     "GetGovernedTagsUserDefinedResources",
@@ -729,6 +737,8 @@ __all__ = [
     "UpdateCustomMetadataInput",
     "UpdateDomainInfo",
     "UpdateDomainInfoPatchUpdateNamespaceInfo",
+    "UpdateDomainSavedQueries",
+    "UpdateDomainSavedQueriesUpdateNamespaceInfo",
     "UpdateSettings",
     "UpdateSettingsUpdateSettings",
     "Upload",

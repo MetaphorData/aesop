@@ -27,9 +27,11 @@ from .get_webhook_payload_schema import GetWebhookPayloadSchema
 from .get_webhooks import GetWebhooks
 from .input_types import (
     AssetGovernedTagsPatchInput,
+    CustomAttributesInput,
     HashtagInput,
     KnowledgeCardInput,
     NamespaceDescriptionInput,
+    SavedLiveQueryInput,
     SettingsInput,
     UpdateCustomMetadataConfigInput,
     UserDefinedResourceDeleteInput,
@@ -40,6 +42,7 @@ from .remove_webhook import RemoveWebhook
 from .unassign_governed_tags import UnassignGovernedTags
 from .update_custom_metadata_config import UpdateCustomMetadataConfig
 from .update_domain_info import UpdateDomainInfo
+from .update_domain_saved_queries import UpdateDomainSavedQueries
 from .update_settings import UpdateSettings
 
 
@@ -306,6 +309,46 @@ class Client(BaseClient):
         data = self.get_data(response)
         return UpdateDomainInfo.model_validate(data)
 
+    def update_domain_saved_queries(
+        self,
+        id: str,
+        saved_queries: List[SavedLiveQueryInput],
+        name: Union[Optional[str], UnsetType] = UNSET,
+        description: Union[Optional[NamespaceDescriptionInput], UnsetType] = UNSET,
+        visible_to: Union[Optional[List[str]], UnsetType] = UNSET,
+        custom_attributes: Union[Optional[CustomAttributesInput], UnsetType] = UNSET,
+        parent_id: Union[Optional[str], UnsetType] = UNSET,
+        **kwargs: Any
+    ) -> UpdateDomainSavedQueries:
+        query = gql(
+            """
+            mutation updateDomainSavedQueries($id: ID!, $savedQueries: [SavedLiveQueryInput!]!, $name: String, $description: NamespaceDescriptionInput, $visibleTo: [ID!], $customAttributes: CustomAttributesInput, $parentId: ID) {
+              updateNamespaceInfo(
+                data: {entityId: $id, detail: {savedQueries: $savedQueries, type: DATA_GROUP}, name: $name, description: $description, visibleTo: $visibleTo, customAttributes: $customAttributes, parentId: $parentId}
+              ) {
+                id
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {
+            "id": id,
+            "savedQueries": saved_queries,
+            "name": name,
+            "description": description,
+            "visibleTo": visible_to,
+            "customAttributes": custom_attributes,
+            "parentId": parent_id,
+        }
+        response = self.execute(
+            query=query,
+            operation_name="updateDomainSavedQueries",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return UpdateDomainSavedQueries.model_validate(data)
+
     def add_governed_tags(
         self, input: List[UserDefinedResourceInput], **kwargs: Any
     ) -> AddGovernedTags:
@@ -511,12 +554,22 @@ class Client(BaseClient):
                         name
                         keyword
                         context
+                        id
+                        facetsJSON
                       }
+                    }
+                    visibleTo
+                    description {
+                      text
+                      tokenizedText
                     }
                     customAttributes {
                       color
                       iconKey
                     }
+                  }
+                  parentNamespace {
+                    id
                   }
                 }
               }

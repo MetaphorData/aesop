@@ -16,12 +16,22 @@ query getDomain($id: ID!) {
             name
             keyword
             context
+            id
+            facetsJSON
           }
+        }
+        visibleTo
+        description {
+          text
+          tokenizedText
         }
         customAttributes {
           color
           iconKey
         }
+      }
+      parentNamespace {
+        id
       }
     }
   }

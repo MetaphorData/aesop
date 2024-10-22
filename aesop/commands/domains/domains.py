@@ -8,10 +8,12 @@ from aesop.commands.common.exception_handler import exception_handler
 from aesop.commands.common.options import OutputFormatOption
 from aesop.config import AesopConfig
 from aesop.console import console
-from aesop.graphql.generated.get_domain import GetDomainNodeNamespace
 from aesop.graphql.generated.input_types import NamespaceDescriptionInput
 
+from .saved_queries import app as saved_queries_app
+
 app = Typer()
+app.add_typer(saved_queries_app, name="saved-queries")
 
 
 @exception_handler("Add domain")
@@ -53,7 +55,9 @@ def get(
 ) -> None:
     config: AesopConfig = ctx.obj
     resp = config.get_graphql_client().get_domain(id).node
-    assert isinstance(resp, GetDomainNodeNamespace)
+    if not resp:
+        return
+
     if output is OutputFormat.JSON:
         print_json(resp.model_dump_json())
 

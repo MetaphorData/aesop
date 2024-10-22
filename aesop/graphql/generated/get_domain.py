@@ -43,6 +43,9 @@ class GetDomainNodeNamespace(BaseModel):
     namespace_info: Optional["GetDomainNodeNamespaceNamespaceInfo"] = Field(
         alias="namespaceInfo"
     )
+    parent_namespace: Optional["GetDomainNodeNamespaceParentNamespace"] = Field(
+        alias="parentNamespace"
+    )
 
 
 class GetDomainNodeNamespaceNamespaceInfo(BaseModel):
@@ -52,6 +55,8 @@ class GetDomainNodeNamespaceNamespaceInfo(BaseModel):
         alias="lastModified"
     )
     detail: "GetDomainNodeNamespaceNamespaceInfoDetail"
+    visible_to: List[str] = Field(alias="visibleTo")
+    description: Optional["GetDomainNodeNamespaceNamespaceInfoDescription"]
     custom_attributes: Optional[
         "GetDomainNodeNamespaceNamespaceInfoCustomAttributes"
     ] = Field(alias="customAttributes")
@@ -77,11 +82,22 @@ class GetDomainNodeNamespaceNamespaceInfoDetailSavedQueries(BaseModel):
     name: Optional[str]
     keyword: str
     context: Optional[SearchContext]
+    id: str
+    facets_json: Optional[str] = Field(alias="facetsJSON")
+
+
+class GetDomainNodeNamespaceNamespaceInfoDescription(BaseModel):
+    text: Optional[str]
+    tokenized_text: Optional[str] = Field(alias="tokenizedText")
 
 
 class GetDomainNodeNamespaceNamespaceInfoCustomAttributes(BaseModel):
     color: Optional[str]
     icon_key: Optional[str] = Field(alias="iconKey")
+
+
+class GetDomainNodeNamespaceParentNamespace(BaseModel):
+    id: str
 
 
 GetDomain.model_rebuild()
