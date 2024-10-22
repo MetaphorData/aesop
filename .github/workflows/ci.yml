@@ -3,8 +3,8 @@ name: CI
 
 env:
   PYTHON_VERSION: 3.9
-  URL: https://qa.metaphor.io
-  METAPHOR_API_KEY: meta-03f22b24-faaf-4b0e-9ab7-27e91701a7d1
+  URL: ${{ vars.METAPHOR_URL }}
+  METAPHOR_API_KEY: ${{ secrets.METAPHOR_API_KEY }}
 
 # Run this build workflow for every new PR
 on:
