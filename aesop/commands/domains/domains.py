@@ -4,14 +4,17 @@ from rich import print, print_json
 from typer import Context, Typer
 
 from aesop.commands.common.enums.output_format import OutputFormat
+from aesop.commands.common.exception_handler import exception_handler
 from aesop.commands.common.options import OutputFormatOption
 from aesop.config import AesopConfig
+from aesop.console import console
 from aesop.graphql.generated.get_domain import GetDomainNodeNamespace
 from aesop.graphql.generated.input_types import NamespaceDescriptionInput
 
 app = Typer()
 
 
+@exception_handler("Add domain")
 @app.command()
 def add(
     ctx: Context,
@@ -19,7 +22,7 @@ def add(
     description: Optional[str] = None,
     tokenized_description: Optional[str] = None,
     color: Optional[str] = None,  # hex string
-    icon_key: Optional[str] = None,  # hex string
+    icon_key: Optional[str] = None,
     parent_id: Optional[str] = None,
 ) -> None:
     config: AesopConfig = ctx.obj
@@ -41,16 +44,17 @@ def add(
     print(f"Created domain: {resp.id}")
 
 
-@app.command()
+@exception_handler("get domain")
+@app.command(help="Gets a data domain defined in Metaphor.")
 def get(
     ctx: Context,
     id: str,
-    output_format: OutputFormat = OutputFormatOption,
+    output: OutputFormat = OutputFormatOption,
 ) -> None:
     config: AesopConfig = ctx.obj
     resp = config.get_graphql_client().get_domain(id).node
     assert isinstance(resp, GetDomainNodeNamespace)
-    if output_format is OutputFormat.JSON:
+    if output is OutputFormat.JSON:
         print_json(resp.model_dump_json())
 
 
@@ -61,4 +65,7 @@ def remove(
 ) -> None:
     config: AesopConfig = ctx.obj
     resp = config.get_graphql_client().delete_domain(id).delete_namespaces
-    print(resp)
+    if resp.deleted_ids:
+        console.ok(f"Deleted domain: {resp.deleted_ids[0]}")
+    if resp.failed_ids:
+        console.warning(f"Failed to delete domain: {resp.failed_ids[0]}")

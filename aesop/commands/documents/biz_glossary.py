@@ -19,7 +19,7 @@ from aesop.commands.documents.utils import (
 )
 from aesop.config import AesopConfig
 
-app = Typer()
+app = Typer(help="Manages business glossary documents.")
 
 
 class Columns(BaseModel):
@@ -74,17 +74,17 @@ def gen_template(
 
 
 @app.command(help="Prints the expected schema for a business glossary CSV file.")
-def schema(output_format: OutputFormat = OutputFormatOption) -> None:
-    if output_format is OutputFormat.JSON:
+def schema(output: OutputFormat = OutputFormatOption) -> None:
+    if output is OutputFormat.JSON:
         print_json(json.dumps(Columns.model_json_schema()))
 
     else:
-        if output_format is OutputFormat.CSV:
+        if output is OutputFormat.CSV:
             spamwriter = writer(sys.stdout)
             spamwriter.writerow(["Name", "Description"])
             for name, field in Columns.model_fields.items():
                 spamwriter.writerow([field.alias or name, field.description])
-        if output_format is OutputFormat.TABULAR:
+        if output is OutputFormat.TABULAR:
             table = Table(
                 "Name",
                 "Description",
