@@ -1,8 +1,7 @@
 from pathlib import Path
-from typing import Optional
 
 import yarl
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, HttpUrl, field_serializer
 
 from aesop.graphql.generated.client import Client
 
@@ -10,18 +9,21 @@ DEFAULT_CONFIG_PATH = Path.home() / ".aesop" / "config.yml"
 
 
 class AesopConfig(BaseModel):
-    config: str
+    url_: HttpUrl = Field(alias="url")
     api_key: str
-    tenant: Optional[str] = None
+
+    @field_serializer("url_")
+    def serialize_url(self, url_: HttpUrl) -> str:
+        return self.url.human_repr()
 
     @property
-    def base_url(self) -> yarl.URL:
-        prefix = f"{self.tenant}.{self.config}" if self.tenant else self.config
-        return yarl.URL(f"https://{prefix}.metaphor.io")
+    def url(self) -> yarl.URL:
+        return yarl.URL(self.url_.scheme + "://" + (self.url_.unicode_host() or ""))
 
     def get_graphql_client(self) -> Client:
+        # yarl does not care if there's a trailing slash, pydantic url does
         return Client(
-            url=(self.base_url / "api" / "graphql").human_repr(),
+            url=(self.url / "api" / "graphql").human_repr(),
             headers={
                 "X-Api-Key": self.api_key,
                 "Content-Type": "application/json",
