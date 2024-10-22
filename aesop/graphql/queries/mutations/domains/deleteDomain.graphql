@@ -1,0 +1,8 @@
+mutation deleteDomain($id: ID!) {
+  deleteNamespaces(input: {
+    ids: [$id]
+  }) {
+    deletedIds
+    failedIds
+  }
+}

@@ -1,5 +1,6 @@
 from .aspects import tags_app
 from .documents.documents import app as documents_app
+from .domains.domains import app as domains_app
 from .entities import datasets_app
 from .info import info as info_command
 from .settings.settings import app as settings_app
@@ -8,6 +9,7 @@ from .webhooks import app as webhooks_app
 
 __all__ = [
     "documents_app",
+    "domains_app",
     "upload_command",
     "info_command",
     "settings_app",

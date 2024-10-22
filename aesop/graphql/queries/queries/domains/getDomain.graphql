@@ -1,0 +1,28 @@
+query getDomain($id: ID!) {
+  node(id: $id) {
+    ...on Namespace {
+      namespaceInfo {
+        name
+        created {
+          time
+          actor
+        }
+        lastModified {
+          time
+          actor
+        }
+        detail {
+          savedQueries {
+            name
+            keyword
+            context
+          }
+        }
+        customAttributes {
+          color
+          iconKey
+        }
+      }
+    }
+  }
+}

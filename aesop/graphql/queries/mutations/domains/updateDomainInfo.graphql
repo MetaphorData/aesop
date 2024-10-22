@@ -1,0 +1,21 @@
+mutation updateDomainInfo (
+  $id: ID!
+  $parentId: ID
+  $name: String,
+  $description: NamespaceDescriptionInput,
+  $color: String
+  $iconKey: String
+) {
+  patchUpdateNamespaceInfo(input: {
+    entityId: $id
+    parentId: $parentId
+    name: $name
+    description: $description
+    customAttributes: {
+      color: $color
+      iconKey: $iconKey
+    }
+  }) {
+    id
+  }
+}
