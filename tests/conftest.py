@@ -4,6 +4,7 @@ import typing
 import loguru
 import pytest
 import yaml
+from pydantic_core import Url
 
 from aesop.config import DEFAULT_CONFIG_PATH, AesopConfig
 
@@ -29,12 +30,12 @@ def config_file(
         _user_config
         if _user_config
         else AesopConfig(
-            environment=os.environ.get("ENVIRONMENT", ""),
+            url=Url(url=os.environ.get("url", "")),
             api_key=os.environ.get("METAPHOR_API_KEY", ""),
         )
     )
     loguru.logger.info(f"Config = {config}")
     path = tmp_path_factory.mktemp("config") / "config.yml"
     with open(path, "w") as file:
-        file.write(yaml.safe_dump(config.model_dump()))
+        file.write(yaml.safe_dump(config.model_dump(by_alias=True)))
     return path.as_posix()

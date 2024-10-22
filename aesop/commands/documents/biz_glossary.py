@@ -140,5 +140,5 @@ def import_(
     if not namespace_id:
         print(f"Created {files_created} files.")
     else:
-        namespace_url = config.base_url / "documents" / "directories" / namespace_id
+        namespace_url = config.url / "documents" / "directories" / namespace_id
         print(f"Created {files_created} files: {namespace_url.human_repr()}")
