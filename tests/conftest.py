@@ -30,7 +30,7 @@ def config_file(
         _user_config
         if _user_config
         else AesopConfig(
-            url=Url(url=os.environ.get("url", "")),
+            url=Url(url=os.environ.get("URL", "")),
             api_key=os.environ.get("METAPHOR_API_KEY", ""),
         )
     )
