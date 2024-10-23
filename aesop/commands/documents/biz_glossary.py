@@ -52,6 +52,7 @@ class Columns(BaseModel):
         return self.hashtags_
 
 
+@exception_handler("generate business glossary template")
 @app.command(
     help="Generates a template of business glossary CSV file with some example values."
 )
@@ -73,6 +74,7 @@ def gen_template(
     print(f"Wrote template to {file.name}")
 
 
+@exception_handler("print business glossary schema")
 @app.command(help="Prints the expected schema for a business glossary CSV file.")
 def schema(output: OutputFormat = OutputFormatOption) -> None:
     if output is OutputFormat.JSON:
