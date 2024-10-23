@@ -21,6 +21,7 @@ from .create_data_document import (
     CreateDataDocument,
     CreateDataDocumentCreateKnowledgeCard,
 )
+from .create_domain import CreateDomain, CreateDomainCreateNamespace
 from .create_knowledge_card import (
     CreateKnowledgeCard,
     CreateKnowledgeCardCreateKnowledgeCard,
@@ -36,6 +37,7 @@ from .create_knowledge_card import (
     CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetailChangeRequestStatusLastModifiedActingPersonProperties,
 )
 from .create_namespace import CreateNamespace, CreateNamespaceCreateNamespace
+from .delete_domain import DeleteDomain, DeleteDomainDeleteNamespaces
 from .enums import (
     AggregationMetadataName,
     AnchorEntityType,
@@ -131,6 +133,31 @@ from .get_dataset_governed_tags import (
     GetDatasetGovernedTagsNodeDatasetGovernedTagsEdgesNodeUserDefinedResourceInfoDescription,
     GetDatasetGovernedTagsNodeDatasetGovernedTagsPageInfo,
     GetDatasetGovernedTagsNodeNode,
+)
+from .get_domain import (
+    GetDomain,
+    GetDomainNodeNamespace,
+    GetDomainNodeNamespaceNamespaceAssets,
+    GetDomainNodeNamespaceNamespaceAssetsNamedAssetCollections,
+    GetDomainNodeNamespaceNamespaceInfo,
+    GetDomainNodeNamespaceNamespaceInfoCreated,
+    GetDomainNodeNamespaceNamespaceInfoCustomAttributes,
+    GetDomainNodeNamespaceNamespaceInfoDescription,
+    GetDomainNodeNamespaceNamespaceInfoDetail,
+    GetDomainNodeNamespaceNamespaceInfoDetailSavedQueries,
+    GetDomainNodeNamespaceNamespaceInfoLastModified,
+    GetDomainNodeNamespaceParentNamespace,
+    GetDomainNodeNode,
+)
+from .get_domain_assets import (
+    GetDomainAssets,
+    GetDomainAssetsNodeNamespace,
+    GetDomainAssetsNodeNamespaceNamespaceAssets,
+    GetDomainAssetsNodeNamespaceNamespaceAssetsAssets,
+    GetDomainAssetsNodeNamespaceNamespaceAssetsAssetsEdges,
+    GetDomainAssetsNodeNamespaceNamespaceAssetsAssetsEdgesNode,
+    GetDomainAssetsNodeNamespaceNamespaceAssetsAssetsPageInfo,
+    GetDomainAssetsNodeNode,
 )
 from .get_governed_tags import (
     GetGovernedTags,
@@ -372,6 +399,18 @@ from .update_custom_metadata_config import (
     UpdateCustomMetadataConfig,
     UpdateCustomMetadataConfigUpdateCustomMetadataConfig,
 )
+from .update_domain_assets import (
+    UpdateDomainAssets,
+    UpdateDomainAssetsUpdateNamespaceAssets,
+)
+from .update_domain_info import (
+    UpdateDomainInfo,
+    UpdateDomainInfoPatchUpdateNamespaceInfo,
+)
+from .update_domain_saved_queries import (
+    UpdateDomainSavedQueries,
+    UpdateDomainSavedQueriesUpdateNamespaceInfo,
+)
 from .update_settings import UpdateSettings, UpdateSettingsUpdateSettings
 
 __all__ = [
@@ -443,6 +482,8 @@ __all__ = [
     "CreateCrawlerScheduleInput",
     "CreateDataDocument",
     "CreateDataDocumentCreateKnowledgeCard",
+    "CreateDomain",
+    "CreateDomainCreateNamespace",
     "CreateKnowledgeCard",
     "CreateKnowledgeCardCreateKnowledgeCard",
     "CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfo",
@@ -489,6 +530,8 @@ __all__ = [
     "DbtModelRelationInput",
     "DbtUpstreamLineageInput",
     "DeleteCrawlerInput",
+    "DeleteDomain",
+    "DeleteDomainDeleteNamespaces",
     "DeleteWebhooksInput",
     "DependencyCondition",
     "DeprecationKnowledgeCardInput",
@@ -512,6 +555,27 @@ __all__ = [
     "GetDatasetGovernedTagsNodeDatasetGovernedTagsEdgesNodeUserDefinedResourceInfoDescription",
     "GetDatasetGovernedTagsNodeDatasetGovernedTagsPageInfo",
     "GetDatasetGovernedTagsNodeNode",
+    "GetDomain",
+    "GetDomainAssets",
+    "GetDomainAssetsNodeNamespace",
+    "GetDomainAssetsNodeNamespaceNamespaceAssets",
+    "GetDomainAssetsNodeNamespaceNamespaceAssetsAssets",
+    "GetDomainAssetsNodeNamespaceNamespaceAssetsAssetsEdges",
+    "GetDomainAssetsNodeNamespaceNamespaceAssetsAssetsEdgesNode",
+    "GetDomainAssetsNodeNamespaceNamespaceAssetsAssetsPageInfo",
+    "GetDomainAssetsNodeNode",
+    "GetDomainNodeNamespace",
+    "GetDomainNodeNamespaceNamespaceAssets",
+    "GetDomainNodeNamespaceNamespaceAssetsNamedAssetCollections",
+    "GetDomainNodeNamespaceNamespaceInfo",
+    "GetDomainNodeNamespaceNamespaceInfoCreated",
+    "GetDomainNodeNamespaceNamespaceInfoCustomAttributes",
+    "GetDomainNodeNamespaceNamespaceInfoDescription",
+    "GetDomainNodeNamespaceNamespaceInfoDetail",
+    "GetDomainNodeNamespaceNamespaceInfoDetailSavedQueries",
+    "GetDomainNodeNamespaceNamespaceInfoLastModified",
+    "GetDomainNodeNamespaceParentNamespace",
+    "GetDomainNodeNode",
     "GetGovernedTags",
     "GetGovernedTagsUserDefinedResources",
     "GetGovernedTagsUserDefinedResourcesEdges",
@@ -697,6 +761,12 @@ __all__ = [
     "UpdateCustomMetadataConfigInput",
     "UpdateCustomMetadataConfigUpdateCustomMetadataConfig",
     "UpdateCustomMetadataInput",
+    "UpdateDomainAssets",
+    "UpdateDomainAssetsUpdateNamespaceAssets",
+    "UpdateDomainInfo",
+    "UpdateDomainInfoPatchUpdateNamespaceInfo",
+    "UpdateDomainSavedQueries",
+    "UpdateDomainSavedQueriesUpdateNamespaceInfo",
     "UpdateSettings",
     "UpdateSettingsUpdateSettings",
     "Upload",

@@ -1001,7 +1001,7 @@ class NamespaceDeleteInput(BaseModel):
 
 
 class NamespaceDescriptionInput(BaseModel):
-    text: Optional[str] = ""
+    text: Optional[str] = None
     tokenized_text: Optional[str] = Field(alias="tokenizedText", default=None)
 
 

@@ -1,0 +1,19 @@
+query getDomainAssets($id: ID!, $endCursor: String) {
+  node(id: $id) {
+    ... on Namespace {
+      namespaceAssets {
+        assets(first: 50, after: $endCursor) {
+          edges {
+            node {
+              id
+            }
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+    }
+  }
+}

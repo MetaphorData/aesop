@@ -1,0 +1,19 @@
+mutation updateDomainAssets(
+  $id: ID!
+  $assetIdsToAdd: [ID!]
+  $assetIdsToRemove: [ID!]
+  $collectionName: String
+  $removeCollection: Boolean = false
+) {
+  updateNamespaceAssets(
+    input: {
+      entityIds: [$id]
+      assetIdsToAdd: $assetIdsToAdd
+      assetIdsToRemove: $assetIdsToRemove
+      namedAssetCollectionName: $collectionName
+      removeCollection: $removeCollection
+    }
+  ) {
+    id
+  }
+}

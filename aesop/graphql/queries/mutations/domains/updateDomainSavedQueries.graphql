@@ -1,0 +1,24 @@
+mutation updateDomainSavedQueries(
+  $id: ID!,
+  $savedQueries: [SavedLiveQueryInput!]!,
+  $name: String,
+  $description: NamespaceDescriptionInput,
+  $visibleTo: [ID!]
+  $customAttributes: CustomAttributesInput
+  $parentId: ID
+) {
+  updateNamespaceInfo(data: {
+    entityId: $id
+    detail: {
+      savedQueries: $savedQueries
+      type: DATA_GROUP
+    }
+    name: $name
+    description: $description
+    visibleTo: $visibleTo
+    customAttributes: $customAttributes
+    parentId: $parentId
+  }) {
+    id
+  }
+}

@@ -30,11 +30,11 @@ app = typer.Typer(help="Custom metadata settings")
 
 def _display(
     configs: List[Config],
-    output_format: OutputFormat,
+    output: OutputFormat,
 ) -> None:
-    if output_format is OutputFormat.JSON:
+    if output is OutputFormat.JSON:
         print_json(TypeAdapter(List[Config]).dump_json(configs).decode())
-    elif output_format is OutputFormat.CSV:
+    elif output is OutputFormat.CSV:
         spamwriter = csv.writer(sys.stdout)
         fields = list(Config.model_fields.keys())
         spamwriter.writerow(fields)
@@ -62,14 +62,14 @@ def _display(
 
 @exception_handler("Get custom metadata configs")
 @app.command()
-def get(ctx: typer.Context, output_format: OutputFormat = OutputFormatOption) -> None:
+def get(ctx: typer.Context, output: OutputFormat = OutputFormatOption) -> None:
     config: AesopConfig = ctx.obj
     client = config.get_graphql_client()
     settings = client.get_custom_metadata_settings()
     custom_metadata_configs = settings.settings.custom_metadata_config
     if not custom_metadata_configs:
         raise ValueError  # Impossible!
-    _display(custom_metadata_configs, output_format)
+    _display(custom_metadata_configs, output)
 
 
 def _get_existing_configs(

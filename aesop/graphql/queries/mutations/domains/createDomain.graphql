@@ -1,0 +1,24 @@
+mutation createDomain (
+  $name: String!,
+  $description: NamespaceDescriptionInput,
+  $color: String
+  $iconKey: String
+  $parentId: ID
+) {
+  createNamespace(data: {
+    namespaceInfo: {
+      name: $name
+      description: $description
+      detail: {
+        type: DATA_GROUP
+      }
+      customAttributes: {
+        color: $color,
+        iconKey: $iconKey
+      }
+      parentId: $parentId
+    }
+  }) {
+    id
+  }
+}

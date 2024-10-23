@@ -10,11 +10,15 @@ from .attach_data_document_to_namespace import AttachDataDocumentToNamespace
 from .base_client import BaseClient
 from .base_model import UNSET, UnsetType
 from .create_data_document import CreateDataDocument
+from .create_domain import CreateDomain
 from .create_knowledge_card import CreateKnowledgeCard
 from .create_namespace import CreateNamespace
+from .delete_domain import DeleteDomain
 from .enums import WebhookTriggerType
 from .get_custom_metadata_settings import GetCustomMetadataSettings
 from .get_dataset_governed_tags import GetDatasetGovernedTags
+from .get_domain import GetDomain
+from .get_domain_assets import GetDomainAssets
 from .get_governed_tags import GetGovernedTags
 from .get_namespace import GetNamespace
 from .get_non_prod_settings import GetNonProdSettings
@@ -24,8 +28,11 @@ from .get_webhook_payload_schema import GetWebhookPayloadSchema
 from .get_webhooks import GetWebhooks
 from .input_types import (
     AssetGovernedTagsPatchInput,
+    CustomAttributesInput,
     HashtagInput,
     KnowledgeCardInput,
+    NamespaceDescriptionInput,
+    SavedLiveQueryInput,
     SettingsInput,
     UpdateCustomMetadataConfigInput,
     UserDefinedResourceDeleteInput,
@@ -35,6 +42,9 @@ from .remove_governed_tags import RemoveGovernedTags
 from .remove_webhook import RemoveWebhook
 from .unassign_governed_tags import UnassignGovernedTags
 from .update_custom_metadata_config import UpdateCustomMetadataConfig
+from .update_domain_assets import UpdateDomainAssets
+from .update_domain_info import UpdateDomainInfo
+from .update_domain_saved_queries import UpdateDomainSavedQueries
 from .update_settings import UpdateSettings
 
 
@@ -211,6 +221,171 @@ class Client(BaseClient):
         )
         data = self.get_data(response)
         return UpdateCustomMetadataConfig.model_validate(data)
+
+    def create_domain(
+        self,
+        name: str,
+        description: Union[Optional[NamespaceDescriptionInput], UnsetType] = UNSET,
+        color: Union[Optional[str], UnsetType] = UNSET,
+        icon_key: Union[Optional[str], UnsetType] = UNSET,
+        parent_id: Union[Optional[str], UnsetType] = UNSET,
+        **kwargs: Any
+    ) -> CreateDomain:
+        query = gql(
+            """
+            mutation createDomain($name: String!, $description: NamespaceDescriptionInput, $color: String, $iconKey: String, $parentId: ID) {
+              createNamespace(
+                data: {namespaceInfo: {name: $name, description: $description, detail: {type: DATA_GROUP}, customAttributes: {color: $color, iconKey: $iconKey}, parentId: $parentId}}
+              ) {
+                id
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {
+            "name": name,
+            "description": description,
+            "color": color,
+            "iconKey": icon_key,
+            "parentId": parent_id,
+        }
+        response = self.execute(
+            query=query, operation_name="createDomain", variables=variables, **kwargs
+        )
+        data = self.get_data(response)
+        return CreateDomain.model_validate(data)
+
+    def delete_domain(self, id: str, **kwargs: Any) -> DeleteDomain:
+        query = gql(
+            """
+            mutation deleteDomain($id: ID!) {
+              deleteNamespaces(input: {ids: [$id]}) {
+                deletedIds
+                failedIds
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"id": id}
+        response = self.execute(
+            query=query, operation_name="deleteDomain", variables=variables, **kwargs
+        )
+        data = self.get_data(response)
+        return DeleteDomain.model_validate(data)
+
+    def update_domain_assets(
+        self,
+        id: str,
+        asset_ids_to_add: Union[Optional[List[str]], UnsetType] = UNSET,
+        asset_ids_to_remove: Union[Optional[List[str]], UnsetType] = UNSET,
+        collection_name: Union[Optional[str], UnsetType] = UNSET,
+        remove_collection: Union[Optional[bool], UnsetType] = UNSET,
+        **kwargs: Any
+    ) -> UpdateDomainAssets:
+        query = gql(
+            """
+            mutation updateDomainAssets($id: ID!, $assetIdsToAdd: [ID!], $assetIdsToRemove: [ID!], $collectionName: String, $removeCollection: Boolean = false) {
+              updateNamespaceAssets(
+                input: {entityIds: [$id], assetIdsToAdd: $assetIdsToAdd, assetIdsToRemove: $assetIdsToRemove, namedAssetCollectionName: $collectionName, removeCollection: $removeCollection}
+              ) {
+                id
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {
+            "id": id,
+            "assetIdsToAdd": asset_ids_to_add,
+            "assetIdsToRemove": asset_ids_to_remove,
+            "collectionName": collection_name,
+            "removeCollection": remove_collection,
+        }
+        response = self.execute(
+            query=query,
+            operation_name="updateDomainAssets",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return UpdateDomainAssets.model_validate(data)
+
+    def update_domain_info(
+        self,
+        id: str,
+        parent_id: Union[Optional[str], UnsetType] = UNSET,
+        name: Union[Optional[str], UnsetType] = UNSET,
+        description: Union[Optional[NamespaceDescriptionInput], UnsetType] = UNSET,
+        color: Union[Optional[str], UnsetType] = UNSET,
+        icon_key: Union[Optional[str], UnsetType] = UNSET,
+        **kwargs: Any
+    ) -> UpdateDomainInfo:
+        query = gql(
+            """
+            mutation updateDomainInfo($id: ID!, $parentId: ID, $name: String, $description: NamespaceDescriptionInput, $color: String, $iconKey: String) {
+              patchUpdateNamespaceInfo(
+                input: {entityId: $id, parentId: $parentId, name: $name, description: $description, customAttributes: {color: $color, iconKey: $iconKey}}
+              ) {
+                id
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {
+            "id": id,
+            "parentId": parent_id,
+            "name": name,
+            "description": description,
+            "color": color,
+            "iconKey": icon_key,
+        }
+        response = self.execute(
+            query=query,
+            operation_name="updateDomainInfo",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return UpdateDomainInfo.model_validate(data)
+
+    def update_domain_saved_queries(
+        self,
+        id: str,
+        saved_queries: List[SavedLiveQueryInput],
+        name: Union[Optional[str], UnsetType] = UNSET,
+        description: Union[Optional[NamespaceDescriptionInput], UnsetType] = UNSET,
+        visible_to: Union[Optional[List[str]], UnsetType] = UNSET,
+        custom_attributes: Union[Optional[CustomAttributesInput], UnsetType] = UNSET,
+        parent_id: Union[Optional[str], UnsetType] = UNSET,
+        **kwargs: Any
+    ) -> UpdateDomainSavedQueries:
+        query = gql(
+            """
+            mutation updateDomainSavedQueries($id: ID!, $savedQueries: [SavedLiveQueryInput!]!, $name: String, $description: NamespaceDescriptionInput, $visibleTo: [ID!], $customAttributes: CustomAttributesInput, $parentId: ID) {
+              updateNamespaceInfo(
+                data: {entityId: $id, detail: {savedQueries: $savedQueries, type: DATA_GROUP}, name: $name, description: $description, visibleTo: $visibleTo, customAttributes: $customAttributes, parentId: $parentId}
+              ) {
+                id
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {
+            "id": id,
+            "savedQueries": saved_queries,
+            "name": name,
+            "description": description,
+            "visibleTo": visible_to,
+            "customAttributes": custom_attributes,
+            "parentId": parent_id,
+        }
+        response = self.execute(
+            query=query,
+            operation_name="updateDomainSavedQueries",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return UpdateDomainSavedQueries.model_validate(data)
 
     def add_governed_tags(
         self, input: List[UserDefinedResourceInput], **kwargs: Any
@@ -394,6 +569,101 @@ class Client(BaseClient):
         )
         data = self.get_data(response)
         return GetNamespace.model_validate(data)
+
+    def get_domain(self, id: str, **kwargs: Any) -> GetDomain:
+        query = gql(
+            """
+            query getDomain($id: ID!) {
+              node(id: $id) {
+                __typename
+                ... on Namespace {
+                  namespaceInfo {
+                    name
+                    created {
+                      time
+                      actor
+                    }
+                    lastModified {
+                      time
+                      actor
+                    }
+                    detail {
+                      savedQueries {
+                        name
+                        keyword
+                        context
+                        id
+                        facetsJSON
+                      }
+                    }
+                    visibleTo
+                    description {
+                      text
+                      tokenizedText
+                    }
+                    customAttributes {
+                      color
+                      iconKey
+                    }
+                  }
+                  parentNamespace {
+                    id
+                  }
+                  namespaceAssets {
+                    namedAssetCollections {
+                      name
+                      assetIds
+                    }
+                  }
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"id": id}
+        response = self.execute(
+            query=query, operation_name="getDomain", variables=variables, **kwargs
+        )
+        data = self.get_data(response)
+        return GetDomain.model_validate(data)
+
+    def get_domain_assets(
+        self,
+        id: str,
+        end_cursor: Union[Optional[str], UnsetType] = UNSET,
+        **kwargs: Any
+    ) -> GetDomainAssets:
+        query = gql(
+            """
+            query getDomainAssets($id: ID!, $endCursor: String) {
+              node(id: $id) {
+                __typename
+                ... on Namespace {
+                  namespaceAssets {
+                    assets(first: 50, after: $endCursor) {
+                      edges {
+                        node {
+                          __typename
+                          id
+                        }
+                      }
+                      pageInfo {
+                        hasNextPage
+                        endCursor
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"id": id, "endCursor": end_cursor}
+        response = self.execute(
+            query=query, operation_name="getDomainAssets", variables=variables, **kwargs
+        )
+        data = self.get_data(response)
+        return GetDomainAssets.model_validate(data)
 
     def get_custom_metadata_settings(self, **kwargs: Any) -> GetCustomMetadataSettings:
         query = gql(
