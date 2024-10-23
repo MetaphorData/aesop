@@ -62,7 +62,7 @@ def version() -> None:
     """
     Print Aesop's version.
     """
-    print(f"Aesop version: {metadata.version('aesop')}")
+    print(f"Aesop version: {metadata.version('metaphor-aesop')}")
 
 
 root_path = Path(__file__).parent.resolve()  # This is the aesop app directory
