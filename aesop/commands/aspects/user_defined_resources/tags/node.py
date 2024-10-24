@@ -1,19 +1,70 @@
 import csv
 import json
 import sys
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from pydantic import BaseModel
 from rich.table import Column, Table
 
 from aesop.commands.common.enums.output_format import OutputFormat
 from aesop.console import console
+from aesop.graphql.generated.get_governed_tag import (
+    GetGovernedTagNodeUserDefinedResource,
+)
+from aesop.graphql.generated.get_governed_tag_child_tags import (
+    GetGovernedTagChildTagsNodeUserDefinedResourceChildResourcesEdgesNode,
+)
+from aesop.graphql.generated.list_governed_tags import (
+    ListGovernedTagsUserDefinedResourcesEdgesNode,
+)
+
+
+class GovernedTagParent(BaseModel):
+    id: str
+    name: Optional[str]
 
 
 class GovernedTagNode(BaseModel):
     id: str
     name: str
     description: Optional[str] = None
+    parent: Optional[GovernedTagParent] = None
+
+    @classmethod
+    def from_gql_response(
+        cls,
+        node: Union[
+            ListGovernedTagsUserDefinedResourcesEdgesNode,
+            GetGovernedTagNodeUserDefinedResource,
+            GetGovernedTagChildTagsNodeUserDefinedResourceChildResourcesEdgesNode,
+        ],
+    ) -> Optional["GovernedTagNode"]:
+        if not node.user_defined_resource_info:
+            return None
+
+        parent = (
+            GovernedTagParent(
+                id=node.parent_resource.id,
+                name=(
+                    node.parent_resource.user_defined_resource_info.name
+                    if node.parent_resource.user_defined_resource_info
+                    else None
+                ),
+            )
+            if node.parent_resource
+            else None
+        )
+        return GovernedTagNode(
+            id=node.id,
+            name=node.user_defined_resource_info.name,
+            description=(
+                node.user_defined_resource_info.description.text
+                if node.user_defined_resource_info.description
+                and node.user_defined_resource_info.description.text
+                else None
+            ),
+            parent=parent,
+        )
 
 
 def display_nodes(

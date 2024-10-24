@@ -25,6 +25,8 @@ def add_tags(
                     if tag.description
                     else None
                 ),
+                customTagAttributes=tag.custom_attributes,
+                parentResourceId=tag.parent_id,
             )
         )
         for tag in tags
