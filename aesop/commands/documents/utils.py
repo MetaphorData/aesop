@@ -123,9 +123,9 @@ def create_namespace(
 def attach_document_to_namespace(
     client: Client,
     namespace_id: str,
-    document_id: str,
+    document_ids: List[str],
 ) -> None:
     """
     Attaches the document to the namespace.
     """
-    client.attach_data_document_to_namespace(namespace_id, document_id)
+    client.attach_data_documents_to_namespace(namespace_id, document_ids)
