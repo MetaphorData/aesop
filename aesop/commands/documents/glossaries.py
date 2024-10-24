@@ -5,6 +5,7 @@ from typing import Any, List, Optional, Union
 
 from pydantic import BaseModel, Field, field_validator
 from rich import print, print_json
+from rich.progress import track
 from rich.table import Table
 from typer import Argument, Context, FileText, FileTextWrite, Option, Typer
 
@@ -125,20 +126,21 @@ def import_(
     client = config.get_graphql_client()
     namespace_id = create_namespace(client, Directory(dir=directory))
 
-    files_created = 0
-    for row in DictReader(input_file.readlines()):
-        columns = Columns.model_validate(row)
-
+    columns = [
+        Columns.model_validate(row) for row in DictReader(input_file.readlines())
+    ]
+    print(f"{len(columns)} documents to import.")
+    document_ids: List[str] = []
+    for column in track(columns, "Importing..."):
         document_id = create_data_document(
-            client, columns.name, columns.content, columns.hashtags, publish
+            client, column.name, column.content, column.hashtags, publish
         )
-
-        if namespace_id:
-            attach_document_to_namespace(client, namespace_id, document_id)
-        files_created += 1
+        document_ids.append(document_id)
 
     if not namespace_id:
-        print(f"Created {files_created} files.")
+        print(f"Created {len(document_ids)} files.")
     else:
         namespace_url = config.url / "documents" / "directories" / namespace_id
-        print(f"Created {files_created} files: {namespace_url.human_repr()}")
+        print("Attaching documents to namespace")
+        attach_document_to_namespace(client, namespace_id, document_ids)
+        print(f"Created {len(document_ids)} files: {namespace_url.human_repr()}")
