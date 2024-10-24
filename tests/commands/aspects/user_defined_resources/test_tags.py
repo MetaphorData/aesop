@@ -26,6 +26,7 @@ class TestTags(BaseTestSuite):
                 "tags",
                 "add",
                 name,
+                "--description",
                 description,
             ]
         )
@@ -71,7 +72,7 @@ class TestTags(BaseTestSuite):
         res = self.run_app(
             [
                 "tags",
-                "get",
+                "list",
                 "--name",
                 name,
             ]
