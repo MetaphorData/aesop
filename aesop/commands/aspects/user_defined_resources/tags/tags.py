@@ -25,15 +25,11 @@ from aesop.console import console
 from aesop.graphql.generated.get_governed_tag import (
     GetGovernedTagNodeUserDefinedResource,
 )
-from aesop.graphql.generated.get_governed_tag_child_tags import GetGovernedTagChildTags
 from aesop.graphql.generated.get_governed_tag_child_tags import (
-    GetGovernedTagChildTagsNodeUserDefinedResource as GetChildTags,
-)
-from aesop.graphql.generated.get_governed_tag_child_tags import (
-    GetGovernedTagChildTagsNodeUserDefinedResourceChildResourcesEdges as GetChildTagsEdge,  # noqa: E501
-)
-from aesop.graphql.generated.get_governed_tag_child_tags import (
-    GetGovernedTagChildTagsNodeUserDefinedResourceChildResourcesPageInfo as GetChildTagsPageInfo,  # noqa: E501
+    GetGovernedTagChildTags,
+    GetGovernedTagChildTagsNodeUserDefinedResource,
+    GetGovernedTagChildTagsNodeUserDefinedResourceChildResourcesEdges,
+    GetGovernedTagChildTagsNodeUserDefinedResourceChildResourcesPageInfo,
 )
 from aesop.graphql.generated.input_types import CustomTagAttributesInput
 from aesop.graphql.generated.list_governed_tags import (
@@ -149,17 +145,19 @@ def get(
         display_nodes([node], output)
 
 
-@exception_handler("get child tags")
+@exception_handler("get tag values")
 @app.command(
-    help="Get the child tags of a governed tag",
-    rich_help_panel=TagsRichPanelNames.list,
+    help="Get the values of a governed tag",
+    rich_help_panel=TagsRichPanelNames.get,
 )
-def get_child_tags(
+def get_values(
     ctx: typer.Context,
     id: str,
     output: OutputFormat = OutputFormatOption,
 ) -> None:
-    def edge_to_node(edge: GetChildTagsEdge) -> Optional[GovernedTagNode]:
+    def edge_to_node(
+        edge: GetGovernedTagChildTagsNodeUserDefinedResourceChildResourcesEdges,
+    ) -> Optional[GovernedTagNode]:
         return GovernedTagNode.from_gql_response(edge.node)
 
     config: AesopConfig = ctx.obj
@@ -169,15 +167,21 @@ def get_child_tags(
 
     def edge_projection(
         resp: GetGovernedTagChildTags,
-    ) -> List[Optional[GetChildTagsEdge]]:
-        if isinstance(resp.node, GetChildTags):
+    ) -> List[
+        Optional[GetGovernedTagChildTagsNodeUserDefinedResourceChildResourcesEdges]
+    ]:
+        if isinstance(resp.node, GetGovernedTagChildTagsNodeUserDefinedResource):
             return resp.node.child_resources.edges
         return []
 
-    def page_info_projection(resp: GetGovernedTagChildTags) -> GetChildTagsPageInfo:
-        if isinstance(resp.node, GetChildTags):
+    def page_info_projection(
+        resp: GetGovernedTagChildTags,
+    ) -> GetGovernedTagChildTagsNodeUserDefinedResourceChildResourcesPageInfo:
+        if isinstance(resp.node, GetGovernedTagChildTagsNodeUserDefinedResource):
             return resp.node.child_resources.page_info
-        return GetChildTagsPageInfo(hasNextPage=False, endCursor=None)
+        return GetGovernedTagChildTagsNodeUserDefinedResourceChildResourcesPageInfo(
+            hasNextPage=False, endCursor=None
+        )
 
     nodes = list(
         paginate_query(
