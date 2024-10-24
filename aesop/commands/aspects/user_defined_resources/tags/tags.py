@@ -30,10 +30,10 @@ from aesop.graphql.generated.get_governed_tag_child_tags import (
     GetGovernedTagChildTagsNodeUserDefinedResource as GetChildTags,
 )
 from aesop.graphql.generated.get_governed_tag_child_tags import (
-    GetGovernedTagChildTagsNodeUserDefinedResourceChildResourcesEdges as GetChildTagsEdge,
+    GetGovernedTagChildTagsNodeUserDefinedResourceChildResourcesEdges as GetChildTagsEdge,  # noqa: E501
 )
 from aesop.graphql.generated.get_governed_tag_child_tags import (
-    GetGovernedTagChildTagsNodeUserDefinedResourceChildResourcesPageInfo as GetChildTagsPageInfo,
+    GetGovernedTagChildTagsNodeUserDefinedResourceChildResourcesPageInfo as GetChildTagsPageInfo,  # noqa: E501
 )
 from aesop.graphql.generated.input_types import CustomTagAttributesInput
 from aesop.graphql.generated.list_governed_tags import (
