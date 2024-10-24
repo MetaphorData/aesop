@@ -19,7 +19,8 @@ from .get_custom_metadata_settings import GetCustomMetadataSettings
 from .get_dataset_governed_tags import GetDatasetGovernedTags
 from .get_domain import GetDomain
 from .get_domain_assets import GetDomainAssets
-from .get_governed_tags import GetGovernedTags
+from .get_governed_tag import GetGovernedTag
+from .get_governed_tag_child_tags import GetGovernedTagChildTags
 from .get_namespace import GetNamespace
 from .get_non_prod_settings import GetNonProdSettings
 from .get_setup_info import GetSetupInfo
@@ -38,6 +39,7 @@ from .input_types import (
     UserDefinedResourceDeleteInput,
     UserDefinedResourceInput,
 )
+from .list_governed_tags import ListGovernedTags
 from .remove_governed_tags import RemoveGovernedTags
 from .remove_webhook import RemoveWebhook
 from .unassign_governed_tags import UnassignGovernedTags
@@ -735,46 +737,6 @@ class Client(BaseClient):
         data = self.get_data(response)
         return GetDatasetGovernedTags.model_validate(data)
 
-    def get_governed_tags(
-        self,
-        name: Union[Optional[str], UnsetType] = UNSET,
-        end_cursor: Union[Optional[str], UnsetType] = UNSET,
-        **kwargs: Any
-    ) -> GetGovernedTags:
-        query = gql(
-            """
-            query getGovernedTags($name: String, $endCursor: String) {
-              userDefinedResources(
-                first: 50
-                after: $endCursor
-                filters: {name: $name, type: [GOVERNED_TAG]}
-              ) {
-                edges {
-                  node {
-                    id
-                    userDefinedResourceInfo {
-                      name
-                      description {
-                        text
-                      }
-                    }
-                  }
-                }
-                pageInfo {
-                  hasNextPage
-                  endCursor
-                }
-              }
-            }
-            """
-        )
-        variables: Dict[str, object] = {"name": name, "endCursor": end_cursor}
-        response = self.execute(
-            query=query, operation_name="getGovernedTags", variables=variables, **kwargs
-        )
-        data = self.get_data(response)
-        return GetGovernedTags.model_validate(data)
-
     def get_non_prod_settings(self, **kwargs: Any) -> GetNonProdSettings:
         query = gql(
             """
@@ -892,3 +854,134 @@ class Client(BaseClient):
         )
         data = self.get_data(response)
         return GetWebhooks.model_validate(data)
+
+    def get_governed_tag(self, id: str, **kwargs: Any) -> GetGovernedTag:
+        query = gql(
+            """
+            query getGovernedTag($id: ID!) {
+              node(id: $id) {
+                __typename
+                ... on UserDefinedResource {
+                  id
+                  userDefinedResourceInfo {
+                    name
+                    description {
+                      text
+                    }
+                  }
+                  parentResource {
+                    id
+                    userDefinedResourceInfo {
+                      name
+                    }
+                  }
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"id": id}
+        response = self.execute(
+            query=query, operation_name="getGovernedTag", variables=variables, **kwargs
+        )
+        data = self.get_data(response)
+        return GetGovernedTag.model_validate(data)
+
+    def get_governed_tag_child_tags(
+        self,
+        id: str,
+        end_cursor: Union[Optional[str], UnsetType] = UNSET,
+        **kwargs: Any
+    ) -> GetGovernedTagChildTags:
+        query = gql(
+            """
+            query getGovernedTagChildTags($id: ID!, $endCursor: String) {
+              node(id: $id) {
+                __typename
+                ... on UserDefinedResource {
+                  childResources(first: 50, after: $endCursor, filters: {type: [GOVERNED_TAG]}) {
+                    edges {
+                      node {
+                        id
+                        userDefinedResourceInfo {
+                          name
+                          description {
+                            text
+                          }
+                        }
+                        parentResource {
+                          id
+                          userDefinedResourceInfo {
+                            name
+                          }
+                        }
+                      }
+                    }
+                    pageInfo {
+                      hasNextPage
+                      endCursor
+                    }
+                  }
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"id": id, "endCursor": end_cursor}
+        response = self.execute(
+            query=query,
+            operation_name="getGovernedTagChildTags",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return GetGovernedTagChildTags.model_validate(data)
+
+    def list_governed_tags(
+        self,
+        name: Union[Optional[str], UnsetType] = UNSET,
+        end_cursor: Union[Optional[str], UnsetType] = UNSET,
+        **kwargs: Any
+    ) -> ListGovernedTags:
+        query = gql(
+            """
+            query listGovernedTags($name: String, $endCursor: String) {
+              userDefinedResources(
+                first: 50
+                after: $endCursor
+                filters: {name: $name, type: [GOVERNED_TAG]}
+              ) {
+                edges {
+                  node {
+                    id
+                    userDefinedResourceInfo {
+                      name
+                      description {
+                        text
+                      }
+                    }
+                    parentResource {
+                      id
+                      userDefinedResourceInfo {
+                        name
+                      }
+                    }
+                  }
+                }
+                pageInfo {
+                  hasNextPage
+                  endCursor
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"name": name, "endCursor": end_cursor}
+        response = self.execute(
+            query=query,
+            operation_name="listGovernedTags",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return ListGovernedTags.model_validate(data)

@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Optional
+from typing import List, Optional
 
 import typer
 
@@ -11,15 +11,37 @@ from aesop.commands.aspects.user_defined_resources.tags.models import (
     GovernedTag,
     RemoveTagsOutput,
 )
+from aesop.commands.aspects.user_defined_resources.tags.node import (
+    GovernedTagNode,
+    display_nodes,
+)
 from aesop.commands.common.arguments import InputFileArg
 from aesop.commands.common.enums.output_format import OutputFormat
 from aesop.commands.common.exception_handler import exception_handler
 from aesop.commands.common.options import OutputFormatOption
+from aesop.commands.common.paginator import ClientQueryCallback, paginate_query
+from aesop.config import AesopConfig
 from aesop.console import console
+from aesop.graphql.generated.get_governed_tag import (
+    GetGovernedTagNodeUserDefinedResource,
+)
+from aesop.graphql.generated.get_governed_tag_child_tags import GetGovernedTagChildTags
+from aesop.graphql.generated.get_governed_tag_child_tags import (
+    GetGovernedTagChildTagsNodeUserDefinedResource as GetChildTags,
+)
+from aesop.graphql.generated.get_governed_tag_child_tags import (
+    GetGovernedTagChildTagsNodeUserDefinedResourceChildResourcesEdges as GetChildTagsEdge,
+)
+from aesop.graphql.generated.get_governed_tag_child_tags import (
+    GetGovernedTagChildTagsNodeUserDefinedResourceChildResourcesPageInfo as GetChildTagsPageInfo,
+)
+from aesop.graphql.generated.input_types import CustomTagAttributesInput
+from aesop.graphql.generated.list_governed_tags import (
+    ListGovernedTagsUserDefinedResourcesEdges,
+)
 
 from .commands.add import add_tags
 from .commands.assign import assign_tags
-from .commands.get import get as get_command
 from .commands.remove import remove_tags
 from .commands.unassign import unassign_tags
 
@@ -29,7 +51,8 @@ app = typer.Typer(help="Manage tags in Metaphor.")
 class TagsRichPanelNames(str, Enum):
     add = "Adding tags"
     assign = "Assigning tags"
-    get = "Listing tags"
+    get = "Getting tag"
+    list = "Listing tags"
     remove = "Removing tags"
     unassign = "Unassigning tags"
 
@@ -42,10 +65,23 @@ class TagsRichPanelNames(str, Enum):
 def add(
     ctx: typer.Context,
     name: str,
-    description: Optional[str] = typer.Argument(default=None),
+    description: Optional[str] = None,
+    parent_id: Optional[str] = None,
+    color: Optional[str] = None,
+    icon_key: Optional[str] = None,
     output: OutputFormat = OutputFormatOption,
 ) -> None:
-    tag = GovernedTag(name=name, description=description)
+    custom_attributes = (
+        CustomTagAttributesInput(color=color, iconKey=icon_key)
+        if color or icon_key
+        else None
+    )
+    tag = GovernedTag(
+        name=name,
+        description=description,
+        parent_id=parent_id,
+        custom_attributes=custom_attributes,
+    )
     created_ids = add_tags([tag], ctx.obj)
     AddTagsOutput(created_ids=created_ids).display(output)
 
@@ -93,12 +129,75 @@ def batch_assign(
     console.ok(f"Assigned governed tags {input.tag_ids} to assets {ids}")
 
 
+@exception_handler("get tag")
 @app.command(
-    help="Get governed tags.",
+    help="Get governed tag",
     rich_help_panel=TagsRichPanelNames.get,
 )
-@exception_handler("get tags")
 def get(
+    ctx: typer.Context,
+    id: str,
+    output: OutputFormat = OutputFormatOption,
+) -> None:
+    config: AesopConfig = ctx.obj
+    resp = config.get_graphql_client().get_governed_tag(id).node
+    if not resp:
+        return
+    assert isinstance(resp, GetGovernedTagNodeUserDefinedResource)
+    node = GovernedTagNode.from_gql_response(resp)
+    if node:
+        display_nodes([node], output)
+
+
+@exception_handler("get child tags")
+@app.command(
+    help="Get the child tags of a governed tag",
+    rich_help_panel=TagsRichPanelNames.list,
+)
+def get_child_tags(
+    ctx: typer.Context,
+    id: str,
+    output: OutputFormat = OutputFormatOption,
+) -> None:
+    def edge_to_node(edge: GetChildTagsEdge) -> Optional[GovernedTagNode]:
+        return GovernedTagNode.from_gql_response(edge.node)
+
+    config: AesopConfig = ctx.obj
+    callback: ClientQueryCallback[GetGovernedTagChildTags] = (
+        lambda client, end_cursor: client.get_governed_tag_child_tags(id, end_cursor)
+    )
+
+    def edge_projection(
+        resp: GetGovernedTagChildTags,
+    ) -> List[Optional[GetChildTagsEdge]]:
+        if isinstance(resp.node, GetChildTags):
+            return resp.node.child_resources.edges
+        return []
+
+    def page_info_projection(resp: GetGovernedTagChildTags) -> GetChildTagsPageInfo:
+        if isinstance(resp.node, GetChildTags):
+            return resp.node.child_resources.page_info
+        return GetChildTagsPageInfo(hasNextPage=False, endCursor=None)
+
+    nodes = list(
+        paginate_query(
+            config,
+            callback,
+            edge_projection,
+            page_info_projection,
+            edge_to_node,
+        )
+    )
+    display_nodes(nodes, output)
+
+
+@app.command(
+    help="list governed tags.",
+    rich_help_panel=TagsRichPanelNames.list,
+    name="list",
+)
+@exception_handler("list tags")
+def list_governed_tags(
     ctx: typer.Context,
     name: Optional[str] = typer.Option(
         default=None,
@@ -106,7 +205,23 @@ def get(
     ),
     output: OutputFormat = OutputFormatOption,
 ) -> None:
-    get_command(name, output, ctx.obj)
+    def edge_to_node(
+        edge: ListGovernedTagsUserDefinedResourcesEdges,
+    ) -> Optional[GovernedTagNode]:
+        return GovernedTagNode.from_gql_response(edge.node)
+
+    config: AesopConfig = ctx.obj
+
+    nodes = list(
+        paginate_query(
+            config,
+            lambda client, end_cursor: client.list_governed_tags(name, end_cursor),
+            lambda resp: resp.user_defined_resources.edges,
+            lambda resp: resp.user_defined_resources.page_info,
+            edge_to_node,
+        )
+    )
+    display_nodes(nodes, output)
 
 
 @app.command(

@@ -1,0 +1,19 @@
+query getGovernedTag($id: ID!) {
+  node(id: $id) {
+    ... on UserDefinedResource {
+      id
+      userDefinedResourceInfo {
+        name
+        description {
+          text
+        }
+      }
+      parentResource {
+        id
+        userDefinedResourceInfo {
+          name
+        }
+      }
+    }
+  }
+}

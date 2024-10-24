@@ -1,0 +1,35 @@
+query getGovernedTagChildTags($id: ID!, $endCursor: String) {
+  node(id: $id) {
+    ... on UserDefinedResource {
+      childResources(
+        first: 50
+        after: $endCursor
+        filters: {
+          type: [GOVERNED_TAG]
+        }
+      ) {
+        edges {
+          node {
+            id
+            userDefinedResourceInfo {
+              name
+              description {
+                text
+              }
+            }
+            parentResource {
+              id
+              userDefinedResourceInfo {
+                name
+              }
+            }
+          }
+        }
+        pageInfo {
+            hasNextPage
+            endCursor
+        }
+      }
+    }
+  }
+}
