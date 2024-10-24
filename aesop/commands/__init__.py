@@ -1,5 +1,5 @@
 from .aspects import tags_app
-from .documents.documents import app as documents_app
+from .documents.glossaries import app as glossaries_app
 from .domains.domains import app as domains_app
 from .entities import datasets_app
 from .info import info as info_command
@@ -8,12 +8,12 @@ from .upload.upload import upload as upload_command
 from .webhooks import app as webhooks_app
 
 __all__ = [
-    "documents_app",
+    "datasets_app",
     "domains_app",
-    "upload_command",
+    "glossaries_app",
     "info_command",
     "settings_app",
     "tags_app",
-    "datasets_app",
+    "upload_command",
     "webhooks_app",
 ]
