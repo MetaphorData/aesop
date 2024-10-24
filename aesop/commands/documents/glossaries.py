@@ -19,7 +19,7 @@ from aesop.commands.documents.utils import (
 )
 from aesop.config import AesopConfig
 
-app = Typer(help="Manages business glossary documents.")
+app = Typer(help="Manages glossary documents.")
 
 
 class Columns(BaseModel):
@@ -52,10 +52,8 @@ class Columns(BaseModel):
         return self.hashtags_
 
 
-@exception_handler("generate business glossary template")
-@app.command(
-    help="Generates a template of business glossary CSV file with some example values."
-)
+@exception_handler("generate glossary template")
+@app.command(help="Generates a template of glossary CSV file with some example values.")
 def gen_template(
     file: FileTextWrite = Argument(
         default="biz_glossary.csv", help="The file to write to."
@@ -74,8 +72,8 @@ def gen_template(
     print(f"Wrote template to {file.name}")
 
 
-@exception_handler("print business glossary schema")
-@app.command(help="Prints the expected schema for a business glossary CSV file.")
+@exception_handler("print glossary schema")
+@app.command(help="Prints the expected schema for a glossary CSV file.")
 def schema(output: OutputFormat = OutputFormatOption) -> None:
     if output is OutputFormat.JSON:
         print_json(json.dumps(Columns.model_json_schema()))
@@ -97,7 +95,7 @@ def schema(output: OutputFormat = OutputFormatOption) -> None:
             print(table)
 
 
-@exception_handler("import business glossary")
+@exception_handler("import glossary")
 @app.command(
     help="Imports a local business glossary file to Metaphor's data document storage. "
     "To see the schema or a simple template file, use `schema` or `gen-template` "
