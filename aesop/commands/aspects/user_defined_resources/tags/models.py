@@ -5,11 +5,14 @@ from pydantic import BaseModel
 from aesop import console
 from aesop.commands.common.enums.output_format import OutputFormat
 from aesop.commands.common.models import InputModel, OutputModel
+from aesop.graphql.generated.input_types import CustomTagAttributesInput
 
 
 class GovernedTag(BaseModel):
     name: str
     description: Optional[str] = None
+    parent_id: Optional[str] = None
+    custom_attributes: Optional[CustomTagAttributesInput] = None
 
 
 class BatchAddTagsInput(InputModel):

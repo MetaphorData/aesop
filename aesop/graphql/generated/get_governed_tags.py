@@ -28,6 +28,9 @@ class GetGovernedTagsUserDefinedResourcesEdgesNode(BaseModel):
     user_defined_resource_info: Optional[
         "GetGovernedTagsUserDefinedResourcesEdgesNodeUserDefinedResourceInfo"
     ] = Field(alias="userDefinedResourceInfo")
+    parent_resource: Optional[
+        "GetGovernedTagsUserDefinedResourcesEdgesNodeParentResource"
+    ] = Field(alias="parentResource")
 
 
 class GetGovernedTagsUserDefinedResourcesEdgesNodeUserDefinedResourceInfo(BaseModel):
@@ -43,6 +46,19 @@ class GetGovernedTagsUserDefinedResourcesEdgesNodeUserDefinedResourceInfoDescrip
     text: str
 
 
+class GetGovernedTagsUserDefinedResourcesEdgesNodeParentResource(BaseModel):
+    id: str
+    user_defined_resource_info: Optional[
+        "GetGovernedTagsUserDefinedResourcesEdgesNodeParentResourceUserDefinedResourceInfo"
+    ] = Field(alias="userDefinedResourceInfo")
+
+
+class GetGovernedTagsUserDefinedResourcesEdgesNodeParentResourceUserDefinedResourceInfo(
+    BaseModel
+):
+    name: str
+
+
 class GetGovernedTagsUserDefinedResourcesPageInfo(BaseModel):
     has_next_page: Optional[bool] = Field(alias="hasNextPage")
     end_cursor: Optional[str] = Field(alias="endCursor")
@@ -53,3 +69,4 @@ GetGovernedTagsUserDefinedResources.model_rebuild()
 GetGovernedTagsUserDefinedResourcesEdges.model_rebuild()
 GetGovernedTagsUserDefinedResourcesEdgesNode.model_rebuild()
 GetGovernedTagsUserDefinedResourcesEdgesNodeUserDefinedResourceInfo.model_rebuild()
+GetGovernedTagsUserDefinedResourcesEdgesNodeParentResource.model_rebuild()
