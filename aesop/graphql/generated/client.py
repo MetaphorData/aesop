@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Optional, Union
 from .add_governed_tags import AddGovernedTags
 from .add_webhook import AddWebhook
 from .assign_governed_tags import AssignGovernedTags
-from .attach_data_document_to_namespace import AttachDataDocumentToNamespace
+from .attach_data_documents_to_namespace import AttachDataDocumentsToNamespace
 from .base_client import BaseClient
 from .base_model import UNSET, UnsetType
 from .create_data_document import CreateDataDocument
@@ -102,42 +102,32 @@ class Client(BaseClient):
         _data = self.get_data(response)
         return CreateKnowledgeCard.model_validate(_data)
 
-    def attach_data_document_to_namespace(
-        self, namespace_id: str, data_document_id: str, **kwargs: Any
-    ) -> AttachDataDocumentToNamespace:
+    def attach_data_documents_to_namespace(
+        self, namespace_id: str, data_document_ids: List[str], **kwargs: Any
+    ) -> AttachDataDocumentsToNamespace:
         query = gql(
             """
-            mutation attachDataDocumentToNamespace($namespaceId: ID!, $dataDocumentId: ID!) {
+            mutation attachDataDocumentsToNamespace($namespaceId: ID!, $dataDocumentIds: [ID!]!) {
               updateNamespaceAssets(
-                input: {entityIds: [$namespaceId], assetIdsToAdd: [$dataDocumentId]}
+                input: {entityIds: [$namespaceId], assetIdsToAdd: $dataDocumentIds}
               ) {
                 id
-                namespaceAssets {
-                  assets(first: 20) {
-                    edges {
-                      node {
-                        __typename
-                        id
-                      }
-                    }
-                  }
-                }
               }
             }
             """
         )
         variables: Dict[str, object] = {
             "namespaceId": namespace_id,
-            "dataDocumentId": data_document_id,
+            "dataDocumentIds": data_document_ids,
         }
         response = self.execute(
             query=query,
-            operation_name="attachDataDocumentToNamespace",
+            operation_name="attachDataDocumentsToNamespace",
             variables=variables,
             **kwargs
         )
         data = self.get_data(response)
-        return AttachDataDocumentToNamespace.model_validate(data)
+        return AttachDataDocumentsToNamespace.model_validate(data)
 
     def create_data_document(
         self,

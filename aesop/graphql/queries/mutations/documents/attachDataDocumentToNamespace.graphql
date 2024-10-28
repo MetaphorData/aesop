@@ -1,24 +1,13 @@
-mutation attachDataDocumentToNamespace (
+mutation attachDataDocumentsToNamespace (
   $namespaceId: ID!,
-  $dataDocumentId: ID!
+  $dataDocumentIds: [ID!]!
 ) {
   updateNamespaceAssets(input: {
     entityIds: [
       $namespaceId
     ],
-    assetIdsToAdd: [
-      $dataDocumentId
-    ]
+    assetIdsToAdd: $dataDocumentIds
   }) {
     id
-    namespaceAssets {
-      assets(first: 20) {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-    }
   }
 }
