@@ -53,19 +53,14 @@ class TagsRichPanelNames(str, Enum):
     unassign = "Unassigning tags"
 
 
-@app.command(
-    help="Add a single governed tag with optional description text to Metaphor.",
-    rich_help_panel=TagsRichPanelNames.add,
-)
-@exception_handler("add tag")
-def add(
-    ctx: typer.Context,
+def _add_tag(
+    config: AesopConfig,
     name: str,
-    description: Optional[str] = None,
-    parent_id: Optional[str] = None,
-    color: Optional[str] = None,
-    icon_key: Optional[str] = None,
-    output: OutputFormat = OutputFormatOption,
+    description: Optional[str],
+    tag_id: Optional[str],
+    color: Optional[str],
+    icon_key: Optional[str],
+    output: OutputFormat,
 ) -> None:
     custom_attributes = (
         CustomTagAttributesInput(color=color, iconKey=icon_key)
@@ -75,11 +70,44 @@ def add(
     tag = GovernedTag(
         name=name,
         description=description,
-        parent_id=parent_id,
+        parent_id=tag_id,
         custom_attributes=custom_attributes,
     )
-    created_ids = add_tags([tag], ctx.obj)
+    created_ids = add_tags([tag], config)
     AddTagsOutput(created_ids=created_ids).display(output)
+
+
+@app.command(
+    help="Add a single governed tag with optional description text to Metaphor.",
+    rich_help_panel=TagsRichPanelNames.add,
+)
+@exception_handler("add tag")
+def add(
+    ctx: typer.Context,
+    name: str,
+    description: Optional[str] = None,
+    color: Optional[str] = None,
+    icon_key: Optional[str] = None,
+    output: OutputFormat = OutputFormatOption,
+) -> None:
+    _add_tag(ctx.obj, name, description, None, color, icon_key, output)
+
+
+@app.command(
+    help="Add a value for a Metaphor governed tag with optional description text.",
+    rich_help_panel=TagsRichPanelNames.add,
+)
+@exception_handler("add tag value")
+def add_value(
+    ctx: typer.Context,
+    name: str,
+    description: Optional[str] = None,
+    tag_id: Optional[str] = None,
+    color: Optional[str] = None,
+    icon_key: Optional[str] = None,
+    output: OutputFormat = OutputFormatOption,
+) -> None:
+    _add_tag(ctx.obj, name, description, tag_id, color, icon_key, output)
 
 
 @app.command(
@@ -196,7 +224,7 @@ def get_values(
 
 
 @app.command(
-    help="list governed tags.",
+    help="List governed tags.",
     rich_help_panel=TagsRichPanelNames.list,
     name="list",
 )
@@ -228,6 +256,18 @@ def list_governed_tags(
     display_nodes(nodes, output)
 
 
+def _remove_tag(
+    tag_id: str,
+    config: AesopConfig,
+    output: OutputFormat,
+) -> None:
+    resp = remove_tags([tag_id], config)
+    RemoveTagsOutput(
+        removed_ids=resp.delete_user_defined_resource.deleted_ids,
+        failed_ids=resp.delete_user_defined_resource.failed_ids,
+    ).display(output)
+
+
 @app.command(
     help="Remove a governed tag from Metaphor.",
     rich_help_panel=TagsRichPanelNames.remove,
@@ -238,11 +278,20 @@ def remove(
     ctx: typer.Context,
     output: OutputFormat = OutputFormatOption,
 ) -> None:
-    resp = remove_tags([tag_id], ctx.obj)
-    RemoveTagsOutput(
-        removed_ids=resp.delete_user_defined_resource.deleted_ids,
-        failed_ids=resp.delete_user_defined_resource.failed_ids,
-    ).display(output)
+    _remove_tag(tag_id, ctx.obj, output)
+
+
+@app.command(
+    help="Remove a value of a governed tag from Metaphor.",
+    rich_help_panel=TagsRichPanelNames.remove,
+)
+@exception_handler("remove tag value")
+def remove_value(
+    tag_value_id: str,
+    ctx: typer.Context,
+    output: OutputFormat = OutputFormatOption,
+) -> None:
+    _remove_tag(tag_value_id, ctx.obj, output)
 
 
 @app.command(
