@@ -116,7 +116,9 @@ def main(
     if check_newer_version:
         # Check for newer versions
         try:
-            resp = request(method="GET", url=f"https://pypi.org/pypi/{PACKAGE_NAME}/json")
+            resp = request(
+                method="GET", url=f"https://pypi.org/pypi/{PACKAGE_NAME}/json"
+            )
             all_versions = sorted(
                 (Version(v) for v in resp.json()["releases"].keys()), reverse=True
             )
