@@ -131,7 +131,7 @@ def main(
                     "To install it, run:",
                     Markdown(
                         "```bash\n"
-                        f"$ pip install {PACKAGE_NAME}=={str(latest_version)}\n"
+                        f"$ pip install -U {PACKAGE_NAME}\n"
                         "```"
                     ),
                 )
