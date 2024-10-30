@@ -5,8 +5,12 @@ from pathlib import Path
 
 import typer
 import yaml
+from httpx import request
+from packaging.version import Version
 from rich import print
+from rich.console import Group
 from rich.markdown import Markdown
+from rich.panel import Panel
 from typing_extensions import Annotated
 
 from aesop.commands import (
@@ -32,6 +36,8 @@ app.add_typer(glossaries_app, name="glossaries")
 app.add_typer(settings_app, name="settings")
 app.add_typer(tags_app, name="tags")
 app.add_typer(webhooks_app, name="webhooks")
+
+PACKAGE_NAME = "metaphor-aesop"
 
 
 @app.command()
@@ -66,7 +72,7 @@ def version() -> None:
     """
     Print Aesop's version.
     """
-    print(f"Aesop version: {metadata.version('metaphor-aesop')}")
+    print(f"Aesop version: {metadata.version(PACKAGE_NAME)}")
 
 
 root_path = Path(__file__).parent.resolve()  # This is the aesop app directory
@@ -103,7 +109,31 @@ def main(
         typer.FileText, typer.Option(help="Path to the configuration file.")
     ] = DEFAULT_CONFIG_PATH.as_posix(),  # type: ignore
 ) -> None:
+    # Instantiate configuration
     ctx.obj = AesopConfig.model_validate(yaml.safe_load(config_file))
+
+    # Check for newer versions
+    try:
+        resp = request(method="GET", url=f"https://pypi.org/pypi/{PACKAGE_NAME}/json")
+        all_versions = sorted(
+            (Version(v) for v in resp.json()["releases"].keys()), reverse=True
+        )
+        latest_version = all_versions[0]
+        current_version = Version(metadata.version(PACKAGE_NAME))
+        if current_version < latest_version:
+            group = Group(
+                f"A new version of [bold cyan]aesop[/bold cyan] ([bold green]{str(latest_version)}[/bold green]) is available!",
+                "",
+                "To install it, run:",
+                Markdown(
+                    "```bash\n"
+                    f"$ pip install {PACKAGE_NAME}=={str(latest_version)}\n"
+                    "```"
+                ),
+            )
+            print(Panel(group, title="🆕 NEW VERSION AVAILABLE"))
+    except Exception:
+        pass
 
 
 if __name__ == "__main__":

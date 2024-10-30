@@ -4,7 +4,7 @@ from typer import Context, Typer
 from aesop.commands.common.exception_handler import exception_handler
 from aesop.config import AesopConfig
 
-app = Typer()
+app = Typer(help="Manages data documents on Metaphor.")
 
 
 @exception_handler("create document")
