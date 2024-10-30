@@ -26,6 +26,7 @@ class BaseTestSuite:
             loguru.logger.info(f"Override config file: {override_config_file}")
 
         config_file_arguments = [
+            "--no-check-newer-version",
             "--config-file",
             override_config_file if override_config_file else self._config_file,
         ]
