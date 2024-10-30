@@ -105,6 +105,7 @@ def help(
 @exception_handler("main")
 def main(
     ctx: typer.Context,
+    check_newer_version: bool = True,
     config_file: Annotated[
         typer.FileText, typer.Option(help="Path to the configuration file.")
     ] = DEFAULT_CONFIG_PATH.as_posix(),  # type: ignore
@@ -112,28 +113,29 @@ def main(
     # Instantiate configuration
     ctx.obj = AesopConfig.model_validate(yaml.safe_load(config_file))
 
-    # Check for newer versions
-    try:
-        resp = request(method="GET", url=f"https://pypi.org/pypi/{PACKAGE_NAME}/json")
-        all_versions = sorted(
-            (Version(v) for v in resp.json()["releases"].keys()), reverse=True
-        )
-        latest_version = all_versions[0]
-        current_version = Version(metadata.version(PACKAGE_NAME))
-        if current_version < latest_version:
-            group = Group(
-                f"A new version of [bold cyan]aesop[/bold cyan] ([bold green]{str(latest_version)}[/bold green]) is available!",
-                "",
-                "To install it, run:",
-                Markdown(
-                    "```bash\n"
-                    f"$ pip install {PACKAGE_NAME}=={str(latest_version)}\n"
-                    "```"
-                ),
+    if check_newer_version:
+        # Check for newer versions
+        try:
+            resp = request(method="GET", url=f"https://pypi.org/pypi/{PACKAGE_NAME}/json")
+            all_versions = sorted(
+                (Version(v) for v in resp.json()["releases"].keys()), reverse=True
             )
-            print(Panel(group, title="🆕 NEW VERSION AVAILABLE"))
-    except Exception:
-        pass
+            latest_version = all_versions[0]
+            current_version = Version(metadata.version(PACKAGE_NAME))
+            if current_version < latest_version:
+                group = Group(
+                    f"A new version of [bold cyan]aesop[/bold cyan] ([bold green]{str(latest_version)}[/bold green]) is available!",  # noqa E501
+                    "",
+                    "To install it, run:",
+                    Markdown(
+                        "```bash\n"
+                        f"$ pip install {PACKAGE_NAME}=={str(latest_version)}\n"
+                        "```"
+                    ),
+                )
+                print(Panel(group, title="🆕 NEW VERSION AVAILABLE"))
+        except Exception:
+            pass
 
 
 if __name__ == "__main__":
