@@ -129,11 +129,7 @@ def main(
                     f"A new version of [bold cyan]aesop[/bold cyan] ([bold green]{str(latest_version)}[/bold green]) is available!",  # noqa E501
                     "",
                     "To install it, run:",
-                    Markdown(
-                        "```bash\n"
-                        f"$ pip install -U {PACKAGE_NAME}\n"
-                        "```"
-                    ),
+                    Markdown("```bash\n" f"$ pip install -U {PACKAGE_NAME}\n" "```"),
                 )
                 print(Panel(group, title="🆕 NEW VERSION AVAILABLE"))
         except Exception:
