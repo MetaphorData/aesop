@@ -1,0 +1,71 @@
+---
+name: Fetch Schema and Create PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        required: false
+        default: ''
+  repository_dispatch:
+    types: [upload-api-schema]
+
+jobs:
+  update-api-schema:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set run_id
+        id: set_run_id
+        run: |
+          # Check if run_id is provided via inputs (manual trigger)
+          if [ "${{ github.event.inputs.run_id }}" != "" ]; then
+            echo "run_id=${{ github.event.inputs.run_id }}" >> $GITHUB_ENV
+          # Check if run_id is in repository_dispatch payload (auto trigger)
+          elif [ "${{ github.event.client_payload.run_id }}" != "" ]; then
+            echo "run_id=${{ github.event.client_payload.run_id }}" >> $GITHUB_ENV
+          else
+            echo "No run_id provided. Exiting."
+            exit 1
+          fi
+
+      - name: Download API schema artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: api-schema
+          github-token: ${{ github.token }}
+          repository: MetaphorData/app
+          run-id: ${{ env.run_id }}
+          # Replace with the correct run ID or workflow run name to target the artifact location if needed.
+
+      - name: Move schema to desired location
+        run: |
+          mv api-schema schema.gql
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add schema.gql
+          git commit -m "Update schema.gql from upstream"
+
+      - name: Push changes to a new branch
+        run: |
+          git push origin HEAD:refs/heads/update-api-schema
+
+      - name: Create Pull Request
+        uses: actions/github-script@v6
+        with:
+          script: |-
+            const { context, github } = require('@actions/github');
+            await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: "Update schema.gql",
+              head: "update-api-schema",
+              base: "main",
+              body: "Automated update of schema.gql from upstream repository."
+            });
