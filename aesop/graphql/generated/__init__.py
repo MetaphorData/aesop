@@ -33,6 +33,10 @@ from .create_knowledge_card import (
     CreateKnowledgeCardCreateKnowledgeCardKnowledgeCardInfoDetailChangeRequestStatusLastModifiedActingPersonProperties,
 )
 from .create_namespace import CreateNamespace, CreateNamespaceCreateNamespace
+from .delete_data_document import (
+    DeleteDataDocument,
+    DeleteDataDocumentDeleteKnowledgeCards,
+)
 from .delete_domain import DeleteDomain, DeleteDomainDeleteNamespaces
 from .enums import (
     AggregationMetadataName,
@@ -328,6 +332,7 @@ from .input_types import (
     NamespaceTypeDetailInput,
     NonProdInput,
     OktaSSOInput,
+    OneLoginSSOInput,
     OrderedEntryInput,
     OrganizationInput,
     PersonActivityInput,
@@ -546,6 +551,8 @@ __all__ = [
     "DbtModelRelationInput",
     "DbtUpstreamLineageInput",
     "DeleteCrawlerInput",
+    "DeleteDataDocument",
+    "DeleteDataDocumentDeleteKnowledgeCards",
     "DeleteDomain",
     "DeleteDomainDeleteNamespaces",
     "DeleteWebhooksInput",
@@ -711,6 +718,7 @@ __all__ = [
     "NativeType",
     "NonProdInput",
     "OktaSSOInput",
+    "OneLoginSSOInput",
     "Order",
     "OrderedEntryInput",
     "OrganizationInput",

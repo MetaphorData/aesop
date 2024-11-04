@@ -1,0 +1,10 @@
+mutation deleteDataDocument(
+  $id: ID!
+) {
+  deleteKnowledgeCards(input: {
+    ids: [$id]
+  }) {
+    deletedIds
+    failedIds
+  }
+}

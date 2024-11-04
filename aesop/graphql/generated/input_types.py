@@ -60,8 +60,8 @@ class AISearchQueryInput(BaseModel):
 
 
 class APIIdInput(BaseModel):
+    name: Optional[str] = ""
     platform: Optional[APIPlatform] = APIPlatform.UNKNOWN
-    url: Optional[str] = ""
 
 
 class AcknowledgeChangeRequestInput(BaseModel):
@@ -856,12 +856,14 @@ class KnowledgeCardInfoInput(BaseModel):
     )
     entity_id: Optional[str] = Field(alias="entityId", default="")
     hashtags: Optional[List["HashtagInput"]] = None
+    impersonated_as: Optional[str] = Field(alias="impersonatedAs", default=None)
     related_entity_ids: Optional[List[str]] = Field(
         alias="relatedEntityIds", default_factory=lambda: []
     )
 
 
 class KnowledgeCardInput(BaseModel):
+    impersonated_as: Optional[str] = Field(alias="impersonatedAs", default=None)
     is_published: Optional[bool] = Field(alias="isPublished", default=None)
     knowledge_card_info: Optional["KnowledgeCardInfoInput"] = Field(
         alias="knowledgeCardInfo", default=None
@@ -1001,7 +1003,7 @@ class NamespaceDeleteInput(BaseModel):
 
 
 class NamespaceDescriptionInput(BaseModel):
-    text: Optional[str] = None
+    text: Optional[str] = ""
     tokenized_text: Optional[str] = Field(alias="tokenizedText", default=None)
 
 
@@ -1076,6 +1078,12 @@ class NonProdInput(BaseModel):
 
 
 class OktaSSOInput(BaseModel):
+    client_id: Optional[str] = Field(alias="clientId", default="")
+    client_secret: Optional[str] = Field(alias="clientSecret", default="")
+    issuer: Optional[str] = ""
+
+
+class OneLoginSSOInput(BaseModel):
     client_id: Optional[str] = Field(alias="clientId", default="")
     client_secret: Optional[str] = Field(alias="clientSecret", default="")
     issuer: Optional[str] = ""
@@ -1407,6 +1415,7 @@ class SSOInput(BaseModel):
     )
     ldap: Optional["LDAPInput"] = None
     okta: Optional["OktaSSOInput"] = None
+    one_login: Optional["OneLoginSSOInput"] = Field(alias="oneLogin", default=None)
 
 
 class SavedLiveQueryInput(BaseModel):

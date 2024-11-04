@@ -13,6 +13,7 @@ from .create_data_document import CreateDataDocument
 from .create_domain import CreateDomain
 from .create_knowledge_card import CreateKnowledgeCard
 from .create_namespace import CreateNamespace
+from .delete_data_document import DeleteDataDocument
 from .delete_domain import DeleteDomain
 from .enums import WebhookTriggerType
 from .get_custom_metadata_settings import GetCustomMetadataSettings
@@ -186,6 +187,27 @@ class Client(BaseClient):
         )
         data = self.get_data(response)
         return CreateNamespace.model_validate(data)
+
+    def delete_data_document(self, id: str, **kwargs: Any) -> DeleteDataDocument:
+        query = gql(
+            """
+            mutation deleteDataDocument($id: ID!) {
+              deleteKnowledgeCards(input: {ids: [$id]}) {
+                deletedIds
+                failedIds
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"id": id}
+        response = self.execute(
+            query=query,
+            operation_name="deleteDataDocument",
+            variables=variables,
+            **kwargs
+        )
+        data = self.get_data(response)
+        return DeleteDataDocument.model_validate(data)
 
     def update_custom_metadata_config(
         self, input: UpdateCustomMetadataConfigInput, **kwargs: Any
