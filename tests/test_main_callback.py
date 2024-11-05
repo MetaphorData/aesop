@@ -17,7 +17,7 @@ class TestMainCallback(BaseTestSuite):
         assert res.exit_code != 0
         assert (
             "Input should be a valid dictionary or instance of AesopConfig"
-            in res.stdout
+            in res.stderr
         )
 
     def test_bad_config_missing_api_key(self, tmp_path: Path) -> None:
@@ -29,4 +29,4 @@ class TestMainCallback(BaseTestSuite):
             f.write(yaml.safe_dump(config))
         res = self.run_app(["info"], override_config_file=bad_config.as_posix())
         assert res.exit_code != 0
-        assert "Field required" in res.stdout
+        assert "Field required" in res.stderr

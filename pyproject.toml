@@ -81,7 +81,7 @@ warn_unused_ignores = false
 exclude = "aesop/graphql/generated/"
 
 [tool.flake8]
-ignore = ['E231', 'E241', 'W503']
+ignore = ['E231', 'E241', 'W503', 'E203']
 max-line-length = 88
 exclude = "aesop/graphql/generated"
 
