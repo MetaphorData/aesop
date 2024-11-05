@@ -15,14 +15,14 @@ from .create_knowledge_card import CreateKnowledgeCard
 from .create_namespace import CreateNamespace
 from .delete_data_document import DeleteDataDocument
 from .delete_domain import DeleteDomain
-from .enums import WebhookTriggerType
+from .enums import NamespaceType, WebhookTriggerType
 from .get_custom_metadata_settings import GetCustomMetadataSettings
 from .get_dataset_governed_tags import GetDatasetGovernedTags
 from .get_domain import GetDomain
 from .get_domain_assets import GetDomainAssets
 from .get_governed_tag import GetGovernedTag
 from .get_governed_tag_child_tags import GetGovernedTagChildTags
-from .get_namespace import GetNamespace
+from .get_namespaces import GetNamespaces
 from .get_non_prod_settings import GetNonProdSettings
 from .get_setup_info import GetSetupInfo
 from .get_soft_deletion_settings import GetSoftDeletionSettings
@@ -542,105 +542,6 @@ class Client(BaseClient):
         data = self.get_data(response)
         return RemoveWebhook.model_validate(data)
 
-    def get_namespace(
-        self,
-        name: str,
-        parent_id: Union[Optional[List[str]], UnsetType] = UNSET,
-        end_cursor: Union[Optional[str], UnsetType] = UNSET,
-        **kwargs: Any
-    ) -> GetNamespace:
-        query = gql(
-            """
-            query getNamespace($name: String!, $parentId: [ID!], $endCursor: String) {
-              namespaces(
-                first: 20
-                filters: {name: $name, type: USER_DEFINED_SPACE, isChildOf: $parentId}
-                after: $endCursor
-              ) {
-                edges {
-                  node {
-                    id
-                    namespaceInfo {
-                      name
-                    }
-                  }
-                }
-                pageInfo {
-                  hasNextPage
-                  endCursor
-                }
-              }
-            }
-            """
-        )
-        variables: Dict[str, object] = {
-            "name": name,
-            "parentId": parent_id,
-            "endCursor": end_cursor,
-        }
-        response = self.execute(
-            query=query, operation_name="getNamespace", variables=variables, **kwargs
-        )
-        data = self.get_data(response)
-        return GetNamespace.model_validate(data)
-
-    def get_domain(self, id: str, **kwargs: Any) -> GetDomain:
-        query = gql(
-            """
-            query getDomain($id: ID!) {
-              node(id: $id) {
-                __typename
-                ... on Namespace {
-                  namespaceInfo {
-                    name
-                    created {
-                      time
-                      actor
-                    }
-                    lastModified {
-                      time
-                      actor
-                    }
-                    detail {
-                      savedQueries {
-                        name
-                        keyword
-                        context
-                        id
-                        facetsJSON
-                      }
-                    }
-                    visibleTo
-                    description {
-                      text
-                      tokenizedText
-                    }
-                    customAttributes {
-                      color
-                      iconKey
-                    }
-                  }
-                  parentNamespace {
-                    id
-                  }
-                  namespaceAssets {
-                    namedAssetCollections {
-                      name
-                      assetIds
-                    }
-                  }
-                }
-              }
-            }
-            """
-        )
-        variables: Dict[str, object] = {"id": id}
-        response = self.execute(
-            query=query, operation_name="getDomain", variables=variables, **kwargs
-        )
-        data = self.get_data(response)
-        return GetDomain.model_validate(data)
-
     def get_domain_assets(
         self,
         id: str,
@@ -748,6 +649,148 @@ class Client(BaseClient):
         )
         data = self.get_data(response)
         return GetDatasetGovernedTags.model_validate(data)
+
+    def get_namespaces(
+        self,
+        type: NamespaceType,
+        name: Union[Optional[str], UnsetType] = UNSET,
+        parent_id: Union[Optional[List[str]], UnsetType] = UNSET,
+        end_cursor: Union[Optional[str], UnsetType] = UNSET,
+        **kwargs: Any
+    ) -> GetNamespaces:
+        query = gql(
+            """
+            query getNamespaces($name: String, $parentId: [ID!], $endCursor: String, $type: NamespaceType!) {
+              namespaces(
+                first: 20
+                filters: {name: $name, type: [$type], isChildOf: $parentId}
+                after: $endCursor
+              ) {
+                edges {
+                  node {
+                    id
+                    ...NamespaceParts
+                  }
+                }
+                pageInfo {
+                  hasNextPage
+                  endCursor
+                }
+              }
+            }
+
+            fragment NamespaceParts on Namespace {
+              namespaceInfo {
+                name
+                created {
+                  time
+                  actor
+                }
+                lastModified {
+                  time
+                  actor
+                }
+                detail {
+                  savedQueries {
+                    name
+                    keyword
+                    context
+                    id
+                    facetsJSON
+                  }
+                }
+                visibleTo
+                description {
+                  text
+                  tokenizedText
+                }
+                customAttributes {
+                  color
+                  iconKey
+                }
+              }
+              parentNamespace {
+                id
+              }
+              namespaceAssets {
+                namedAssetCollections {
+                  name
+                  assetIds
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {
+            "name": name,
+            "parentId": parent_id,
+            "endCursor": end_cursor,
+            "type": type,
+        }
+        response = self.execute(
+            query=query, operation_name="getNamespaces", variables=variables, **kwargs
+        )
+        data = self.get_data(response)
+        return GetNamespaces.model_validate(data)
+
+    def get_domain(self, id: str, **kwargs: Any) -> GetDomain:
+        query = gql(
+            """
+            query getDomain($id: ID!) {
+              node(id: $id) {
+                __typename
+                ...NamespaceParts
+              }
+            }
+
+            fragment NamespaceParts on Namespace {
+              namespaceInfo {
+                name
+                created {
+                  time
+                  actor
+                }
+                lastModified {
+                  time
+                  actor
+                }
+                detail {
+                  savedQueries {
+                    name
+                    keyword
+                    context
+                    id
+                    facetsJSON
+                  }
+                }
+                visibleTo
+                description {
+                  text
+                  tokenizedText
+                }
+                customAttributes {
+                  color
+                  iconKey
+                }
+              }
+              parentNamespace {
+                id
+              }
+              namespaceAssets {
+                namedAssetCollections {
+                  name
+                  assetIds
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"id": id}
+        response = self.execute(
+            query=query, operation_name="getDomain", variables=variables, **kwargs
+        )
+        data = self.get_data(response)
+        return GetDomain.model_validate(data)
 
     def get_non_prod_settings(self, **kwargs: Any) -> GetNonProdSettings:
         query = gql(

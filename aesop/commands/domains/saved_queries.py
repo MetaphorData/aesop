@@ -7,10 +7,10 @@ from typer import Context, Typer
 from aesop.commands.common.exception_handler import exception_handler
 from aesop.config import AesopConfig
 from aesop.graphql.generated.enums import SearchContext
-from aesop.graphql.generated.get_domain import (
-    GetDomainNodeNamespace,
-    GetDomainNodeNamespaceNamespaceInfoDetailSavedQueries,
+from aesop.graphql.generated.fragments import (
+    NamespacePartsNamespaceInfoDetailSavedQueries,
 )
+from aesop.graphql.generated.get_domain import GetDomainNodeNamespace
 from aesop.graphql.generated.input_types import (
     CustomAttributesInput,
     SavedLiveQueryInput,
@@ -111,7 +111,7 @@ def remove(
     saved_queries = namespace_info.detail.saved_queries or []
 
     def should_include(
-        q: GetDomainNodeNamespaceNamespaceInfoDetailSavedQueries,
+        q: NamespacePartsNamespaceInfoDetailSavedQueries,
     ) -> bool:
         if saved_query_id:
             return q.id != saved_query_id

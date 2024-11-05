@@ -4,10 +4,11 @@ from pydantic import BaseModel, model_validator
 
 from aesop.commands.common.paginator import ClientQueryCallback, paginate_query
 from aesop.graphql.generated.client import Client
-from aesop.graphql.generated.get_namespace import (
-    GetNamespace,
-    GetNamespaceNamespacesEdges,
-    GetNamespaceNamespacesEdgesNode,
+from aesop.graphql.generated.enums import NamespaceType
+from aesop.graphql.generated.get_namespaces import (
+    GetNamespaces,
+    GetNamespacesNamespacesEdges,
+    GetNamespacesNamespacesEdgesNode,
 )
 from aesop.graphql.generated.input_types import HashtagInput
 
@@ -55,16 +56,19 @@ def get_namespace_id(
     """
     Locates the namespace whose name is an exact match with the given name.
     """
-    callback: ClientQueryCallback[GetNamespace] = (
-        lambda client, end_cursor: client.get_namespace(
-            name, [parent_id] if parent_id else None, end_cursor
+    callback: ClientQueryCallback[GetNamespaces] = (
+        lambda client, end_cursor: client.get_namespaces(
+            NamespaceType.USER_DEFINED_SPACE,
+            name,
+            [parent_id] if parent_id else None,
+            end_cursor,
         )
     )
 
     # Need this for mypy to work
     def edge_to_node(
-        edge: GetNamespaceNamespacesEdges,
-    ) -> GetNamespaceNamespacesEdgesNode:
+        edge: GetNamespacesNamespacesEdges,
+    ) -> GetNamespacesNamespacesEdgesNode:
         return edge.node
 
     for node in paginate_query(

@@ -1,0 +1,65 @@
+fragment NamespaceParts on Namespace {
+  namespaceInfo {
+    name
+    created {
+      time
+      actor
+    }
+    lastModified {
+      time
+      actor
+    }
+    detail {
+      savedQueries {
+        name
+        keyword
+        context
+        id
+        facetsJSON
+      }
+    }
+    visibleTo
+    description {
+      text
+      tokenizedText
+    }
+    customAttributes {
+      color
+      iconKey
+    }
+  }
+  parentNamespace {
+    id
+  }
+  namespaceAssets {
+    namedAssetCollections {
+      name
+      assetIds
+    }
+  }
+}
+
+query getNamespaces($name: String, $parentId: [ID!], $endCursor: String, $type: NamespaceType!) {
+  namespaces(
+    first: 20
+    filters: { name: $name, type: [$type], isChildOf: $parentId }
+    after: $endCursor
+  ) {
+    edges {
+      node {
+        id
+        ... NamespaceParts
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+
+query getDomain($id: ID!) {
+  node(id: $id) {
+    ... NamespaceParts
+  }
+}

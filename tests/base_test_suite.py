@@ -13,7 +13,7 @@ class BaseTestSuite:
     @pytest.fixture(autouse=True)
     def _setup(self, config_file: str) -> None:
         self._config_file = config_file
-        self._runner = CliRunner()
+        self._runner = CliRunner(mix_stderr=False)
         self._app = app
 
     def run_app(

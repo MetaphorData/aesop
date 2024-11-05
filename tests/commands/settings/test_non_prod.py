@@ -1,18 +1,16 @@
-import random
-import string
-
 from aesop.graphql.generated.enums import DataPlatform
 from aesop.graphql.generated.get_non_prod_settings import (
     GetNonProdSettingsSettingsNonProd,
 )
 from aesop.graphql.generated.input_types import DatasetPatternInput
 from tests.base_test_suite import BaseTestSuite
+from tests.utils import gen_random_str
 
 
 class TestNonProd(BaseTestSuite):
 
     def test_add_then_remove_non_prod(self) -> None:
-        name = "".join(random.choices(string.ascii_uppercase + string.digits, k=10))
+        name = gen_random_str(10)
         database = '"*"'
         schema = '"*"'
         table = name
