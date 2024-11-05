@@ -80,3 +80,8 @@ jobs:
         with:
           coverageFile: ./coverage.xml
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Codecov
+        uses: codecov/codecov-action@v4.6.0
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
