@@ -6,3 +6,4 @@ schema.gql
 coverage.xml
 .mypy_cache
 dist
+site/

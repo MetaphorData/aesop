@@ -1,5 +1,7 @@
 ---
-name: Create Tag and Draft Release
+name: Create Release
+
+run-name: 'Creating release: ${{ inputs.version }}'
 
 on:
   workflow_dispatch:
