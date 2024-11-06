@@ -19,5 +19,11 @@ theme:
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
+
+  features:
+    - toc.follow
+    - toc.integrate
+    - navigation.top
+
   logo: assets/logo.svg
   favicon: assets/favicon.png
