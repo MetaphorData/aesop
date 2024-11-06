@@ -1,0 +1,29 @@
+---
+site_name: metaphor-aesop
+site_url: https://www.github.com/MetaphorData/aesop
+repo_name: MetaphorData/aesop
+repo_url: https://www.github.com/MetaphorData/aesop
+theme:
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - media: '(prefers-color-scheme: light)'
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: '(prefers-color-scheme: dark)'
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+  features:
+    - toc.follow
+    - toc.integrate
+    - navigation.top
+
+  logo: assets/logo.svg
+  favicon: assets/favicon.png

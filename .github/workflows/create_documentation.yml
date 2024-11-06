@@ -1,0 +1,45 @@
+---
+name: Create Documentation
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        required: true
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+
+run-name: Creating documentation for version ${{ inputs.version }}
+
+env:
+  PYTHON_VERSION: 3.9
+  TITLE: Metaphor CLI Documentation
+
+permissions:
+  contents: write # For writing to gh-pages branch
+  actions: read # https://github.com/softprops/turnstyle?tab=readme-ov-file#required-permissions
+
+jobs:
+  build:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup_environment
+
+      - name: Generate typer markdown documentation
+        run: typer aesop/app.py utils docs --name "aesop" --output docs/index.md --title '${{ env.TITLE }}'
+
+      - name: Set git user
+        run: |
+          git config --global user.name 'Release Bot'
+          git config --global user.email 'release-bot@users.noreply.github.com'
+
+      - name: Build and deploy site
+        run: mkdocs gh-deploy --force
