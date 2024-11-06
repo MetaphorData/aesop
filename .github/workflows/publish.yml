@@ -34,3 +34,8 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: dist/
+
+      - name: Build & publish documentation
+        uses: ./.github/workflows/create_documentation.yml
+        with:
+          version: ${{ github.event.release.tag_name }}

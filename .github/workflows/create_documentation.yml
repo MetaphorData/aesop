@@ -1,9 +1,19 @@
 ---
-name: Documentation
+name: Create Documentation
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        required: true
   workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+
+run-name: Creating documentation for version ${{ inputs.version }}
 
 env:
   PYTHON_VERSION: 3.9
@@ -26,19 +36,10 @@ jobs:
       - name: Generate typer markdown documentation
         run: typer aesop/app.py utils docs --name "aesop" --output docs/index.md --title '${{ env.TITLE }}'
 
-      - name: Build MkDocs site
-        run: mkdocs build
-
       - name: Set git user
         run: |
           git config --global user.name 'Release Bot'
           git config --global user.email 'release-bot@users.noreply.github.com'
 
-      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
-
-      - uses: actions/cache@v4
-        with:
-          key: mkdocs-material-${{ env.cache_id }}
-          path: .cache
-          restore-keys: |
-            mkdocs-material-
+      - name: Build and deploy site
+        run: mkdocs gh-deploy --force
