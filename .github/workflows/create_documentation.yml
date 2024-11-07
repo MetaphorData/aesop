@@ -13,6 +13,7 @@ on:
         type: string
         required: true
   pull_request:
+    branches: [main]
 
 run-name: Creating documentation for version ${{ inputs.version }}
 
