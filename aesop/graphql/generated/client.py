@@ -17,6 +17,7 @@ from .delete_data_document import DeleteDataDocument
 from .delete_domain import DeleteDomain
 from .enums import NamespaceType, WebhookTriggerType
 from .get_custom_metadata_settings import GetCustomMetadataSettings
+from .get_data_document import GetDataDocument
 from .get_dataset_governed_tags import GetDatasetGovernedTags
 from .get_domain import GetDomain
 from .get_domain_assets import GetDomainAssets
@@ -26,6 +27,7 @@ from .get_namespaces import GetNamespaces
 from .get_non_prod_settings import GetNonProdSettings
 from .get_setup_info import GetSetupInfo
 from .get_soft_deletion_settings import GetSoftDeletionSettings
+from .get_user import GetUser
 from .get_webhook_payload_schema import GetWebhookPayloadSchema
 from .get_webhooks import GetWebhooks
 from .input_types import (
@@ -136,13 +138,14 @@ class Client(BaseClient):
         content: str,
         publish: bool,
         hashtags: Union[Optional[List[HashtagInput]], UnsetType] = UNSET,
+        impersonated_as: Union[Optional[str], UnsetType] = UNSET,
         **kwargs: Any
     ) -> CreateDataDocument:
         query = gql(
             """
-            mutation createDataDocument($name: String!, $content: String!, $publish: Boolean!, $hashtags: [HashtagInput!]) {
+            mutation createDataDocument($name: String!, $content: String!, $publish: Boolean!, $hashtags: [HashtagInput!], $impersonatedAs: ID) {
               createKnowledgeCard(
-                data: {knowledgeCardInfo: {detail: {type: DATA_DOCUMENT, dataDocument: {title: $name, content: $content}}, hashtags: $hashtags}, isPublished: $publish}
+                data: {knowledgeCardInfo: {detail: {type: DATA_DOCUMENT, dataDocument: {title: $name, content: $content}}, hashtags: $hashtags}, isPublished: $publish, impersonatedAs: $impersonatedAs}
               ) {
                 id
               }
@@ -154,6 +157,7 @@ class Client(BaseClient):
             "content": content,
             "publish": publish,
             "hashtags": hashtags,
+            "impersonatedAs": impersonated_as,
         }
         response = self.execute(
             query=query,
@@ -606,6 +610,45 @@ class Client(BaseClient):
         data = self.get_data(response)
         return GetCustomMetadataSettings.model_validate(data)
 
+    def get_data_document(self, id: str, **kwargs: Any) -> GetDataDocument:
+        query = gql(
+            """
+            query getDataDocument($id: ID!) {
+              node(id: $id) {
+                __typename
+                ... on KnowledgeCard {
+                  knowledgeCardInfo {
+                    created {
+                      time
+                      actor
+                    }
+                    lastModified {
+                      time
+                      actor
+                    }
+                    detail {
+                      type
+                      dataDocument {
+                        title
+                        content
+                        tokenizedContent {
+                          content
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"id": id}
+        response = self.execute(
+            query=query, operation_name="getDataDocument", variables=variables, **kwargs
+        )
+        data = self.get_data(response)
+        return GetDataDocument.model_validate(data)
+
     def get_dataset_governed_tags(
         self,
         id: str,
@@ -868,6 +911,23 @@ class Client(BaseClient):
         )
         data = self.get_data(response)
         return GetSoftDeletionSettings.model_validate(data)
+
+    def get_user(self, email: str, **kwargs: Any) -> GetUser:
+        query = gql(
+            """
+            query getUser($email: String!) {
+              person(logicalId: {email: $email}) {
+                id
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"email": email}
+        response = self.execute(
+            query=query, operation_name="getUser", variables=variables, **kwargs
+        )
+        data = self.get_data(response)
+        return GetUser.model_validate(data)
 
     def get_webhook_payload_schema(
         self, trigger: WebhookTriggerType, **kwargs: Any
