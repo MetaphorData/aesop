@@ -34,7 +34,7 @@ jobs:
         uses: ./.github/actions/setup_environment
 
       - name: Generate typer markdown documentation
-        run: typer aesop/app.py utils docs --name "aesop" --output docs/index.md --title '${{ env.TITLE }}'
+        run: poetry run typer aesop/app.py utils docs --name "aesop" --output docs/index.md --title '${{ env.TITLE }}'
 
       - name: Set git user
         run: |
@@ -42,4 +42,4 @@ jobs:
           git config --global user.email 'release-bot@users.noreply.github.com'
 
       - name: Build and deploy site
-        run: mkdocs gh-deploy --force
+        run: poetry run mkdocs gh-deploy --force
