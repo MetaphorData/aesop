@@ -12,6 +12,7 @@ on:
       version:
         type: string
         required: true
+  pull_request:
 
 run-name: Creating documentation for version ${{ inputs.version }}
 
