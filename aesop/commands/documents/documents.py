@@ -24,10 +24,12 @@ def create(
     ctx: Context,
     name: str = Argument(help="Title of the document."),
     content: str = Argument(
-        help="The content of the document. To upload the content of an existing file, do `aesop documents create $(cat FILE.txt)`."
+        help="The content of the document. To upload the content of an existing file, "
+        "do `aesop documents create $(cat FILE.txt)`."
     ),
     author: Optional[str] = Option(
-        help="Author of the document. Can be either an email or a Metaphor ID. If unset, a user representing the API key in use will be the document's author.",
+        help="Author of the document. Can be either an email or a Metaphor ID. If unset"
+        ", a user representing the API key in use will be the document's author.",
         default=None,
     ),
     directory: str = Option(

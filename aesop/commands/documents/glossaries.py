@@ -110,7 +110,9 @@ def import_(
         help="The business glossary to import to Metaphor."
     ),
     author: Optional[str] = Option(
-        help="Author of the glossary items. Can be either an email or a Metaphor ID. If unset, a user representing the API key in use will be the documents' author.",
+        help="Author of the glossary items. Can be either an email or a Metaphor ID. "
+        "If unset, a user representing the API key in use will be the documents' "
+        "author.",
         default=None,
     ),
     directory: str = Option(
