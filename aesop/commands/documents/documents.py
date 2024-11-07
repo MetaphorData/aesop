@@ -1,6 +1,6 @@
 from typing import Optional
 
-from rich import print
+from rich import print, print_json
 from typer import Argument, Context, Option, Typer
 
 from aesop.commands.common.exception_handler import exception_handler
@@ -13,6 +13,7 @@ from aesop.commands.documents.utils import (
 )
 from aesop.config import AesopConfig
 from aesop.console import console
+from aesop.graphql.generated.get_data_document import GetDataDocumentNodeKnowledgeCard
 
 app = Typer(help="Manages data documents on Metaphor.")
 
@@ -55,17 +56,23 @@ def create(
     print(f"Created document: {url.human_repr()}")
 
 
+def _get_kc_id(id: str) -> str:
+    knowledge_card_prefix = "KNOWLEDGE_CARD~"
+    return (
+        id if id.startswith(knowledge_card_prefix) else f"{knowledge_card_prefix}{id}"
+    )
+
+
 @exception_handler("delete document")
 @app.command(help="Deletes a data document.")
 def delete(
     ctx: Context,
-    id: str,
+    id: str = Argument(
+        help="The ID of the document.",
+    ),
 ) -> None:
     config: AesopConfig = ctx.obj
-    knowledge_card_prefix = "KNOWLEDGE_CARD~"
-    knowledge_card_id = (
-        id if id.startswith(knowledge_card_prefix) else f"{knowledge_card_prefix}{id}"
-    )
+    knowledge_card_id = _get_kc_id(id)
     resp = (
         config.get_graphql_client()
         .delete_data_document(id=knowledge_card_id)
@@ -75,3 +82,26 @@ def delete(
         print(f"Successfully deleted document: {id}")
     else:
         console.warning(f"Cannot delete document: {id}")
+
+
+@app.command(help="Get a data document.")
+def get(
+    ctx: Context,
+    id: str = Argument(
+        help="The ID of the document.",
+    ),
+) -> None:
+    config: AesopConfig = ctx.obj
+    knowledge_card_id = _get_kc_id(id)
+    resp = config.get_graphql_client().get_data_document(knowledge_card_id).node
+    if not resp:
+        return
+    assert isinstance(resp, GetDataDocumentNodeKnowledgeCard)
+    data_document = (
+        resp.knowledge_card_info.detail.data_document
+        if resp.knowledge_card_info
+        else None
+    )
+    if not data_document:
+        return
+    print_json(resp.model_dump_json(exclude={"typename__"}))

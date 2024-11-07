@@ -17,6 +17,7 @@ from .delete_data_document import DeleteDataDocument
 from .delete_domain import DeleteDomain
 from .enums import NamespaceType, WebhookTriggerType
 from .get_custom_metadata_settings import GetCustomMetadataSettings
+from .get_data_document import GetDataDocument
 from .get_dataset_governed_tags import GetDatasetGovernedTags
 from .get_domain import GetDomain
 from .get_domain_assets import GetDomainAssets
@@ -608,6 +609,45 @@ class Client(BaseClient):
         )
         data = self.get_data(response)
         return GetCustomMetadataSettings.model_validate(data)
+
+    def get_data_document(self, id: str, **kwargs: Any) -> GetDataDocument:
+        query = gql(
+            """
+            query getDataDocument($id: ID!) {
+              node(id: $id) {
+                __typename
+                ... on KnowledgeCard {
+                  knowledgeCardInfo {
+                    created {
+                      time
+                      actor
+                    }
+                    lastModified {
+                      time
+                      actor
+                    }
+                    detail {
+                      type
+                      dataDocument {
+                        title
+                        content
+                        tokenizedContent {
+                          content
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {"id": id}
+        response = self.execute(
+            query=query, operation_name="getDataDocument", variables=variables, **kwargs
+        )
+        data = self.get_data(response)
+        return GetDataDocument.model_validate(data)
 
     def get_dataset_governed_tags(
         self,

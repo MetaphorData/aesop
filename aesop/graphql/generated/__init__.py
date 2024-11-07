@@ -136,6 +136,17 @@ from .get_custom_metadata_settings import (
     GetCustomMetadataSettingsSettings,
     GetCustomMetadataSettingsSettingsCustomMetadataConfig,
 )
+from .get_data_document import (
+    GetDataDocument,
+    GetDataDocumentNodeKnowledgeCard,
+    GetDataDocumentNodeKnowledgeCardKnowledgeCardInfo,
+    GetDataDocumentNodeKnowledgeCardKnowledgeCardInfoCreated,
+    GetDataDocumentNodeKnowledgeCardKnowledgeCardInfoDetail,
+    GetDataDocumentNodeKnowledgeCardKnowledgeCardInfoDetailDataDocument,
+    GetDataDocumentNodeKnowledgeCardKnowledgeCardInfoDetailDataDocumentTokenizedContent,
+    GetDataDocumentNodeKnowledgeCardKnowledgeCardInfoLastModified,
+    GetDataDocumentNodeNode,
+)
 from .get_dataset_governed_tags import (
     GetDatasetGovernedTags,
     GetDatasetGovernedTagsNodeDataset,
@@ -568,6 +579,15 @@ __all__ = [
     "GetCustomMetadataSettings",
     "GetCustomMetadataSettingsSettings",
     "GetCustomMetadataSettingsSettingsCustomMetadataConfig",
+    "GetDataDocument",
+    "GetDataDocumentNodeKnowledgeCard",
+    "GetDataDocumentNodeKnowledgeCardKnowledgeCardInfo",
+    "GetDataDocumentNodeKnowledgeCardKnowledgeCardInfoCreated",
+    "GetDataDocumentNodeKnowledgeCardKnowledgeCardInfoDetail",
+    "GetDataDocumentNodeKnowledgeCardKnowledgeCardInfoDetailDataDocument",
+    "GetDataDocumentNodeKnowledgeCardKnowledgeCardInfoDetailDataDocumentTokenizedContent",
+    "GetDataDocumentNodeKnowledgeCardKnowledgeCardInfoLastModified",
+    "GetDataDocumentNodeNode",
     "GetDatasetGovernedTags",
     "GetDatasetGovernedTagsNodeDataset",
     "GetDatasetGovernedTagsNodeDatasetGovernedTags",

@@ -1,0 +1,26 @@
+query getDataDocument($id: ID!) {
+  node(id: $id) {
+    ... on KnowledgeCard {
+      knowledgeCardInfo {
+        created {
+          time
+          actor
+        }
+        lastModified {
+          time
+          actor
+        }
+        detail {
+          type
+          dataDocument {
+            title
+            content
+            tokenizedContent {
+              content
+            }
+          }
+        }
+      }
+    }
+  }
+}
