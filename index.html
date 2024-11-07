@@ -1,0 +1,1910 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://www.github.com/MetaphorData/aesop/">
+      
+      
+      
+      
+      <link rel="icon" href="assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.44">
+    
+    
+      
+        <title>metaphor-aesop</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.0253249f.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#metaphor-cli-documentation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="metaphor-aesop" class="md-header__button md-logo" aria-label="metaphor-aesop" data-md-component="logo">
+      
+  <img src="assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            metaphor-aesop
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Metaphor CLI Documentation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://www.github.com/MetaphorData/aesop" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    MetaphorData/aesop
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="metaphor-aesop" class="md-nav__button md-logo" aria-label="metaphor-aesop" data-md-component="logo">
+      
+  <img src="assets/logo.svg" alt="logo">
+
+    </a>
+    metaphor-aesop
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://www.github.com/MetaphorData/aesop" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    MetaphorData/aesop
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Metaphor CLI Documentation
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Metaphor CLI Documentation
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#aesop-datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop datasets
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="aesop datasets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aesop-datasets-get-aspect" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop datasets get-aspect
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="aesop datasets get-aspect">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aesop-datasets-get-aspect-governed-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop datasets get-aspect governed-tags
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aesop-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop documents
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="aesop documents">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aesop-documents-create" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop documents create
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-documents-delete" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop documents delete
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-documents-get" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop documents get
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aesop-domains" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop domains
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="aesop domains">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aesop-domains-add" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop domains add
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-domains-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop domains assets
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="aesop domains assets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aesop-domains-assets-add" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop domains assets add
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-domains-assets-get" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop domains assets get
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-domains-assets-remove" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop domains assets remove
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-domains-assets-remove-collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop domains assets remove-collection
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-domains-get" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop domains get
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-domains-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop domains list
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-domains-remove" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop domains remove
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-domains-saved-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop domains saved-queries
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="aesop domains saved-queries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aesop-domains-saved-queries-add" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop domains saved-queries add
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-domains-saved-queries-remove" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop domains saved-queries remove
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aesop-glossaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop glossaries
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="aesop glossaries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aesop-glossaries-gen-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop glossaries gen-template
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-glossaries-import" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop glossaries import
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-glossaries-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop glossaries schema
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aesop-help" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop help
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aesop-info" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop info
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aesop-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop settings
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="aesop settings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aesop-settings-custom-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop settings custom-metadata
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="aesop settings custom-metadata">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aesop-settings-custom-metadata-get" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop settings custom-metadata get
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-settings-custom-metadata-remove" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop settings custom-metadata remove
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-settings-custom-metadata-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop settings custom-metadata update
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-settings-non-prod" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop settings non-prod
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="aesop settings non-prod">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aesop-settings-non-prod-add" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop settings non-prod add
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-settings-non-prod-get" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop settings non-prod get
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-settings-non-prod-remove" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop settings non-prod remove
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-settings-non-prod-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop settings non-prod set
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-settings-soft-deletion" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop settings soft-deletion
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="aesop settings soft-deletion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aesop-settings-soft-deletion-get" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop settings soft-deletion get
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-settings-soft-deletion-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop settings soft-deletion set
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="aesop settings soft-deletion set">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aesop-settings-soft-deletion-set-enabled" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop settings soft-deletion set enabled
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-settings-soft-deletion-set-threshold_hours" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop settings soft-deletion set threshold_hours
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aesop-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop tags
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="aesop tags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aesop-tags-add" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop tags add
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-tags-add-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop tags add-value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-tags-assign" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop tags assign
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-tags-batch-add" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop tags batch-add
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-tags-batch-assign" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop tags batch-assign
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-tags-batch-remove" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop tags batch-remove
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-tags-batch-unassign" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop tags batch-unassign
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-tags-get" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop tags get
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-tags-get-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop tags get-values
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-tags-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop tags list
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-tags-remove" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop tags remove
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-tags-remove-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop tags remove-value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-tags-unassign" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop tags unassign
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aesop-upload" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop upload
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aesop-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop version
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aesop-webhooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop webhooks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="aesop webhooks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aesop-webhooks-get" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop webhooks get
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-webhooks-get-payload-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop webhooks get-payload-schema
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-webhooks-register" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop webhooks register
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aesop-webhooks-unregister" class="md-nav__link">
+    <span class="md-ellipsis">
+      aesop webhooks unregister
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="metaphor-cli-documentation">Metaphor CLI Documentation</h1>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--check-newer-version / --no-check-newer-version</code>: [default: check-newer-version]</li>
+<li><code>--config-file FILENAME</code>: Path to the configuration file.  [default: /home/runner/.aesop/config.yml]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<p><strong>Commands</strong>:</p>
+<ul>
+<li><code>datasets</code>: Manage datasets in Metaphor.</li>
+<li><code>documents</code>: Manages data documents on Metaphor.</li>
+<li><code>domains</code>: Manages data domains in Metaphor.</li>
+<li><code>glossaries</code>: Manages glossary documents.</li>
+<li><code>help</code>: Print help for a command.</li>
+<li><code>info</code>: Display information about the Metaphor...</li>
+<li><code>settings</code>: Manage settings in Metaphor.</li>
+<li><code>tags</code>: Manage tags in Metaphor.</li>
+<li><code>upload</code>: Upload data assets from a CSV file.</li>
+<li><code>version</code>: Print Aesop's version.</li>
+<li><code>webhooks</code>: Manages webhooks.</li>
+</ul>
+<h2 id="aesop-datasets"><code>aesop datasets</code></h2>
+<p>Manage datasets in Metaphor.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop datasets [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<p><strong>Commands</strong>:</p>
+<ul>
+<li><code>get-aspect</code>: Display aspect of a dataset in Metaphor.</li>
+</ul>
+<h3 id="aesop-datasets-get-aspect"><code>aesop datasets get-aspect</code></h3>
+<p>Display aspect of a dataset in Metaphor.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop datasets get-aspect [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<p><strong>Commands</strong>:</p>
+<ul>
+<li><code>governed-tags</code>: Show governed tags this dataset is tagged...</li>
+</ul>
+<h4 id="aesop-datasets-get-aspect-governed-tags"><code>aesop datasets get-aspect governed-tags</code></h4>
+<p>Show governed tags this dataset is tagged with</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop datasets get-aspect governed-tags [OPTIONS] DATASET_ID
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>DATASET_ID</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--output [TABULAR|CSV|JSON]</code>: The output format.Supported formats: [TABULAR, CSV, JSON]  [default: JSON]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="aesop-documents"><code>aesop documents</code></h2>
+<p>Manages data documents on Metaphor.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop documents [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<p><strong>Commands</strong>:</p>
+<ul>
+<li><code>create</code>: Creates a data document.</li>
+<li><code>delete</code>: Deletes a data document.</li>
+<li><code>get</code>: Get a data document.</li>
+</ul>
+<h3 id="aesop-documents-create"><code>aesop documents create</code></h3>
+<p>Creates a data document.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop documents create [OPTIONS] NAME CONTENT
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>NAME</code>: Title of the document.  [required]</li>
+<li><code>CONTENT</code>: The content of the document. To upload the content of an existing file, do <code>aesop documents create $(cat FILE.txt)</code>.  [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--author TEXT</code>: Author of the document. Can be either an email or a Metaphor ID. If unset, a user representing the API key in use will be the document's author.</li>
+<li><code>--directory TEXT</code>: The directory to import the file to. Should be in the format of a single slash-separated string. Any nonexisting subdirectory will be created.</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-documents-delete"><code>aesop documents delete</code></h3>
+<p>Deletes a data document.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop documents delete [OPTIONS] ID
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>ID</code>: The ID of the document.  [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-documents-get"><code>aesop documents get</code></h3>
+<p>Get a data document.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop documents get [OPTIONS] ID
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>ID</code>: The ID of the document.  [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="aesop-domains"><code>aesop domains</code></h2>
+<p>Manages data domains in Metaphor.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop domains [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<p><strong>Commands</strong>:</p>
+<ul>
+<li><code>add</code>: Adds a data domain.</li>
+<li><code>assets</code>: Manages assets in a Metaphor data domain.</li>
+<li><code>get</code>: Gets a data domain defined in Metaphor.</li>
+<li><code>list</code>: Lists data domains.</li>
+<li><code>remove</code>: Removes a data domain.</li>
+<li><code>saved-queries</code>: Manages saved live queries for Metaphor...</li>
+</ul>
+<h3 id="aesop-domains-add"><code>aesop domains add</code></h3>
+<p>Adds a data domain.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop domains add [OPTIONS] NAME
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>NAME</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--description TEXT</code></li>
+<li><code>--tokenized-description TEXT</code></li>
+<li><code>--color TEXT</code></li>
+<li><code>--icon-key TEXT</code></li>
+<li><code>--parent-id TEXT</code></li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-domains-assets"><code>aesop domains assets</code></h3>
+<p>Manages assets in a Metaphor data domain.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop domains assets [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<p><strong>Commands</strong>:</p>
+<ul>
+<li><code>add</code>: Adds an asset to a data domain.</li>
+<li><code>get</code>: Gets the ids of the assets that belong to...</li>
+<li><code>remove</code>: Removes an asset from the data domain.</li>
+<li><code>remove-collection</code>: Removes a named asset collection from the...</li>
+</ul>
+<h4 id="aesop-domains-assets-add"><code>aesop domains assets add</code></h4>
+<p>Adds an asset to a data domain.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop domains assets add [OPTIONS] DOMAIN_ID ASSET_ID
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>DOMAIN_ID</code>: [required]</li>
+<li><code>ASSET_ID</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--collection-name TEXT</code></li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h4 id="aesop-domains-assets-get"><code>aesop domains assets get</code></h4>
+<p>Gets the ids of the assets that belong to the data domain.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop domains assets get [OPTIONS] DOMAIN_ID
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>DOMAIN_ID</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h4 id="aesop-domains-assets-remove"><code>aesop domains assets remove</code></h4>
+<p>Removes an asset from the data domain.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop domains assets remove [OPTIONS] DOMAIN_ID ASSET_ID
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>DOMAIN_ID</code>: [required]</li>
+<li><code>ASSET_ID</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--collection-name TEXT</code></li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h4 id="aesop-domains-assets-remove-collection"><code>aesop domains assets remove-collection</code></h4>
+<p>Removes a named asset collection from the data domain.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop domains assets remove-collection [OPTIONS] DOMAIN_ID COLLECTION_NAME
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>DOMAIN_ID</code>: [required]</li>
+<li><code>COLLECTION_NAME</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-domains-get"><code>aesop domains get</code></h3>
+<p>Gets a data domain defined in Metaphor.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop domains get [OPTIONS] ID
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>ID</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--output [TABULAR|CSV|JSON]</code>: The output format.Supported formats: [TABULAR, CSV, JSON]  [default: JSON]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-domains-list"><code>aesop domains list</code></h3>
+<p>Lists data domains.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop domains list [OPTIONS]
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--name TEXT</code></li>
+<li><code>--parent-id TEXT</code></li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-domains-remove"><code>aesop domains remove</code></h3>
+<p>Removes a data domain.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop domains remove [OPTIONS] ID
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>ID</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-domains-saved-queries"><code>aesop domains saved-queries</code></h3>
+<p>Manages saved live queries for Metaphor data domains.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop domains saved-queries [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<p><strong>Commands</strong>:</p>
+<ul>
+<li><code>add</code>: Adds a live query to a Metaphor data domain.</li>
+<li><code>remove</code>: Removes a saved live query from a Metaphor...</li>
+</ul>
+<h4 id="aesop-domains-saved-queries-add"><code>aesop domains saved-queries add</code></h4>
+<p>Adds a live query to a Metaphor data domain.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop domains saved-queries add [OPTIONS] DOMAIN_ID
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>DOMAIN_ID</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--search-context [DATA_DOCUMENT|DATA_GROUP|DBT_MODEL|Dashboards|Datasets|Groups|KnowledgeCards|LOOKER_EXPLORE|LOOKER_VIEW|Metrics|POWER_BI_DATASET|Persons|Pipelines|QUICK_SIGHT|TABLEAU_DATASOURCE|THOUGHT_SPOT_DATA_OBJECT]</code></li>
+<li><code>--facets-json TEXT</code></li>
+<li><code>--keyword TEXT</code></li>
+<li><code>--name TEXT</code></li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h4 id="aesop-domains-saved-queries-remove"><code>aesop domains saved-queries remove</code></h4>
+<p>Removes a saved live query from a Metaphor data domain.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop domains saved-queries remove [OPTIONS] DOMAIN_ID
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>DOMAIN_ID</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--saved-query-id TEXT</code></li>
+<li><code>--saved-query-name TEXT</code></li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="aesop-glossaries"><code>aesop glossaries</code></h2>
+<p>Manages glossary documents.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop glossaries [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<p><strong>Commands</strong>:</p>
+<ul>
+<li><code>gen-template</code>: Generates a template of glossary CSV file...</li>
+<li><code>import</code>: Imports a local business glossary file to...</li>
+<li><code>schema</code>: Prints the expected schema for a glossary...</li>
+</ul>
+<h3 id="aesop-glossaries-gen-template"><code>aesop glossaries gen-template</code></h3>
+<p>Generates a template of glossary CSV file with some example values.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop glossaries gen-template [OPTIONS] [FILE]
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[FILE]</code>: The file to write to.  [default: biz_glossary.csv]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-glossaries-import"><code>aesop glossaries import</code></h3>
+<p>Imports a local business glossary file to Metaphor's data document storage. To see the schema or a simple template file, use <code>schema</code> or <code>gen-template</code> subcommands.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop glossaries import [OPTIONS] INPUT_FILE
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>INPUT_FILE</code>: The business glossary to import to Metaphor.  [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--author TEXT</code>: Author of the glossary items. Can be either an email or a Metaphor ID. If unset, a user representing the API key in use will be the documents' author.</li>
+<li><code>--directory TEXT</code>: The directory to import the file to. Should be in the format of a single slash-separated string. Any nonexisting subdirectory will be created.</li>
+<li><code>--publish / --no-publish</code>: Whether to publish the imported file or not.  [default: publish]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-glossaries-schema"><code>aesop glossaries schema</code></h3>
+<p>Prints the expected schema for a glossary CSV file.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop glossaries schema [OPTIONS]
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--output [TABULAR|CSV|JSON]</code>: The output format.Supported formats: [TABULAR, CSV, JSON]  [default: JSON]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="aesop-help"><code>aesop help</code></h2>
+<p>Print help for a command.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop help [OPTIONS] COMMAND:{tags}
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>COMMAND:{tags}</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="aesop-info"><code>aesop info</code></h2>
+<p>Display information about the Metaphor instance.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop info [OPTIONS]
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--output [TABULAR|CSV|JSON]</code>: The output format. Supported formats: [TABULAR, CSV, JSON]  [default: TABULAR]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="aesop-settings"><code>aesop settings</code></h2>
+<p>Manage settings in Metaphor.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop settings [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<p><strong>Commands</strong>:</p>
+<ul>
+<li><code>custom-metadata</code>: Custom metadata settings</li>
+<li><code>non-prod</code>: Non-prod settings</li>
+<li><code>soft-deletion</code>: Soft deletion settings</li>
+</ul>
+<h3 id="aesop-settings-custom-metadata"><code>aesop settings custom-metadata</code></h3>
+<p>Custom metadata settings</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop settings custom-metadata [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<p><strong>Commands</strong>:</p>
+<ul>
+<li><code>get</code></li>
+<li><code>remove</code>: Removes the metadata config associated...</li>
+<li><code>update</code>: Updates a config for a custom metadata.</li>
+</ul>
+<h4 id="aesop-settings-custom-metadata-get"><code>aesop settings custom-metadata get</code></h4>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop settings custom-metadata get [OPTIONS]
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--output [TABULAR|CSV|JSON]</code>: The output format.Supported formats: [TABULAR, CSV, JSON]  [default: JSON]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h4 id="aesop-settings-custom-metadata-remove"><code>aesop settings custom-metadata remove</code></h4>
+<p>Removes the metadata config associated with a key.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop settings custom-metadata remove [OPTIONS] KEY
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>KEY</code>: The key to remove custom metadata configs for.  [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h4 id="aesop-settings-custom-metadata-update"><code>aesop settings custom-metadata update</code></h4>
+<p>Updates a config for a custom metadata. If no such config exists, it will be added.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop settings custom-metadata update [OPTIONS] [INPUT]
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[INPUT]</code>: The input file to the command. Can either be piped in or passed as a command argument, otherwise an example input payload will be displayed onto the console, and the app will exit.  [default: &lt;_io.TextIOWrapper name='<stdin>' mode='r' encoding='utf-8'&gt;]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-settings-non-prod"><code>aesop settings non-prod</code></h3>
+<p>Non-prod settings</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop settings non-prod [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<p><strong>Commands</strong>:</p>
+<ul>
+<li><code>add</code>: Adds a non-prod dataset pattern.</li>
+<li><code>get</code>: Gets the non-prod dataset patterns</li>
+<li><code>remove</code>: Removes a non-prod dataset pattern.</li>
+<li><code>set</code>: Batch updates all non-prod dataset patterns.</li>
+</ul>
+<h4 id="aesop-settings-non-prod-add"><code>aesop settings non-prod add</code></h4>
+<p>Adds a non-prod dataset pattern.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop settings non-prod add [OPTIONS] DATABASE SCHEMA TABLE PLATFORM:{ATHENA|AZURE_BLOB_STORAGE|AZURE_DATA_LAKE_STORAGE|BIGQUERY|DOCUMENTDB|DYNAMODB|ELASTICSEARCH|EXTERNAL|GCS|GLUE|HIVE|HTTP|KAFKA|MONGODB|MSSQL|MYSQL|ORACLE|POSTGRESQL|RDS|REDIS|REDSHIFT|S3|SFTP|SNOWFLAKE|SYNAPSE|TRINO|UNITY_CATALOG|UNITY_CATALOG_VOLUME_FILE|UNKNOWN}
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>DATABASE</code>: [required]</li>
+<li><code>SCHEMA</code>: [required]</li>
+<li><code>TABLE</code>: [required]</li>
+<li><code>PLATFORM:{ATHENA|AZURE_BLOB_STORAGE|AZURE_DATA_LAKE_STORAGE|BIGQUERY|DOCUMENTDB|DYNAMODB|ELASTICSEARCH|EXTERNAL|GCS|GLUE|HIVE|HTTP|KAFKA|MONGODB|MSSQL|MYSQL|ORACLE|POSTGRESQL|RDS|REDIS|REDSHIFT|S3|SFTP|SNOWFLAKE|SYNAPSE|TRINO|UNITY_CATALOG|UNITY_CATALOG_VOLUME_FILE|UNKNOWN}</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--account TEXT</code></li>
+<li><code>--is-case-sensitive / --no-is-case-sensitive</code>: [default: no-is-case-sensitive]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h4 id="aesop-settings-non-prod-get"><code>aesop settings non-prod get</code></h4>
+<p>Gets the non-prod dataset patterns</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop settings non-prod get [OPTIONS]
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h4 id="aesop-settings-non-prod-remove"><code>aesop settings non-prod remove</code></h4>
+<p>Removes a non-prod dataset pattern.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop settings non-prod remove [OPTIONS] DATABASE SCHEMA TABLE PLATFORM:{ATHENA|AZURE_BLOB_STORAGE|AZURE_DATA_LAKE_STORAGE|BIGQUERY|DOCUMENTDB|DYNAMODB|ELASTICSEARCH|EXTERNAL|GCS|GLUE|HIVE|HTTP|KAFKA|MONGODB|MSSQL|MYSQL|ORACLE|POSTGRESQL|RDS|REDIS|REDSHIFT|S3|SFTP|SNOWFLAKE|SYNAPSE|TRINO|UNITY_CATALOG|UNITY_CATALOG_VOLUME_FILE|UNKNOWN}
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>DATABASE</code>: [required]</li>
+<li><code>SCHEMA</code>: [required]</li>
+<li><code>TABLE</code>: [required]</li>
+<li><code>PLATFORM:{ATHENA|AZURE_BLOB_STORAGE|AZURE_DATA_LAKE_STORAGE|BIGQUERY|DOCUMENTDB|DYNAMODB|ELASTICSEARCH|EXTERNAL|GCS|GLUE|HIVE|HTTP|KAFKA|MONGODB|MSSQL|MYSQL|ORACLE|POSTGRESQL|RDS|REDIS|REDSHIFT|S3|SFTP|SNOWFLAKE|SYNAPSE|TRINO|UNITY_CATALOG|UNITY_CATALOG_VOLUME_FILE|UNKNOWN}</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--account TEXT</code></li>
+<li><code>--is-case-sensitive / --no-is-case-sensitive</code>: [default: no-is-case-sensitive]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h4 id="aesop-settings-non-prod-set"><code>aesop settings non-prod set</code></h4>
+<p>Batch updates all non-prod dataset patterns.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop settings non-prod set [OPTIONS] [INPUT]
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[INPUT]</code>: The input file to the command. Can either be piped in or passed as a command argument, otherwise an example input payload will be displayed onto the console, and the app will exit.  [default: &lt;_io.TextIOWrapper name='<stdin>' mode='r' encoding='utf-8'&gt;]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-settings-soft-deletion"><code>aesop settings soft-deletion</code></h3>
+<p>Soft deletion settings</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop settings soft-deletion [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<p><strong>Commands</strong>:</p>
+<ul>
+<li><code>get</code></li>
+<li><code>set</code></li>
+</ul>
+<h4 id="aesop-settings-soft-deletion-get"><code>aesop settings soft-deletion get</code></h4>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop settings soft-deletion get [OPTIONS]
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h4 id="aesop-settings-soft-deletion-set"><code>aesop settings soft-deletion set</code></h4>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop settings soft-deletion set [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<p><strong>Commands</strong>:</p>
+<ul>
+<li><code>enabled</code></li>
+<li><code>threshold_hours</code></li>
+</ul>
+<h5 id="aesop-settings-soft-deletion-set-enabled"><code>aesop settings soft-deletion set enabled</code></h5>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop settings soft-deletion set enabled [OPTIONS] ENABLED
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>ENABLED</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h5 id="aesop-settings-soft-deletion-set-threshold_hours"><code>aesop settings soft-deletion set threshold_hours</code></h5>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop settings soft-deletion set threshold_hours [OPTIONS] HOURS
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>HOURS</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="aesop-tags"><code>aesop tags</code></h2>
+<p>Manage tags in Metaphor.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop tags [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<p><strong>Commands</strong>:</p>
+<ul>
+<li><code>add</code>: Add a single governed tag with optional...</li>
+<li><code>add-value</code>: Add a value for a Metaphor governed tag...</li>
+<li><code>assign</code>: Assign a governed tag to an asset.</li>
+<li><code>batch-add</code>: Batch add governed tags with optional...</li>
+<li><code>batch-assign</code>: Batch assign governed tags to multiple assets</li>
+<li><code>batch-remove</code>: Batch remove governed tags from Metaphor.</li>
+<li><code>batch-unassign</code>: Unassign governed tags from assets.</li>
+<li><code>get</code>: Get governed tag</li>
+<li><code>get-values</code>: Get the values of a governed tag</li>
+<li><code>list</code>: List governed tags.</li>
+<li><code>remove</code>: Remove a governed tag from Metaphor.</li>
+<li><code>remove-value</code>: Remove a value of a governed tag from...</li>
+<li><code>unassign</code>: Unassign a governed tag from an asset.</li>
+</ul>
+<h3 id="aesop-tags-add"><code>aesop tags add</code></h3>
+<p>Add a single governed tag with optional description text to Metaphor.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop tags add [OPTIONS] NAME
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>NAME</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--description TEXT</code></li>
+<li><code>--color TEXT</code></li>
+<li><code>--icon-key TEXT</code></li>
+<li><code>--output [TABULAR|CSV|JSON]</code>: The output format.Supported formats: [TABULAR, CSV, JSON]  [default: JSON]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-tags-add-value"><code>aesop tags add-value</code></h3>
+<p>Add a value for a Metaphor governed tag with optional description text.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop tags add-value [OPTIONS] NAME
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>NAME</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--description TEXT</code></li>
+<li><code>--tag-id TEXT</code></li>
+<li><code>--color TEXT</code></li>
+<li><code>--icon-key TEXT</code></li>
+<li><code>--output [TABULAR|CSV|JSON]</code>: The output format.Supported formats: [TABULAR, CSV, JSON]  [default: JSON]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-tags-assign"><code>aesop tags assign</code></h3>
+<p>Assign a governed tag to an asset.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop tags assign [OPTIONS] TAG_ID ASSET_ID
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>TAG_ID</code>: [required]</li>
+<li><code>ASSET_ID</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-tags-batch-add"><code>aesop tags batch-add</code></h3>
+<p>Batch add governed tags with optional description text to Metaphor.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop tags batch-add [OPTIONS] [INPUT_FILE]
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[INPUT_FILE]</code>: The input file to the command. Can either be piped in or passed as a command argument, otherwise an example input payload will be displayed onto the console, and the app will exit.  [default: &lt;_io.TextIOWrapper name='<stdin>' mode='r' encoding='utf-8'&gt;]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--output [TABULAR|CSV|JSON]</code>: The output format.Supported formats: [TABULAR, CSV, JSON]  [default: JSON]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-tags-batch-assign"><code>aesop tags batch-assign</code></h3>
+<p>Batch assign governed tags to multiple assets</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop tags batch-assign [OPTIONS] [INPUT_FILE]
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[INPUT_FILE]</code>: The input file to the command. Can either be piped in or passed as a command argument, otherwise an example input payload will be displayed onto the console, and the app will exit.  [default: &lt;_io.TextIOWrapper name='<stdin>' mode='r' encoding='utf-8'&gt;]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-tags-batch-remove"><code>aesop tags batch-remove</code></h3>
+<p>Batch remove governed tags from Metaphor.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop tags batch-remove [OPTIONS] [INPUT_FILE]
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[INPUT_FILE]</code>: The input file to the command. Can either be piped in or passed as a command argument, otherwise an example input payload will be displayed onto the console, and the app will exit.  [default: &lt;_io.TextIOWrapper name='<stdin>' mode='r' encoding='utf-8'&gt;]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--output [TABULAR|CSV|JSON]</code>: The output format.Supported formats: [TABULAR, CSV, JSON]  [default: JSON]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-tags-batch-unassign"><code>aesop tags batch-unassign</code></h3>
+<p>Unassign governed tags from assets.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop tags batch-unassign [OPTIONS] [INPUT_FILE]
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[INPUT_FILE]</code>: The input file to the command. Can either be piped in or passed as a command argument, otherwise an example input payload will be displayed onto the console, and the app will exit.  [default: &lt;_io.TextIOWrapper name='<stdin>' mode='r' encoding='utf-8'&gt;]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-tags-get"><code>aesop tags get</code></h3>
+<p>Get governed tag</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop tags get [OPTIONS] ID
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>ID</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--output [TABULAR|CSV|JSON]</code>: The output format.Supported formats: [TABULAR, CSV, JSON]  [default: JSON]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-tags-get-values"><code>aesop tags get-values</code></h3>
+<p>Get the values of a governed tag</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop tags get-values [OPTIONS] ID
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>ID</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--output [TABULAR|CSV|JSON]</code>: The output format.Supported formats: [TABULAR, CSV, JSON]  [default: JSON]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-tags-list"><code>aesop tags list</code></h3>
+<p>List governed tags.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop tags list [OPTIONS]
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--name TEXT</code>: Filter for the name of the governed tag</li>
+<li><code>--output [TABULAR|CSV|JSON]</code>: The output format.Supported formats: [TABULAR, CSV, JSON]  [default: JSON]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-tags-remove"><code>aesop tags remove</code></h3>
+<p>Remove a governed tag from Metaphor.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop tags remove [OPTIONS] TAG_ID
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>TAG_ID</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--output [TABULAR|CSV|JSON]</code>: The output format.Supported formats: [TABULAR, CSV, JSON]  [default: JSON]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-tags-remove-value"><code>aesop tags remove-value</code></h3>
+<p>Remove a value of a governed tag from Metaphor.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop tags remove-value [OPTIONS] TAG_VALUE_ID
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>TAG_VALUE_ID</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--output [TABULAR|CSV|JSON]</code>: The output format.Supported formats: [TABULAR, CSV, JSON]  [default: JSON]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-tags-unassign"><code>aesop tags unassign</code></h3>
+<p>Unassign a governed tag from an asset.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop tags unassign [OPTIONS] TAG_ID ASSET_ID
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>TAG_ID</code>: [required]</li>
+<li><code>ASSET_ID</code>: [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="aesop-upload"><code>aesop upload</code></h2>
+<p>Upload data assets from a CSV file.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop upload [OPTIONS] CSV_PATH
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>CSV_PATH</code>: Path to the CSV file containing data asset information  [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="aesop-version"><code>aesop version</code></h2>
+<p>Print Aesop's version.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop version [OPTIONS]
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="aesop-webhooks"><code>aesop webhooks</code></h2>
+<p>Manages webhooks.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop webhooks [OPTIONS] COMMAND [ARGS]...
+</code></pre>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<p><strong>Commands</strong>:</p>
+<ul>
+<li><code>get</code>: Gets a list of webhooks that are...</li>
+<li><code>get-payload-schema</code>: Gets the payload of a webhook trigger type.</li>
+<li><code>register</code>: Registers a webhook to Metaphor.</li>
+<li><code>unregister</code>: Unregisters a webhook from Metaphor.</li>
+</ul>
+<h3 id="aesop-webhooks-get"><code>aesop webhooks get</code></h3>
+<p>Gets a list of webhooks that are registered to Metaphor.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop webhooks get [OPTIONS] [TRIGGER]:[DATASET_SCHEMA_CHANGED|SERVICE_REQUEST_CREATED|UNKNOWN]
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[TRIGGER]:[DATASET_SCHEMA_CHANGED|SERVICE_REQUEST_CREATED|UNKNOWN]</code></li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-webhooks-get-payload-schema"><code>aesop webhooks get-payload-schema</code></h3>
+<p>Gets the payload of a webhook trigger type.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop webhooks get-payload-schema [OPTIONS] TRIGGER:{DATASET_SCHEMA_CHANGED|SERVICE_REQUEST_CREATED|UNKNOWN}
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>TRIGGER:{DATASET_SCHEMA_CHANGED|SERVICE_REQUEST_CREATED|UNKNOWN}</code>: The trigger type.  [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-webhooks-register"><code>aesop webhooks register</code></h3>
+<p>Registers a webhook to Metaphor.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop webhooks register [OPTIONS] TRIGGER:{DATASET_SCHEMA_CHANGED|SERVICE_REQUEST_CREATED|UNKNOWN} [URL]
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>TRIGGER:{DATASET_SCHEMA_CHANGED|SERVICE_REQUEST_CREATED|UNKNOWN}</code>: The wewbhook trigger type.  [required]</li>
+<li><code>[URL]</code>: [default: The url for the webhook. Metaphor will send a POST request to this URL.]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="aesop-webhooks-unregister"><code>aesop webhooks unregister</code></h3>
+<p>Unregisters a webhook from Metaphor.</p>
+<p><strong>Usage</strong>:</p>
+<pre><code class="language-console">$ aesop webhooks unregister [OPTIONS] [WEBHOOK_ID]
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[WEBHOOK_ID]</code>: [default: The ID of the webhook to unregister.]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["toc.follow", "toc.integrate", "navigation.top"], "search": "assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+    
+  </body>
+</html>
