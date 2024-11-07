@@ -1,12 +1,16 @@
+from functools import cached_property
 from typing import Optional, Sequence
 
 import loguru
 import pytest
+import yaml
 from click.testing import Result
 from typer.testing import CliRunner
 
 from aesop.app import app
 from aesop.commands.common.enums.output_format import OutputFormat
+from aesop.config import AesopConfig
+from aesop.graphql.generated.client import Client
 
 
 class BaseTestSuite:
@@ -15,6 +19,13 @@ class BaseTestSuite:
         self._config_file = config_file
         self._runner = CliRunner(mix_stderr=False)
         self._app = app
+
+    @cached_property
+    def graphql_client(self) -> Client:
+        with open(self._config_file) as f:
+            return AesopConfig.model_validate(
+                yaml.safe_load(f.read())
+            ).get_graphql_client()
 
     def run_app(
         self,

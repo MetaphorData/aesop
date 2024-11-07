@@ -110,7 +110,7 @@ def import_(
         help="The business glossary to import to Metaphor."
     ),
     author: Optional[str] = Option(
-        help="Author of the glossary items. If unset, a user representing the API key in use will be the documents' author.",
+        help="Author of the glossary items. Can be either an email or a Metaphor ID. If unset, a user representing the API key in use will be the documents' author.",
         default=None,
     ),
     directory: str = Option(
@@ -123,7 +123,7 @@ def import_(
     ),
 ) -> None:
     """
-    1. Looks for the
+    1. Looks for the user id representing the author.
     2. Creates the target namespace if it does not exist already.
     3. Creates the data document.
     4. Attaches the data document to the target namespace.
