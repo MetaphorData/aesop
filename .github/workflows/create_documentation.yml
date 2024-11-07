@@ -44,4 +44,4 @@ jobs:
           git config --global user.email 'release-bot@users.noreply.github.com'
 
       - name: Build and deploy site
-        run: mkdocs gh-deploy --force
+        run: poetry run mkdocs gh-deploy --force
