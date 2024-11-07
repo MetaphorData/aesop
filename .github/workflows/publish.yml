@@ -39,5 +39,8 @@ jobs:
     needs: publish
     name: Build & publish documentation
     uses: ./.github/workflows/create_documentation.yml
+    permissions:
+      contents: write # For writing to gh-pages branch
+      actions: read # https://github.com/softprops/turnstyle?tab=readme-ov-file#required-permissions
     with:
       version: ${{ github.event.release.tag_name }}
