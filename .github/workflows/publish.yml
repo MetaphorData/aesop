@@ -35,7 +35,9 @@ jobs:
         with:
           packages-dir: dist/
 
-      - name: Build & publish documentation
-        uses: ./.github/workflows/create_documentation.yml
-        with:
-          version: ${{ github.event.release.tag_name }}
+  documentation:
+    needs: publish
+    name: Build & publish documentation
+    uses: ./.github/workflows/create_documentation.yml
+    with:
+      version: ${{ github.event.release.tag_name }}
