@@ -17,6 +17,7 @@ from aesop.commands.documents.utils import (
     attach_document_to_namespace,
     create_data_document,
     create_namespace,
+    get_user_id,
 )
 from aesop.config import AesopConfig
 
@@ -108,6 +109,10 @@ def import_(
     input_file: FileText = Argument(
         help="The business glossary to import to Metaphor."
     ),
+    author: Optional[str] = Option(
+        help="Author of the glossary items. If unset, a user representing the API key in use will be the documents' author.",
+        default=None,
+    ),
     directory: str = Option(
         help="The directory to import the file to. Should be in the format of a "
         "single slash-separated string. Any nonexisting subdirectory will be created.",
@@ -118,12 +123,14 @@ def import_(
     ),
 ) -> None:
     """
-    1. Creates the target namespace if it does not exist already.
-    2. Creates the data document.
-    3. Attaches the data document to the target namespace.
+    1. Looks for the
+    2. Creates the target namespace if it does not exist already.
+    3. Creates the data document.
+    4. Attaches the data document to the target namespace.
     """
     config: AesopConfig = ctx.obj
     client = config.get_graphql_client()
+    user_id = get_user_id(client, author) if author else None
     namespace_id = create_namespace(client, Directory(dir=directory))
 
     columns = [
@@ -133,7 +140,7 @@ def import_(
     document_ids: List[str] = []
     for column in track(columns, "Importing..."):
         document_id = create_data_document(
-            client, column.name, column.content, column.hashtags, publish
+            client, column.name, column.content, column.hashtags, publish, user_id
         )
         document_ids.append(document_id)
 

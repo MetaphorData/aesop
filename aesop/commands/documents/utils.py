@@ -1,10 +1,11 @@
 from typing import List, Optional
 
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, model_validator, validate_email
 
+from aesop.commands.common.entity_id import is_entity_id
 from aesop.commands.common.paginator import ClientQueryCallback, paginate_query
 from aesop.graphql.generated.client import Client
-from aesop.graphql.generated.enums import NamespaceType
+from aesop.graphql.generated.enums import EntityType, NamespaceType
 from aesop.graphql.generated.get_namespaces import (
     GetNamespaces,
     GetNamespacesNamespacesEdges,
@@ -13,12 +14,27 @@ from aesop.graphql.generated.get_namespaces import (
 from aesop.graphql.generated.input_types import HashtagInput
 
 
+def get_user_id(
+    client: Client,
+    user_id_or_email: str,
+) -> Optional[str]:
+    if is_entity_id(user_id_or_email, EntityType.PERSON):
+        return user_id_or_email
+    try:
+        _, email = validate_email(user_id_or_email)
+        resp = client.get_user(email).person
+        return resp.id if resp else None
+    except Exception:
+        return None
+
+
 def create_data_document(
     client: Client,
     title: str,
     content: str,
     hashtags: Optional[List[str]],
     publish: bool,
+    user_id: Optional[str],
 ) -> str:
     """
     Creates a data document. Returns the document's id.
@@ -27,7 +43,11 @@ def create_data_document(
         [HashtagInput(value=value) for value in hashtags] if hashtags else None
     )
     res = client.create_data_document(
-        title, content, publish, hashtag_inputs
+        title,
+        content,
+        publish,
+        hashtag_inputs,
+        impersonated_as=user_id,
     ).create_knowledge_card
     assert res
     return res.id

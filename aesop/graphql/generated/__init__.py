@@ -204,6 +204,7 @@ from .get_soft_deletion_settings import (
     GetSoftDeletionSettingsSettings,
     GetSoftDeletionSettingsSettingsSoftDeletion,
 )
+from .get_user import GetUser, GetUserPerson
 from .get_webhook_payload_schema import GetWebhookPayloadSchema
 from .get_webhooks import GetWebhooks, GetWebhooksWebhooks
 from .input_types import (
@@ -621,6 +622,8 @@ __all__ = [
     "GetSoftDeletionSettings",
     "GetSoftDeletionSettingsSettings",
     "GetSoftDeletionSettingsSettingsSoftDeletion",
+    "GetUser",
+    "GetUserPerson",
     "GetWebhookPayloadSchema",
     "GetWebhookPayloadSchemaInput",
     "GetWebhooks",

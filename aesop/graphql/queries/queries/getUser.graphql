@@ -1,0 +1,5 @@
+query getUser($email: String!) {
+  person(logicalId: {email: $email}) {
+    id
+  }
+}
