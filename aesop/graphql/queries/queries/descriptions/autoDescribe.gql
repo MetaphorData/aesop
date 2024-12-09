@@ -1,0 +1,17 @@
+query autoDescribe($entityId: ID, $table: String, $fieldPaths: [String!], $isBatch: Boolean = false) {
+  autoDescribe(
+  isBatch: $isBatch, 
+  input: [
+    {
+      entityId: $entityId
+      table: $table
+      fieldPaths: $fieldPaths
+    }
+  ]) {
+    description
+    fieldDescriptions {
+      fieldDescription
+      fieldPath
+    }
+  }
+}

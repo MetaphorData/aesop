@@ -1187,6 +1187,10 @@ class PersonPropertiesPatchInput(BaseModel):
     avatar_url: Optional[str] = Field(alias="avatarUrl", default=None)
 
 
+class PersonQueryConnectionFilterInput(BaseModel):
+    dataset_id: Optional[str] = Field(alias="datasetId", default=None)
+
+
 class PersonalizationOptionsInput(BaseModel):
     entity_id: Optional[str] = Field(alias="entityId", default="")
     persona: Optional[Persona] = None
@@ -1315,13 +1319,13 @@ class QueryInfoAssetsConnectionFilterInput(BaseModel):
 
 
 class QueryInfoConnectionFilterInput(BaseModel):
-    dataset_id: Optional[str] = Field(alias="datasetId", default=None)
     hide_duplicates: Optional[bool] = Field(alias="hideDuplicates", default=True)
     hide_service_account: Optional[bool] = Field(
         alias="hideServiceAccount", default=True
     )
     issued_by: Optional[List[str]] = Field(alias="issuedBy", default=None)
     lookback_days: Optional[int] = Field(alias="lookbackDays", default=1)
+    source_datasets: Optional[List[str]] = Field(alias="sourceDatasets", default=None)
 
 
 class QueryKnowledgeCardInput(BaseModel):
@@ -1554,6 +1558,310 @@ class SearchQueryInput(BaseModel):
     name: Optional[str] = None
 
 
+class SearchRankingCommonInput(BaseModel):
+    entity_id: Optional[float] = Field(alias="entityId", default=2000)
+    has_contacts: Optional[float] = Field(alias="hasContacts", default=100)
+    has_govern_tags: Optional[float] = Field(alias="hasGovernTags", default=100)
+    has_posts: Optional[float] = Field(alias="hasPosts", default=100)
+    hash_tag_full: Optional[float] = Field(alias="hashTagFull", default=100)
+    hash_tag_partial: Optional[float] = Field(alias="hashTagPartial", default=5)
+    name_full: Optional[float] = Field(alias="nameFull", default=1000)
+    name_ngram: Optional[float] = Field(alias="nameNgram", default=10)
+    name_partial: Optional[float] = Field(alias="namePartial", default=300)
+    suggest: Optional[float] = 1000
+
+
+class SearchRankingConfigInput(BaseModel):
+    common: Optional["SearchRankingCommonInput"] = Field(
+        default_factory=lambda: globals()["SearchRankingCommonInput"].model_validate(
+            {
+                "entityId": 2000,
+                "hasContacts": 100,
+                "hasGovernTags": 100,
+                "hasPosts": 100,
+                "hashTagFull": 100,
+                "hashTagPartial": 5,
+                "nameFull": 1000,
+                "nameNgram": 10,
+                "namePartial": 300,
+                "suggest": 1000,
+            }
+        )
+    )
+    dashboard: Optional["SearchRankingDashboardInput"] = Field(
+        default_factory=lambda: globals()["SearchRankingDashboardInput"].model_validate(
+            {
+                "chartDescriptionPartial": 1,
+                "chartNameFull": 5,
+                "chartNamePartial": 5,
+                "descriptionPartial": 100,
+                "idFull": 1000,
+                "idPartial": 100,
+            }
+        )
+    )
+    dataset: Optional["SearchRankingDatasetInput"] = Field(
+        default_factory=lambda: globals()["SearchRankingDatasetInput"].model_validate(
+            {
+                "columnDescriptionPartial": 1,
+                "columnNameFull": 200,
+                "columnNamePartial": 5,
+                "databaseBoost": [],
+                "databaseNameFull": 350,
+                "descriptionPartial": 100,
+                "fullNameFull": 1000,
+                "schemaBoost": [],
+                "schemaNameFull": 500,
+                "usageLast7Days": 150,
+                "usageLast30Days": 150,
+            }
+        )
+    )
+    knowledge_card: Optional["SearchRankingKnowledgeCardInput"] = Field(
+        alias="knowledgeCard",
+        default_factory=lambda: globals()[
+            "SearchRankingKnowledgeCardInput"
+        ].model_validate({"authorNamePartial": 100, "contentPartial": 100}),
+    )
+    metric: Optional["SearchRankingMetricInput"] = Field(
+        default_factory=lambda: globals()["SearchRankingMetricInput"].model_validate(
+            {"descriptionPartial": 100}
+        )
+    )
+    namespace: Optional["SearchRankingNamespaceInput"] = Field(
+        default_factory=lambda: globals()["SearchRankingNamespaceInput"].model_validate(
+            {"descriptionPartial": 100}
+        )
+    )
+    person: Optional["SearchRankingPersonInput"] = Field(
+        default_factory=lambda: globals()["SearchRankingPersonInput"].model_validate(
+            {"emailPartial": 100}
+        )
+    )
+    pipeline: Optional["SearchRankingPipelineInput"] = Field(
+        default_factory=lambda: globals()["SearchRankingPipelineInput"].model_validate(
+            {"descriptionPartial": 100, "idFull": 1000, "idPartial": 100}
+        )
+    )
+    user_defined_resource: Optional["SearchRankingUserDefinedResourceInput"] = Field(
+        alias="userDefinedResource",
+        default_factory=lambda: globals()[
+            "SearchRankingUserDefinedResourceInput"
+        ].model_validate({"authorNamePartial": 10, "descriptionPartial": 1}),
+    )
+    virtual_view: Optional["SearchRankingVirtualViewInput"] = Field(
+        alias="virtualView",
+        default_factory=lambda: globals()[
+            "SearchRankingVirtualViewInput"
+        ].model_validate(
+            {
+                "columnDescriptionPartial": 1,
+                "columnNameFull": 500,
+                "columnNamePartial": 200,
+                "descriptionPartial": 100,
+            }
+        ),
+    )
+
+
+class SearchRankingConfigPatchInput(BaseModel):
+    dashboard: Optional["SearchRankingDashboardPatchInput"] = None
+    dataset: Optional["SearchRankingDatasetPatchInput"] = None
+    knowledge_card: Optional["SearchRankingKnowledgeCardPatchInput"] = Field(
+        alias="knowledgeCard", default=None
+    )
+    metric: Optional["SearchRankingMetricPatchInput"] = None
+    namespace: Optional["SearchRankingNamespacePatchInput"] = None
+    person: Optional["SearchRankingPersonPatchInput"] = None
+    pipeline: Optional["SearchRankingPipelinePatchInput"] = None
+    user_defined_resource: Optional["SearchRankingUserDefinedResourcePatchInput"] = (
+        Field(alias="userDefinedResource", default=None)
+    )
+    virtual_view: Optional["SearchRankingVirtualViewPatchInput"] = Field(
+        alias="virtualView", default=None
+    )
+
+
+class SearchRankingDashboardInput(BaseModel):
+    chart_description_partial: Optional[float] = Field(
+        alias="chartDescriptionPartial", default=1
+    )
+    chart_name_full: Optional[float] = Field(alias="chartNameFull", default=5)
+    chart_name_partial: Optional[float] = Field(alias="chartNamePartial", default=5)
+    description_partial: Optional[float] = Field(
+        alias="descriptionPartial", default=100
+    )
+    id_full: Optional[float] = Field(alias="idFull", default=1000)
+    id_partial: Optional[float] = Field(alias="idPartial", default=100)
+
+
+class SearchRankingDashboardPatchInput(BaseModel):
+    chart_description_partial: Optional[float] = Field(
+        alias="chartDescriptionPartial", default=None
+    )
+    chart_name_full: Optional[float] = Field(alias="chartNameFull", default=None)
+    chart_name_partial: Optional[float] = Field(alias="chartNamePartial", default=None)
+    description_partial: Optional[float] = Field(
+        alias="descriptionPartial", default=None
+    )
+    id_full: Optional[float] = Field(alias="idFull", default=None)
+    id_partial: Optional[float] = Field(alias="idPartial", default=None)
+
+
+class SearchRankingDatabaseBoostInput(BaseModel):
+    boost: Optional[float] = 100
+    database: Optional[str] = ""
+
+
+class SearchRankingDatasetInput(BaseModel):
+    column_description_partial: Optional[float] = Field(
+        alias="columnDescriptionPartial", default=1
+    )
+    column_name_full: Optional[float] = Field(alias="columnNameFull", default=200)
+    column_name_partial: Optional[float] = Field(alias="columnNamePartial", default=5)
+    database_boost: Optional[List["SearchRankingDatabaseBoostInput"]] = Field(
+        alias="databaseBoost", default_factory=lambda: []
+    )
+    database_name_full: Optional[float] = Field(alias="databaseNameFull", default=350)
+    description_partial: Optional[float] = Field(
+        alias="descriptionPartial", default=100
+    )
+    full_name_full: Optional[float] = Field(alias="fullNameFull", default=1000)
+    schema_boost: Optional[List["SearchRankingSchemaBoostInput"]] = Field(
+        alias="schemaBoost", default_factory=lambda: []
+    )
+    schema_name_full: Optional[float] = Field(alias="schemaNameFull", default=500)
+    usage_last_7_days: Optional[float] = Field(alias="usageLast7Days", default=150)
+    usage_last_30_days: Optional[float] = Field(alias="usageLast30Days", default=150)
+
+
+class SearchRankingDatasetPatchInput(BaseModel):
+    column_description_partial: Optional[float] = Field(
+        alias="columnDescriptionPartial", default=None
+    )
+    column_name_full: Optional[float] = Field(alias="columnNameFull", default=None)
+    column_name_partial: Optional[float] = Field(
+        alias="columnNamePartial", default=None
+    )
+    database_boost: Optional[List["SearchRankingDatabaseBoostInput"]] = Field(
+        alias="databaseBoost", default=None
+    )
+    database_name_full: Optional[float] = Field(alias="databaseNameFull", default=None)
+    description_partial: Optional[float] = Field(
+        alias="descriptionPartial", default=None
+    )
+    full_name_full: Optional[float] = Field(alias="fullNameFull", default=None)
+    schema_boost: Optional[List["SearchRankingSchemaBoostInput"]] = Field(
+        alias="schemaBoost", default=None
+    )
+    schema_name_full: Optional[float] = Field(alias="schemaNameFull", default=None)
+    usage_last_7_days: Optional[float] = Field(alias="usageLast7Days", default=None)
+    usage_last_30_days: Optional[float] = Field(alias="usageLast30Days", default=None)
+
+
+class SearchRankingKnowledgeCardInput(BaseModel):
+    author_name_partial: Optional[float] = Field(alias="authorNamePartial", default=100)
+    content_partial: Optional[float] = Field(alias="contentPartial", default=100)
+
+
+class SearchRankingKnowledgeCardPatchInput(BaseModel):
+    author_name_partial: Optional[float] = Field(
+        alias="authorNamePartial", default=None
+    )
+    content_partial: Optional[float] = Field(alias="contentPartial", default=None)
+
+
+class SearchRankingMetricInput(BaseModel):
+    description_partial: Optional[float] = Field(
+        alias="descriptionPartial", default=100
+    )
+
+
+class SearchRankingMetricPatchInput(BaseModel):
+    description_partial: Optional[float] = Field(
+        alias="descriptionPartial", default=None
+    )
+
+
+class SearchRankingNamespaceInput(BaseModel):
+    description_partial: Optional[float] = Field(
+        alias="descriptionPartial", default=100
+    )
+
+
+class SearchRankingNamespacePatchInput(BaseModel):
+    description_partial: Optional[float] = Field(
+        alias="descriptionPartial", default=None
+    )
+
+
+class SearchRankingPersonInput(BaseModel):
+    email_partial: Optional[float] = Field(alias="emailPartial", default=100)
+
+
+class SearchRankingPersonPatchInput(BaseModel):
+    email_partial: Optional[float] = Field(alias="emailPartial", default=None)
+
+
+class SearchRankingPipelineInput(BaseModel):
+    description_partial: Optional[float] = Field(
+        alias="descriptionPartial", default=100
+    )
+    id_full: Optional[float] = Field(alias="idFull", default=1000)
+    id_partial: Optional[float] = Field(alias="idPartial", default=100)
+
+
+class SearchRankingPipelinePatchInput(BaseModel):
+    description_partial: Optional[float] = Field(
+        alias="descriptionPartial", default=None
+    )
+    id_full: Optional[float] = Field(alias="idFull", default=None)
+    id_partial: Optional[float] = Field(alias="idPartial", default=None)
+
+
+class SearchRankingSchemaBoostInput(BaseModel):
+    boost: Optional[float] = 100
+    schema_: Optional[str] = Field(alias="schema", default="")
+
+
+class SearchRankingUserDefinedResourceInput(BaseModel):
+    author_name_partial: Optional[float] = Field(alias="authorNamePartial", default=10)
+    description_partial: Optional[float] = Field(alias="descriptionPartial", default=1)
+
+
+class SearchRankingUserDefinedResourcePatchInput(BaseModel):
+    author_name_partial: Optional[float] = Field(
+        alias="authorNamePartial", default=None
+    )
+    description_partial: Optional[float] = Field(
+        alias="descriptionPartial", default=None
+    )
+
+
+class SearchRankingVirtualViewInput(BaseModel):
+    column_description_partial: Optional[float] = Field(
+        alias="columnDescriptionPartial", default=1
+    )
+    column_name_full: Optional[float] = Field(alias="columnNameFull", default=500)
+    column_name_partial: Optional[float] = Field(alias="columnNamePartial", default=200)
+    description_partial: Optional[float] = Field(
+        alias="descriptionPartial", default=100
+    )
+
+
+class SearchRankingVirtualViewPatchInput(BaseModel):
+    column_description_partial: Optional[float] = Field(
+        alias="columnDescriptionPartial", default=None
+    )
+    column_name_full: Optional[float] = Field(alias="columnNameFull", default=None)
+    column_name_partial: Optional[float] = Field(
+        alias="columnNamePartial", default=None
+    )
+    description_partial: Optional[float] = Field(
+        alias="descriptionPartial", default=None
+    )
+
+
 class SearchResultFieldsSelection(BaseModel):
     excludes: Optional[List[str]] = Field(default_factory=lambda: [])
     includes: Optional[List[str]] = Field(default_factory=lambda: [])
@@ -1592,6 +1900,9 @@ class SettingsInput(BaseModel):
     )
     query_user_emails: Optional[List["QueryUserEmailInput"]] = Field(
         alias="queryUserEmails", default=None
+    )
+    search_ranking: Optional["SearchRankingConfigInput"] = Field(
+        alias="searchRanking", default=None
     )
     service_accounts: Optional[List[str]] = Field(alias="serviceAccounts", default=None)
     social_login: Optional["SocialLoginInput"] = Field(
@@ -1823,6 +2134,10 @@ SSOInput.model_rebuild()
 SearchArguments.model_rebuild()
 SearchFacets.model_rebuild()
 SearchQueryFilters.model_rebuild()
+SearchRankingConfigInput.model_rebuild()
+SearchRankingConfigPatchInput.model_rebuild()
+SearchRankingDatasetInput.model_rebuild()
+SearchRankingDatasetPatchInput.model_rebuild()
 SearchResultSort.model_rebuild()
 SettingsInput.model_rebuild()
 SocialLoginInput.model_rebuild()
