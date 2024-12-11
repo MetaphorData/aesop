@@ -8,7 +8,6 @@ from typer import Context, Typer
 from aesop.commands.common.exception_handler import exception_handler
 
 from aesop.config import AesopConfig
-from aesop.graphql.generated.auto_describe import AutoDescribe
 
 
 # Define the Typer app
@@ -40,14 +39,9 @@ def get_ai_descriptions(
         print(f"Error: Failed to parse entity_ids as a list. Received: {entity_id}")
         raise e
 
-    
-
 
     config: AesopConfig = ctx.obj
     client = config.get_graphql_client()
-    # Prepare the variables for the query
-
-
 
     query = []
     for i in entities:
@@ -57,7 +51,7 @@ def get_ai_descriptions(
             "field_paths": field_paths,
             "is_batch": True
         }
-        query.append(client.auto_describe(**variables))  # Assuming client.auto_describe returns a query object
+        query.append(client.auto_describe(**variables)) 
 
     
     descriptions = {}
