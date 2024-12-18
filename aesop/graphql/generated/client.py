@@ -7,6 +7,7 @@ from .add_governed_tags import AddGovernedTags
 from .add_webhook import AddWebhook
 from .assign_governed_tags import AssignGovernedTags
 from .attach_data_documents_to_namespace import AttachDataDocumentsToNamespace
+from .auto_describe import AutoDescribe
 from .base_client import BaseClient
 from .base_model import UNSET, UnsetType
 from .create_data_document import CreateDataDocument
@@ -545,6 +546,42 @@ class Client(BaseClient):
         )
         data = self.get_data(response)
         return RemoveWebhook.model_validate(data)
+
+    def auto_describe(
+        self,
+        entity_id: Union[Optional[str], UnsetType] = UNSET,
+        table: Union[Optional[str], UnsetType] = UNSET,
+        field_paths: Union[Optional[List[str]], UnsetType] = UNSET,
+        is_batch: Union[Optional[bool], UnsetType] = UNSET,
+        **kwargs: Any
+    ) -> AutoDescribe:
+        query = gql(
+            """
+            query autoDescribe($entityId: ID, $table: String, $fieldPaths: [String!], $isBatch: Boolean = false) {
+              autoDescribe(
+                isBatch: $isBatch
+                input: [{entityId: $entityId, table: $table, fieldPaths: $fieldPaths}]
+              ) {
+                description
+                fieldDescriptions {
+                  fieldDescription
+                  fieldPath
+                }
+              }
+            }
+            """
+        )
+        variables: Dict[str, object] = {
+            "entityId": entity_id,
+            "table": table,
+            "fieldPaths": field_paths,
+            "isBatch": is_batch,
+        }
+        response = self.execute(
+            query=query, operation_name="autoDescribe", variables=variables, **kwargs
+        )
+        data = self.get_data(response)
+        return AutoDescribe.model_validate(data)
 
     def get_domain_assets(
         self,

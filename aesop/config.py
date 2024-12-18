@@ -1,6 +1,8 @@
 from pathlib import Path
+from socket import timeout
 
 import yarl
+import httpx
 from pydantic import BaseModel, Field, HttpUrl, field_serializer
 
 from aesop.graphql.generated.client import Client
@@ -24,8 +26,11 @@ class AesopConfig(BaseModel):
         # yarl does not care if there's a trailing slash, pydantic url does
         return Client(
             url=(self.url / "api" / "graphql").human_repr(),
-            headers={
-                "X-Api-Key": self.api_key,
-                "Content-Type": "application/json",
-            },
+            http_client=httpx.Client(
+                headers={
+                    "X-Api-Key": self.api_key,
+                    "Content-Type": "application/json",
+                },
+                timeout=30,
+            ),
         )

@@ -738,6 +738,8 @@ class SchemaType(str, Enum):
 
 
 class SearchContext(str, Enum):
+    API = "API"
+    Assets = "Assets"
     DATA_DOCUMENT = "DATA_DOCUMENT"
     DATA_GROUP = "DATA_GROUP"
     DBT_MODEL = "DBT_MODEL"
