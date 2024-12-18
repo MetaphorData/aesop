@@ -2,18 +2,13 @@ from typing import List, Optional
 import typer
 import csv
 import os
-
 from rich import print
 from typer import Context
-
 from aesop.commands.common.exception_handler import exception_handler
-
 from aesop.config import AesopConfig
-
 
 # Define the Typer app
 app = typer.Typer(help="Generate descriptions for a dataset in Metaphor.")
-
 
 @exception_handler("get ai descriptions")
 @app.command(help="Batch generates entity descriptions for entity IDs from a CSV and outputs another CSV in specified directory.")
@@ -33,8 +28,8 @@ def get_ai_descriptions(
         table: The name of the table (optional).
         field_paths: A list of field paths (optional).
     """
+    # Read entity IDs from the input CSV
     try:
-        # Read entity IDs from the input CSV
         with open(input_csv, mode='r', newline='') as csvfile:
             csvreader = csv.reader(csvfile)
             entities = [row for row in csvreader]  # Assuming entity IDs are in the first column
@@ -42,9 +37,11 @@ def get_ai_descriptions(
         print(f"Error: Failed to read entity IDs from CSV. {e}")
         raise e
 
+    # Initialize client
     config: AesopConfig = ctx.obj
     client = config.get_graphql_client()
 
+    # Generate descriptions
     query = []
     for i in entities[0]:
         variables = {
@@ -55,6 +52,7 @@ def get_ai_descriptions(
         }
         query.append(client.auto_describe(**variables)) 
 
+    # Format descriptions
     descriptions = []
     for i, v in enumerate(entities[0]):
         description = {"entity_id": v, "description": query[i].auto_describe[0].description}
@@ -72,11 +70,7 @@ def get_ai_descriptions(
         print(f"Error: The provided output path is not a directory.")
         return
 
-    # Write descriptions to the output CSV
-    all_keys = set()
-    for record in descriptions:
-        all_keys.update(record.keys())
-
+    # Write descriptions to a csv
     try:
         with open(output_file_path, mode='w', newline='') as csvfile:
             writer = csv.writer(csvfile)
